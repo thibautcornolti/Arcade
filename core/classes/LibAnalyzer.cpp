@@ -30,15 +30,17 @@ void LibAnalyzer::_analyzeFolder(const std::string &path,
 				container.push_back(ent->d_name);
 		}
 		closedir(dir);
+	} else {
+		perror(path.c_str());
 	}
 }
 
-auto &LibAnalyzer::getLibs()
+std::vector<std::string> &LibAnalyzer::getLibs()
 {
 	return _libs;
 }
 
-auto &LibAnalyzer::getGames()
+std::vector<std::string> &LibAnalyzer::getGames()
 {
-	return _libs;
+	return _games;
 }

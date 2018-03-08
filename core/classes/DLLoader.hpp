@@ -12,11 +12,11 @@
 
 class DLLoader {
 	public:
-		DLLoader(const std::string &filename, int flags);
+		DLLoader(const std::string &, int = RTLD_LAZY);
 		~DLLoader();
 
-		auto isError();
-		auto &getError();
+		bool isError();
+		std::string &getError();
 
 		template<typename T>
 		T getSym(const std::string &symbole)
@@ -29,7 +29,7 @@ class DLLoader {
 		}
 
 		template<typename T>
-		T *getInstance(const std::string &getter)
+		T *getInstance(const std::string &getter = "entryPoint")
 		{
 			auto fct = getSym<T *(*)()>(getter);
 			if (!isError())

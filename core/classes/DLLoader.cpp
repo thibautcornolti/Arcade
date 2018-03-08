@@ -17,14 +17,15 @@ DLLoader::DLLoader(const std::string &filename, int flags)
 
 DLLoader::~DLLoader()
 {
-	dlclose(handle);
+	if (handle)
+		dlclose(handle);
 }
 
-auto DLLoader::isError()
+bool DLLoader::isError()
 {
 	return error.length() > 0;
 }
 
-auto &DLLoader::getError() {
+std::string &DLLoader::getError() {
 	return error;
 }

@@ -14,3 +14,8 @@ Arcade::GraphicLib::GraphicLib()
 Arcade::GraphicLib::~GraphicLib()
 {
 }
+
+bool Arcade::GraphicLib::isOpen()
+{
+	return true;
+}

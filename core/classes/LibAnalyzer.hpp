@@ -17,8 +17,8 @@ class LibAnalyzer {
 		LibAnalyzer();
 		~LibAnalyzer() = default;
 
-		auto &getLibs();
-		auto &getGames();
+		std::vector<std::string> &getLibs();
+		std::vector<std::string> &getGames();
 	protected:
 	private:
 		void _analyzeFolder(const std::string &,

@@ -11,7 +11,7 @@ SRCS	= ./classes/DLLoader.cpp \
 OBJS	= $(SRCS:.cpp=.o)
 
 CPPFLAGS = -I ./pp
-CPPFLAGS += -W -Wall -Wextra
+CPPFLAGS += -W -Wall -Wextra -g
 
 LDFLAGS += -ldl
 

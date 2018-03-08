@@ -15,26 +15,26 @@ namespace Arcade {
 			GraphicLib();
 			~GraphicLib();
 
-			virtual bool supportSprite();
-			virtual bool needFont();
+			bool supportSprite() final;
+			bool needFont() final;
 
-			virtual bool isOpen();
-			virtual bool closeRendering();
-			virtual bool openRendering();
-			virtual void clearWindow();
+			bool isOpen() final;
+			bool closeRendering() final;
+			bool openRendering() final;
+			void clearWindow() final;
 
-			virtual bool initRenderer();
-			virtual bool stopRenderer();
+			bool initRenderer() final;
+			bool stopRenderer() final;
 
-			virtual void drawPixelBox(Arcade::PixelBox *);
-			virtual void drawText(Arcade::TextBox *);
+			void drawPixelBox(Arcade::PixelBox *) final;
+			void drawText(Arcade::TextBox *) final;
 
-			virtual void *loadText(std::string path);
-			virtual void *loadSprite(std::string path);
+			void *loadText(std::string path) final;
+			void *loadSprite(std::string path) final;
 
-			virtual void getLastEvent();
-			virtual void pollEvent();
-			virtual void cleanEvent();
+			void getLastEvent() final;
+			void pollEvent() final;
+			void cleanEvent() final;
 			int oui = 1;
 		protected:
 		private:

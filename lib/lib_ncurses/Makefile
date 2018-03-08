@@ -12,7 +12,7 @@ SRCS	= ./src/entry.cpp \
 OBJS	= $(SRCS:.cpp=.o)
 
 CPPFLAGS = -I ./src/pp
-CPPFLAGS += -W -Wall -Wextra --std=c++11 -g
+CPPFLAGS += -W -Wall -Wextra --std=c++11 -g 
 CPPFLAGS += -fPIC
 
 LDFLAGS += -shared --std=c++11

@@ -7,95 +7,99 @@
 
 #pragma once
 
-#include "../shared_header/IGraphicLib.hpp"
+#include <string>
+#include "Vect.hpp"
+#include "PixelBox.hpp"
+#include "TextBox.hpp"
+#include "Keys.hpp"
 
 namespace Arcade {
-	class GraphicLib : public Arcade::IGraphicLib {
+	class IGraphicLib {
 	public:
-		GraphicLib();
-		~GraphicLib() final;
+		IGraphicLib() {};
+		virtual ~IGraphicLib() = 0;
 
-		bool supportSprite() const final {};
-		bool supportSound() const final {};
-		bool needFont() const final {};
+		/* Module info: Used to optimize initialization */
+		virtual bool supportSprite() const = 0;
+		virtual bool supportSound() const = 0;
+		virtual bool needFont() const = 0;
 
 
 		/* Window handling */
 		// Main loop condition
-		bool isOpen() const final;
+		virtual bool isOpen() const = 0;
 
+		
 		// Closes the window => stop loop (go menu)
-		bool closeRendering() final {};
+		virtual bool closeRendering() = 0;
 		
 		// Opens the window => start loop
-		bool openRendering() final {};
+		virtual bool openRendering() = 0;
 		
 		// Clears the screen
-		void clearWindow() final {};
+		virtual void clearWindow() = 0;
 
-
+		
 		/* Resources handling */
 		// Initializes the library
-		bool initRenderer() final {};
+		virtual bool initRenderer() = 0;
 		
 		// Unloads the library
-		bool stopRenderer() final {};
+		virtual bool stopRenderer() = 0;
 
-
+		
 		/* Rendering functions */
 		// Draws a PixelBox or the sprite if supported
-		void drawPixelBox(PixelBox *) final {};
+		virtual void drawPixelBox(PixelBox *) = 0;
 		
 		// Draws a TextBox
-		void drawText(TextBox *) final {};
+		virtual void drawText(TextBox *) = 0;
 
-
+		
 		/* Sound functions */
 		// Plays sound passed in arg
-		void playSound(void *) final {};
+		virtual void playSound(void *) = 0;
 		
 		// Pauses sound passed in arg
-		void pauseSound(void *) final {};
+		virtual void pauseSound(void *) = 0;
 		
 		// Stops sound passed in arg
-		void stopSound(void *) final {};
+		virtual void stopSound(void *) = 0;
 
-
+		
 		/* Loading functions */
 		// Returns a text font in the Graphics library format
 		// or NULL if not supported
-		void *loadTextFont(std::string path) final {};
+		virtual void *loadTextFont(std::string path) = 0;
 		
 		// Returns a sprite in the Graphics library format
 		// or NULL if not supported
-		void *loadSprite(std::string path) final {};
+		virtual void *loadSprite(std::string path) = 0;
 		
 		// Returns a sound in the Graphics library format
 		// or NULL if not supported
-		void *loadSound(std::string path) final {};
+		virtual void *loadSound(std::string path) = 0;
 
-
+		
 		/* Events handling */
 		// Gets the last saved event (used in render loop)
-		Keys getLastEvent() final {};
+		virtual Keys getLastEvent() = 0;
 		
 		// Saves the event in the Graphics library
-		void pollEvent() final {};
+		virtual void pollEvent() = 0;
 		
 		// Deletes the last event
-		void cleanEvent() final {};
+		virtual void cleanEvent() = 0;
 
-
+		
 		/* Context Info */
 		// get the X and Y max of the windows
-		Vect<size_t> getScreenSize() const final {};
+		virtual Vect<size_t> getScreenSize() const = 0;
 		
 		// get the Y max of the windows
-		int getMaxY() const final {};
+		virtual int getMaxY() const = 0;
 		
 		// get the X max of the windows
-		int getMaxX() const final {};
-	protected:
-	private:
+		virtual int getMaxX() const = 0;
 	};
 };

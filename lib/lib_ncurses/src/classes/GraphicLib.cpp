@@ -15,7 +15,7 @@ Arcade::GraphicLib::~GraphicLib()
 {
 }
 
-bool Arcade::GraphicLib::isOpen()
+bool Arcade::GraphicLib::isOpen() const
 {
 	return true;
 }

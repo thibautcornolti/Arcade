@@ -11,7 +11,7 @@
 #include <iostream>
 #include "classes/LibAnalyzer.hpp"
 #include "classes/DLLoader.hpp"
-#include "Arcade.hpp"
+#include "shared_header/IGraphicLib.hpp"
 
 int main()
 {

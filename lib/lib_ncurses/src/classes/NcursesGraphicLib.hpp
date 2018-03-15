@@ -7,13 +7,14 @@
 
 #pragma once
 
+#include <ncurses.h>
 #include "../shared_header/IGraphicLib.hpp"
 
 namespace Arcade {
-	class GraphicLib : public Arcade::IGraphicLib {
+	class NcursesGraphicLib : public Arcade::IGraphicLib {
 	public:
-		GraphicLib();
-		~GraphicLib() final;
+		NcursesGraphicLib();
+		~NcursesGraphicLib() final;
 
 		bool supportSprite() const final {};
 		bool supportSound() const final {};
@@ -25,26 +26,26 @@ namespace Arcade {
 		bool isOpen() const final;
 
 		// Closes the window => stop loop (go menu)
-		bool closeRendering() final {};
+		bool closeRendering() final;
 		
 		// Opens the window => start loop
-		bool openRendering() final {};
+		bool openRendering() final;
 		
 		// Clears the screen
-		void clearWindow() final {};
+		void clearWindow() final;
 
 
 		/* Resources handling */
 		// Initializes the library
-		bool initRenderer() final {};
+		bool initRenderer() final;
 		
 		// Unloads the library
-		bool stopRenderer() final {};
+		bool stopRenderer() final;
 
 
 		/* Rendering functions */
 		// Draws a PixelBox or the sprite if supported
-		void drawPixelBox(PixelBox *) final {};
+		void drawPixelBox(PixelBox *) final;
 		
 		// Draws a TextBox
 		void drawText(TextBox *) final {};
@@ -88,14 +89,15 @@ namespace Arcade {
 
 		/* Context Info */
 		// get the X and Y max of the windows
-		Vect<size_t> getScreenSize() const final {};
+		Vect<size_t> getScreenSize() const final;
 		
 		// get the Y max of the windows
-		int getMaxY() const final {};
+		int getMaxY() const final;
 		
 		// get the X max of the windows
-		int getMaxX() const final {};
+		int getMaxX() const final;
 	protected:
 	private:
+		bool _isRendering = false;
 	};
 };

@@ -7,6 +7,7 @@
 
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <iostream>
 #include "classes/LibAnalyzer.hpp"
@@ -27,7 +28,13 @@ int main()
 		std::cout << dl.getError() << std::endl;
 		return 2;
 	}
-	std::cout << o->isOpen() << std::endl;
+	o->initRenderer();
+	o->openRendering();
+	auto a = Arcade::PixelBox(10, 10, 10, 10);
+	o->drawPixelBox(&a);
+	sleep(2);
+	o->closeRendering();
+	o->stopRenderer();
 	
 	return (0);
 }

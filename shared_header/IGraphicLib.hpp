@@ -17,7 +17,7 @@ namespace Arcade {
 	class IGraphicLib {
 	public:
 		IGraphicLib() {};
-		virtual ~IGraphicLib() = 0;
+		virtual ~IGraphicLib() {};
 
 		/* Module info: Used to optimize initialization */
 		virtual bool supportSprite() const = 0;

@@ -7,7 +7,8 @@ CP = cp
 RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
-			./src/classes/GraphicLib.cpp
+			./src/classes/NcursesGraphicLib.cpp \
+			./src/shared_header/PixelBox.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 
@@ -15,7 +16,7 @@ CPPFLAGS = -I ./src/pp
 CPPFLAGS += -W -Wall -Wextra --std=c++11 -g 
 CPPFLAGS += -fPIC
 
-LDFLAGS += -shared --std=c++11
+LDFLAGS += -lncurses -shared --std=c++11
 
 all: $(NAME)
 

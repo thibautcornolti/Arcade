@@ -9,66 +9,73 @@
 
 Arcade::PixelBox::PixelBox(size_t height, size_t width, size_t posW, size_t posH)
 {
-    _size = Vect<size_t>(width, height);
-    _pos = Vect<size_t>(posW, posH);
+	setHeight(height);
+	setWidth(width);
+	setX(posW);
+	setY(posH);
 }
 
-size_t Arcade::PixelBox::getH() const
+size_t Arcade::PixelBox::getY() const
 {
 	return _size.getY();
 }
 
-size_t Arcade::PixelBox::getPosH() const
+size_t Arcade::PixelBox::getHeight() const
 {
 	return _pos.getY();
 }
 
-void Arcade::PixelBox::setH(size_t height)
+void Arcade::PixelBox::setY(size_t y)
+{
+	_pos.setY(y);
+}
+
+void Arcade::PixelBox::setHeight(size_t height)
 {
 	_size.setY(height);
 }
 
-void Arcade::PixelBox::setPosH(size_t posH)
-{
-	_pos.setY(posH);
-}
-
-size_t Arcade::PixelBox::getW() const
+size_t Arcade::PixelBox::getX() const
 {
 	return _size.getX();
 }
 
-size_t Arcade::PixelBox::getPosW() const
+size_t Arcade::PixelBox::getWidth() const
 {
 	return _pos.getX();
 }
 
-void Arcade::PixelBox::setW(size_t width)
+void Arcade::PixelBox::setWidth(size_t width)
 {
 	_size.setX(width);
 }
 
-void Arcade::PixelBox::setPosW(size_t posW)
+void Arcade::PixelBox::setX(size_t x)
 {
-	_pos.setX(posW);
+	_pos.setX(x);
 }
 
-void Arcade::PixelBox::setColor(Color &color)
+void Arcade::PixelBox::putPixel(Vect<size_t> pos, Arcade::Color col)
 {
-	_color = color;
+	_colorTab[pos] = col;
 }
 
-Arcade::Color &Arcade::PixelBox::getColor()
+Arcade::Color Arcade::PixelBox::getPixel(Vect<size_t> pos)
 {
-	return _color;
+	return _colorTab[pos];
 }
 
-void Arcade::PixelBox::setSprite(void *sprite)
+std::vector<Arcade::Color> Arcade::PixelBox::getPixelArray()
 {
-	_sprite = sprite;
+	std::vector<Arcade::Color> res;
+
+	for (size_t w = 0 ; w < getWidth() ; ++w)
+		for (size_t h = 0 ; h < getHeight() ; ++h)
+			res.push_back(_colorTab[Arcade::Vect<size_t>(w, h)]);
+	return res;
 }
 
-void *Arcade::PixelBox::getSprite()
+std::unordered_map<Arcade::Vect<size_t>, Arcade::Color> &Arcade::PixelBox::getPixelMap()
 {
-	return _sprite;
+	return _colorTab;
 }

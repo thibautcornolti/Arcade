@@ -78,11 +78,13 @@ void Arcade::NcursesGraphicLib::refreshWindow()
 
 void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox *pixelBox)
 {
-	size_t posH = pixelBox->getPosH();
-	size_t posW = pixelBox->getPosW();
-	for (size_t h = posH ; h < pixelBox->getH() + posH ; ++h)
-		for (size_t w = posW ; w < pixelBox->getW() + posW ; ++w)
-			mvprintw(h, w, "*");
+	size_t x = pixelBox->getX();
+	size_t y = pixelBox->getY();
+	for (size_t xi = 0 ; xi < pixelBox->getWidth() ; ++xi)
+		for (size_t yi = 0 ; yi < pixelBox->getHeight() ; ++yi) {
+			Arcade::Color c = pixelBox->getPixel(Vect<size_t>(yi, xi));
+			mvprintw(yi + y, xi + x, "%d", c.getAlpha());
+		}
 }
 
 void Arcade::NcursesGraphicLib::drawText(TextBox *textBox)

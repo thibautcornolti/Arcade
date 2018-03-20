@@ -56,7 +56,8 @@ void Core::run()
 			}
 		}
 		auto a = Arcade::PixelBox(10, 10, 10, 10);
-		auto b = Arcade::TextBox("salut", 0, 0, 12, 15);
+		a.putPixel(Arcade::Vect<size_t>(4, 0), Arcade::Color(0, 0, 0, 1));
+		auto b = Arcade::TextBox("salut", 0, 0, 15, 10);
 		_getLib().drawPixelBox(&a);
 		_getLib().drawText(&b);
 		_getLib().refreshWindow();

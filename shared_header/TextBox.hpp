@@ -15,6 +15,8 @@ namespace Arcade {
 	public:
 		TextBox(std::string const &text, size_t h, size_t w,
 			size_t posH, size_t posW);
+		~TextBox() = default;
+
 		std::string getValue() const;
 		void setValue(std::string const &text);
 
@@ -23,7 +25,7 @@ namespace Arcade {
 
 		size_t getH() const;
 		size_t getPosH() const;
-		void setH(size_t heigh);
+		void setH(size_t height);
 		void setPosH(size_t posH);
 
 		size_t getW() const;

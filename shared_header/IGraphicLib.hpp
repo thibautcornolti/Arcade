@@ -19,6 +19,9 @@ namespace Arcade {
 		IGraphicLib() {};
 		virtual ~IGraphicLib() {};
 
+		/* Get the name of the library */
+		virtual std::string getName() = 0;
+
 		/* Module info: Used to optimize initialization */
 		virtual bool supportSprite() const = 0;
 		virtual bool supportSound() const = 0;
@@ -29,7 +32,7 @@ namespace Arcade {
 		// Main loop condition
 		virtual bool isOpen() const = 0;
 
-		
+
 		// Closes the window => stop loop (go menu)
 		virtual bool closeRendering() = 0;
 		
@@ -39,6 +42,8 @@ namespace Arcade {
 		// Clears the screen
 		virtual void clearWindow() = 0;
 
+		// Displays the buffered frame to the screen
+		virtual void refreshWindow() = 0;
 		
 		/* Resources handling */
 		// Initializes the library
@@ -86,7 +91,7 @@ namespace Arcade {
 		virtual Keys getLastEvent() = 0;
 		
 		// Saves the event in the Graphics library
-		virtual void pollEvent() = 0;
+		virtual bool pollEvent() = 0;
 		
 		// Deletes the last event
 		virtual void cleanEvent() = 0;

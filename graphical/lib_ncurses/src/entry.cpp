@@ -6,24 +6,15 @@
 */
 
 #include <stdio.h>
-#include <signal.h>
 #include <memory>
 #include "classes/NcursesGraphicLib.hpp"
 
 Arcade::NcursesGraphicLib *main_instance;
 
-void sig_handler(int sig)
-{
-	printf("AH\n");
-	main_instance->closeRendering();
-	main_instance->stopRenderer();
-}
-
 __attribute__((constructor))
 void cons()
 {
 	printf("[libfoo] Loading ncurses library ...\n");
-	signal(SIGINT, sig_handler);
 	main_instance = new Arcade::NcursesGraphicLib();
 }
 

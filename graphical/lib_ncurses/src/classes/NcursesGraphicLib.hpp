@@ -16,9 +16,13 @@ namespace Arcade {
 		NcursesGraphicLib();
 		~NcursesGraphicLib() final;
 
-		bool supportSprite() const final {};
-		bool supportSound() const final {};
-		bool needFont() const final {};
+		/* Get the name of the library */
+		std::string getName() final;
+
+		/* Module info: Used to optimize initialization */
+		bool supportSprite() const final;
+		bool supportSound() const final;
+		bool needFont() const final;
 
 
 		/* Window handling */
@@ -34,6 +38,9 @@ namespace Arcade {
 		// Clears the screen
 		void clearWindow() final;
 
+		// Displays the buffered frame to the screen
+		void refreshWindow() final;
+
 
 		/* Resources handling */
 		// Initializes the library
@@ -48,43 +55,43 @@ namespace Arcade {
 		void drawPixelBox(PixelBox *) final;
 		
 		// Draws a TextBox
-		void drawText(TextBox *) final {};
+		void drawText(TextBox *) final;
 
 
 		/* Sound functions */
 		// Plays sound passed in arg
-		void playSound(void *) final {};
+		void playSound(void *) final;
 		
 		// Pauses sound passed in arg
-		void pauseSound(void *) final {};
+		void pauseSound(void *) final;
 		
 		// Stops sound passed in arg
-		void stopSound(void *) final {};
+		void stopSound(void *) final;
 
 
 		/* Loading functions */
 		// Returns a text font in the Graphics library format
 		// or NULL if not supported
-		void *loadTextFont(std::string path) final {};
+		void *loadTextFont(std::string path) final;
 		
 		// Returns a sprite in the Graphics library format
 		// or NULL if not supported
-		void *loadSprite(std::string path) final {};
+		void *loadSprite(std::string path) final;
 		
 		// Returns a sound in the Graphics library format
 		// or NULL if not supported
-		void *loadSound(std::string path) final {};
+		void *loadSound(std::string path) final;
 
 
 		/* Events handling */
 		// Gets the last saved event (used in render loop)
-		Keys getLastEvent() final {};
+		Keys getLastEvent() final;
 		
 		// Saves the event in the Graphics library
-		void pollEvent() final {};
+		bool pollEvent() final;
 		
 		// Deletes the last event
-		void cleanEvent() final {};
+		void cleanEvent() final;
 
 
 		/* Context Info */
@@ -99,5 +106,6 @@ namespace Arcade {
 	protected:
 	private:
 		bool _isRendering = false;
+		Keys _lastEvent;
 	};
 };

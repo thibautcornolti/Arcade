@@ -47,6 +47,7 @@ void Core::run()
 	while (_getLib().isOpen()) {
 		_getLib().pollEvent();
 		key = _getLib().getLastEvent();
+		_getLib().cleanEvent();
 		if (key != Arcade::Keys::NONE) {
 			swapLib(key);
 			if (key == Arcade::Keys::ESC) {

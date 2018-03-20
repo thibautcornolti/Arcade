@@ -117,9 +117,7 @@ void *Arcade::NcursesGraphicLib::loadSound(std::string)
 
 Arcade::Keys Arcade::NcursesGraphicLib::getLastEvent()
 {
-	auto temp = _lastEvent;
-	_lastEvent = Arcade::Keys::NONE;
-	return temp;
+	return _lastEvent;
 }
 
 bool Arcade::NcursesGraphicLib::pollEvent()
@@ -144,11 +142,13 @@ bool Arcade::NcursesGraphicLib::pollEvent()
 }
 
 void Arcade::NcursesGraphicLib::cleanEvent()
-{}
+{
+	_lastEvent = Arcade::Keys::NONE;
+}
 
 Arcade::Vect<size_t> Arcade::NcursesGraphicLib::getScreenSize() const 
 {
-	return Arcade::Vect<size_t>(COLS, LINES);
+	return Arcade::Vect<size_t>(getMaxX(), getMaxY());
 }
 
 int Arcade::NcursesGraphicLib::getMaxY() const

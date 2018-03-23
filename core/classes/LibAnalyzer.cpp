@@ -11,7 +11,7 @@
 LibAnalyzer::LibAnalyzer()
 {
 	_analyzeFolder(GAME_FOLDER, _games);
-	_analyzeFolder(LIB_FOLDER, _libs);
+	_analyzeFolder(GRAPH_FOLDER, _graphs);
 }
 
 void LibAnalyzer::_analyzeFolder(const std::string &path,
@@ -35,9 +35,9 @@ void LibAnalyzer::_analyzeFolder(const std::string &path,
 	}
 }
 
-std::vector<std::string> &LibAnalyzer::getLibs()
+std::vector<std::string> &LibAnalyzer::getGraphs()
 {
-	return _libs;
+	return _graphs;
 }
 
 std::vector<std::string> &LibAnalyzer::getGames()

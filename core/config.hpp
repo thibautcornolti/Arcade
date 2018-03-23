@@ -8,4 +8,4 @@
 #pragma once
 
 #define GAME_FOLDER "games"
-#define LIB_FOLDER "graphical"
+#define GRAPH_FOLDER "graphical"

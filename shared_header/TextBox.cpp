@@ -17,7 +17,7 @@ Arcade::TextBox::TextBox(std::string const &text, size_t h, size_t w,
 	setPosW(posW);
 }
 
-std::string Arcade::TextBox::getValue() const
+const std::string &Arcade::TextBox::getValue() const
 {
 	return _value;
 }
@@ -25,16 +25,6 @@ std::string Arcade::TextBox::getValue() const
 void Arcade::TextBox::setValue(std::string const &text)
 {
 	_value = text;
-}
-
-void *Arcade::TextBox::getFont() const
-{
-	return _font;
-}
-
-void Arcade::TextBox::setFont(void *font)
-{
-	_font = font;
 }
 
 size_t Arcade::TextBox::getH() const
@@ -75,4 +65,14 @@ void Arcade::TextBox::setW(size_t width)
 void Arcade::TextBox::setPosW(size_t posW)
 {
 	_pos.setX(posW);
+}
+
+Arcade::Color Arcade::TextBox::getColor() const
+{
+	return _color;
+}
+
+void Arcade::TextBox::setColor(Arcade::Color color)
+{
+	_color = color;
 }

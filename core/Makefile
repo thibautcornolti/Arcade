@@ -7,10 +7,11 @@ RM	= rm -f
 SRCS	= ./classes/DLLoader.cpp \
 	  ./classes/LibAnalyzer.cpp \
 	  ./classes/Core.cpp \
+	  ./menu/Menu.cpp \
 	  ./main.cpp  \
-	  ./shared_header/PixelBox.cpp \
-	  ./shared_header/TextBox.cpp \
-	  ./shared_header/Color.cpp \
+	  ../shared_header/PixelBox.cpp \
+	  ../shared_header/TextBox.cpp \
+	  ../shared_header/Color.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 

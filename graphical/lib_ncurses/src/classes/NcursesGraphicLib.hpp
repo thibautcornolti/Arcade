@@ -8,7 +8,7 @@
 #pragma once
 
 #include <ncurses.h>
-#include "../shared_header/IGraphicLib.hpp"
+#include "../../../../shared_header/IGraphicLib.hpp"
 
 namespace Arcade {
 	class NcursesGraphicLib : public Arcade::IGraphicLib {
@@ -76,6 +76,46 @@ namespace Arcade {
 	protected:
 	private:
 		bool _isRendering = false;
-		Keys _lastEvent;
+		Keys _lastEvent = Arcade::Keys::NONE;
+		std::vector<std::pair<int, Arcade::Keys>> _keymap = {
+			{'a', Arcade::Keys::A},
+			{'b', Arcade::Keys::B},
+			{'c', Arcade::Keys::C},
+			{'d', Arcade::Keys::D},
+			{'e', Arcade::Keys::E},
+			{'f', Arcade::Keys::F},
+			{'g', Arcade::Keys::G},
+			{'h', Arcade::Keys::H},
+			{'i', Arcade::Keys::I},
+			{'j', Arcade::Keys::J},
+			{'k', Arcade::Keys::K},
+			{'l', Arcade::Keys::L},
+			{'m', Arcade::Keys::M},
+			{'n', Arcade::Keys::N},
+			{'o', Arcade::Keys::O},
+			{'p', Arcade::Keys::P},
+			{'q', Arcade::Keys::Q},
+			{'r', Arcade::Keys::R},
+			{'s', Arcade::Keys::S},
+			{'t', Arcade::Keys::T},
+			{'u', Arcade::Keys::U},
+			{'v', Arcade::Keys::V},
+			{'w', Arcade::Keys::W},
+			{'x', Arcade::Keys::X},
+			{'y', Arcade::Keys::Y},
+			{'z', Arcade::Keys::Z},
+			{KEY_LEFT, Arcade::Keys::LEFT},
+			{KEY_RIGHT, Arcade::Keys::RIGHT},
+			{KEY_UP, Arcade::Keys::UP},
+			{KEY_DOWN, Arcade::Keys::DOWN},
+			{10, Arcade::Keys::ENTER},
+			{32, Arcade::Keys::SPACE},
+			{KEY_DC, Arcade::Keys::DELETE},
+			{KEY_BACKSPACE, Arcade::Keys::BACKSPACE},
+			{KEY_STAB, Arcade::Keys::TAB},
+			{27, Arcade::Keys::ESC},
+			{KEY_MOUSE, Arcade::Keys::MOUSELEFT},
+			{KEY_MOUSE, Arcade::Keys::MOUSERIGHT}
+		};
 	};
 };

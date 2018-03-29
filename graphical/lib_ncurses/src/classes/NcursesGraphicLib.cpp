@@ -87,20 +87,14 @@ bool Arcade::NcursesGraphicLib::pollEvent()
 {
 	if (_isRendering == false)
 		return false;
-	int keys[] = {
-		KEY_RIGHT, KEY_LEFT, 27,
-	};
-	Arcade::Keys match[] = {
-		Arcade::Keys::RIGHT,
-		Arcade::Keys::LEFT,
-		Arcade::Keys::ESC,
-	};
 	auto k = getch();
-	for (size_t i = 0 ; i < 3 ; ++i)
-		if (k == keys[i]) {
-			_lastEvent = match[i];
+
+	for (size_t i = 0 ; i < _keymap.size() ; ++i) {
+		if (k == _keymap[i].first) {
+			_lastEvent = _keymap[i].second;
 			break ;
 		}
+	}
 	return true;
 }
 

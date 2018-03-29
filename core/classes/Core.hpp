@@ -25,9 +25,10 @@ class Core {
 		void stop();
 		bool init();
 		void swapLib(Arcade::Keys);
-	protected:
-	private:
 		Arcade::IGraphicLib &_getGraph();
+
+protected:
+	private:
 		Arcade::IGameLib &_getGame();
 		bool _initGraphs();
 		bool _initGames();

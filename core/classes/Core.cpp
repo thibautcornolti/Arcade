@@ -46,19 +46,6 @@ void Core::run()
 	if (_graphs.size() == 0)
 		return ;
 	_getGraph().openRendering();
-	_getGame().openGame();
-	while (_getGame().loop(&_getGraph())) {
-		_getGraph().pollEvent();
-		key = _getGraph().getLastEvent();
-		_getGraph().cleanEvent();
-		if (key != Arcade::Keys::NONE) {
-			swapLib(key);
-			if (key == Arcade::Keys::ESC) {
-				close();
-				break ;
-			}
-		}
-	}
 }
 
 bool Core::_initGraphs()
@@ -116,10 +103,18 @@ bool Core::init()
 
 Arcade::IGraphicLib &Core::_getGraph()
 {
+	if (_graphs.size() == 0) {
+		fprintf(stderr, "No lib found\n");
+		exit(84);
+	}
 	return *(_graphs[_libGraphIncrementer % _graphs.size()]);
 }
 
 Arcade::IGameLib &Core::_getGame()
 {
+	if (_games.size() == 0) {
+		fprintf(stderr, "No game found\n");
+		exit(84);
+	}
 	return *(_games[_libGameIncrementer % _games.size()]);
 }

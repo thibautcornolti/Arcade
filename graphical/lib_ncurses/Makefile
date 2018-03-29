@@ -8,9 +8,9 @@ RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
 			./src/classes/NcursesGraphicLib.cpp \
-			./src/shared_header/PixelBox.cpp \
-			./src/shared_header/TextBox.cpp \
-			./src/shared_header/Color.cpp \
+			../../shared_header/PixelBox.cpp \
+			../../shared_header/TextBox.cpp \
+			../../shared_header/Color.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 

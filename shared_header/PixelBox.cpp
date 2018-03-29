@@ -7,12 +7,12 @@
 
 #include "PixelBox.hpp"
 
-Arcade::PixelBox::PixelBox(size_t height, size_t width, size_t posW, size_t posH)
+Arcade::PixelBox::PixelBox(Vect<size_t> size, Vect<size_t> pos, Color col)
 {
-	setHeight(height);
-	setWidth(width);
-	setX(posW);
-	setY(posH);
+	_pos = pos;
+	_size = size;
+	for (size_t i = 0 ; i < size.getX() * size.getY() ; ++i)
+		_colorFrame.push_back(col);
 }
 
 size_t Arcade::PixelBox::getY() const
@@ -57,13 +57,16 @@ void Arcade::PixelBox::setX(size_t x)
 
 void Arcade::PixelBox::putPixel(Vect<size_t> pos, Arcade::Color col)
 {
+	_colorFrame[pos.getY() * _size.getX() + pos.getX()] = col;
 }
 
-Arcade::Color Arcade::PixelBox::getPixel(Vect<size_t> pos)
+Arcade::Color Arcade::PixelBox::getPixel(Vect<size_t> pos) const
 {
+	return _colorFrame[pos.getY() * _size.getX() + pos.getX()];
 }
 
 std::vector<Arcade::Color> &Arcade::PixelBox::getPixelArray()
 {
+	return _colorFrame;
 }
 

@@ -22,27 +22,19 @@ namespace Arcade {
 
 		/* Window handling */
 		// Main loop condition
-		bool isOpen() const final;
+		bool isOpen() const final; 
 
 		// Closes the window => stop loop (go menu)
-		bool closeRendering() final;
+		void closeRenderer() final;
 		
 		// Opens the window => start loop
-		bool openRendering() final;
+		void openRenderer() final;
 		
 		// Clears the screen
 		void clearWindow() final;
 
 		// Displays the buffered frame to the screen
 		void refreshWindow() final;
-
-
-		/* Resources handling */
-		// Initializes the library
-		bool initRenderer() final;
-		
-		// Unloads the library
-		bool stopRenderer() final;
 
 
 		/* Rendering functions */
@@ -58,10 +50,10 @@ namespace Arcade {
 		Keys getLastEvent() final;
 		
 		// Saves the event in the Graphics library
-		bool pollEvent() final;
+		bool pollEvents() final;
 		
 		// Deletes the last event
-		void cleanEvent() final;
+		void clearEvents() final;
 
 
 		/* Context Info */

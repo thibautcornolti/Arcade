@@ -1,9 +1,0 @@
-<application>
-  <component name="FindSettings">
-    <option name="customScope" value="Project 'cpp_d14m'" />
-    <option name="defaultScopeName" value="Project 'cpp_d14m'" />
-    <option name="regularExpressions" value="true" />
-    <option name="REGULAR_EXPRESSIONS" value="true" />
-    <option name="SEARCH_SCOPE" value="Project 'cpp_d14m'" />
-  </component>
-</application>

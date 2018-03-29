@@ -8,7 +8,7 @@
 #pragma once
 
 #include <ncurses.h>
-#include "../shared_header/IGraphicLib.hpp"
+#include "../../../../shared_header/IGraphicLib.hpp"
 
 namespace Arcade {
 	class NcursesGraphicLib : public Arcade::IGraphicLib {
@@ -17,23 +17,18 @@ namespace Arcade {
 		~NcursesGraphicLib() final;
 
 		/* Get the name of the library */
-		std::string getName() final;
-
-		/* Module info: Used to optimize initialization */
-		bool supportSprite() const final;
-		bool supportSound() const final;
-		bool needFont() const final;
+		std::string getName() const final;
 
 
 		/* Window handling */
 		// Main loop condition
-		bool isOpen() const final;
+		bool isOpen() const final; 
 
 		// Closes the window => stop loop (go menu)
-		bool closeRendering() final;
+		void closeRenderer() final;
 		
 		// Opens the window => start loop
-		bool openRendering() final;
+		void openRenderer() final;
 		
 		// Clears the screen
 		void clearWindow() final;
@@ -42,45 +37,12 @@ namespace Arcade {
 		void refreshWindow() final;
 
 
-		/* Resources handling */
-		// Initializes the library
-		bool initRenderer() final;
-		
-		// Unloads the library
-		bool stopRenderer() final;
-
-
 		/* Rendering functions */
 		// Draws a PixelBox or the sprite if supported
-		void drawPixelBox(PixelBox *) final;
+		void drawPixelBox(PixelBox &) final;
 		
 		// Draws a TextBox
-		void drawText(TextBox *) final;
-
-
-		/* Sound functions */
-		// Plays sound passed in arg
-		void playSound(void *) final;
-		
-		// Pauses sound passed in arg
-		void pauseSound(void *) final;
-		
-		// Stops sound passed in arg
-		void stopSound(void *) final;
-
-
-		/* Loading functions */
-		// Returns a text font in the Graphics library format
-		// or NULL if not supported
-		void *loadTextFont(std::string path) final;
-		
-		// Returns a sprite in the Graphics library format
-		// or NULL if not supported
-		void *loadSprite(std::string path) final;
-		
-		// Returns a sound in the Graphics library format
-		// or NULL if not supported
-		void *loadSound(std::string path) final;
+		void drawText(TextBox &) final;
 
 
 		/* Events handling */
@@ -88,10 +50,10 @@ namespace Arcade {
 		Keys getLastEvent() final;
 		
 		// Saves the event in the Graphics library
-		bool pollEvent() final;
+		bool pollEvents() final;
 		
 		// Deletes the last event
-		void cleanEvent() final;
+		void clearEvents() final;
 
 
 		/* Context Info */
@@ -106,6 +68,46 @@ namespace Arcade {
 	protected:
 	private:
 		bool _isRendering = false;
-		Keys _lastEvent;
+		Keys _lastEvent = Arcade::Keys::NONE;
+		std::vector<std::pair<int, Arcade::Keys>> _keymap = {
+			{'a', Arcade::Keys::A},
+			{'b', Arcade::Keys::B},
+			{'c', Arcade::Keys::C},
+			{'d', Arcade::Keys::D},
+			{'e', Arcade::Keys::E},
+			{'f', Arcade::Keys::F},
+			{'g', Arcade::Keys::G},
+			{'h', Arcade::Keys::H},
+			{'i', Arcade::Keys::I},
+			{'j', Arcade::Keys::J},
+			{'k', Arcade::Keys::K},
+			{'l', Arcade::Keys::L},
+			{'m', Arcade::Keys::M},
+			{'n', Arcade::Keys::N},
+			{'o', Arcade::Keys::O},
+			{'p', Arcade::Keys::P},
+			{'q', Arcade::Keys::Q},
+			{'r', Arcade::Keys::R},
+			{'s', Arcade::Keys::S},
+			{'t', Arcade::Keys::T},
+			{'u', Arcade::Keys::U},
+			{'v', Arcade::Keys::V},
+			{'w', Arcade::Keys::W},
+			{'x', Arcade::Keys::X},
+			{'y', Arcade::Keys::Y},
+			{'z', Arcade::Keys::Z},
+			{KEY_LEFT, Arcade::Keys::LEFT},
+			{KEY_RIGHT, Arcade::Keys::RIGHT},
+			{KEY_UP, Arcade::Keys::UP},
+			{KEY_DOWN, Arcade::Keys::DOWN},
+			{10, Arcade::Keys::ENTER},
+			{32, Arcade::Keys::SPACE},
+			{KEY_DC, Arcade::Keys::DELETE},
+			{KEY_BACKSPACE, Arcade::Keys::BACKSPACE},
+			{KEY_STAB, Arcade::Keys::TAB},
+			{27, Arcade::Keys::ESC},
+			{KEY_MOUSE, Arcade::Keys::MOUSELEFT},
+			{KEY_MOUSE, Arcade::Keys::MOUSERIGHT}
+		};
 	};
 };

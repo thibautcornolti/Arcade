@@ -18,22 +18,24 @@ Core::~Core()
 void Core::stop()
 {
 	close();
-	for (auto &lib : _libs)
-		lib->stopRenderer();
+	for (auto &graph : _graphs)
+		graph->closeRenderer();
+	for (auto &game : _games)
+		game->stop();
 }
 
 void Core::close()
 {
-	_getLib().closeRendering();
+	_getGraph().closeRenderer();
 }
 
 void Core::swapLib(Arcade::Keys key)
 {
 	if (key == Arcade::Keys::RIGHT || key == Arcade::Keys::LEFT) {
-		_getLib().closeRendering();
-		_libIncrementer = (_libIncrementer +
-			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _libs.size();
-		_getLib().openRendering();
+		_getGraph().closeRenderer();
+		_libGraphIncrementer = (_libGraphIncrementer +
+			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
+		_getGraph().openRenderer();
 	}
 }
 
@@ -41,35 +43,17 @@ void Core::run()
 {
 	Arcade::Keys key;
 
-	if (_libs.size() == 0)
+	if (_graphs.size() == 0)
 		return ;
-	_getLib().openRendering();
-	while (_getLib().isOpen()) {
-		_getLib().pollEvent();
-		key = _getLib().getLastEvent();
-		_getLib().cleanEvent();
-		if (key != Arcade::Keys::NONE) {
-			swapLib(key);
-			if (key == Arcade::Keys::ESC) {
-				close();
-				break ;
-			}
-		}
-		auto a = Arcade::PixelBox(10, 10, 10, 10);
-		a.putPixel(Arcade::Vect<size_t>(4, 0), Arcade::Color(0, 0, 0, 1));
-		auto b = Arcade::TextBox("salut", 0, 0, 15, 10);
-		_getLib().drawPixelBox(&a);
-		_getLib().drawText(&b);
-		_getLib().refreshWindow();
-	}
+	_getGraph().openRenderer();
 }
 
-bool Core::init()
-{	
+bool Core::_initGraphs()
+{
 	LibAnalyzer l;
-
-	for (auto &lib : l.getLibs()) {
-		std::shared_ptr<DLLoader> dl(new DLLoader(LIB_FOLDER"/" + lib));
+	
+	for (auto &lib : l.getGraphs()) {
+		std::shared_ptr<DLLoader> dl(new DLLoader(GRAPH_FOLDER"/" + lib));
 		_loaders.push_back(dl);
 
 		if (dl->isError()) {
@@ -81,13 +65,56 @@ bool Core::init()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
-		o->initRenderer();
-		_libs.push_back(o);
+		o->openRenderer();//o->initRenderer();
+		_graphs.push_back(o);
 	}
 	return true;
 }
 
-Arcade::IGraphicLib &Core::_getLib()
+bool Core::_initGames()
 {
-	return *(_libs[_libIncrementer % _libs.size()]);
+	LibAnalyzer l;
+	
+	for (auto &lib : l.getGames()) {
+		std::shared_ptr<DLLoader> dl(new DLLoader(GAME_FOLDER"/" + lib));
+		_loaders.push_back(dl);
+
+		if (dl->isError()) {
+			std::cout << dl->getError() << std::endl;
+			return false;
+		}
+		auto o = dl->getInstance<Arcade::IGameLib>();
+		if (dl->isError()) {
+			std::cout << dl->getError() << std::endl;
+			return false;
+		}
+		o->init();
+		_games.push_back(o);
+	}
+	return true;
+}
+
+bool Core::init()
+{	
+	if (!_initGraphs() || !_initGames())
+		return false;
+	return true;
+}
+
+Arcade::IGraphicLib &Core::_getGraph()
+{
+	if (_graphs.size() == 0) {
+		fprintf(stderr, "No lib found\n");
+		exit(84);
+	}
+	return *(_graphs[_libGraphIncrementer % _graphs.size()]);
+}
+
+Arcade::IGameLib &Core::_getGame()
+{
+	if (_games.size() == 0) {
+		fprintf(stderr, "No game found\n");
+		exit(84);
+	}
+	return *(_games[_libGameIncrementer % _games.size()]);
 }

@@ -1,3 +1,14 @@
 .idea/
 cmake-build-debug/
 CMakeLists.txt
+.vscode
+*.o
+a.out
+program
+*.so
+.gitignore
+_linux/
+codestyles/
+fileTemplates/
+keymaps/
+tools/

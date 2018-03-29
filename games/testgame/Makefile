@@ -1,4 +1,4 @@
-NAME	= lib_ncurses.so
+NAME	= game_testgame.so
 
 CC	= g++
 
@@ -7,7 +7,7 @@ CP = cp
 RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
-			./src/classes/NcursesGraphicLib.cpp \
+			./src/classes/TestGameLib.cpp \
 			../../shared_header/PixelBox.cpp \
 			../../shared_header/TextBox.cpp \
 			../../shared_header/Color.cpp \

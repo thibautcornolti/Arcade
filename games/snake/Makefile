@@ -1,4 +1,4 @@
-NAME	= lib_ncurses.so
+NAME	= game_snake.so
 
 CC	= g++
 
@@ -6,11 +6,7 @@ CP = cp
 
 RM	= rm -f
 
-SRCS	= ./src/entry.cpp \
-			./src/classes/NcursesGraphicLib.cpp \
-			../../shared_header/PixelBox.cpp \
-			../../shared_header/TextBox.cpp \
-			../../shared_header/Color.cpp \
+SRCS	=
 
 OBJS	= $(SRCS:.cpp=.o)
 

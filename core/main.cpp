@@ -38,9 +38,9 @@ void game(Core &core)
 	Menu menu(core, 50, 50);
 
 	while (core._getGraph().isOpen()) {
-		core._getGraph().pollEvent();
+		core._getGraph().pollEvents();
 		key = core._getGraph().getLastEvent();
-		core._getGraph().cleanEvent();
+		core._getGraph().clearEvents();
 		if (key != Arcade::Keys::NONE) {
 			core.swapLib(key);
 			if (key == Arcade::Keys::ESC) {

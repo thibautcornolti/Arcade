@@ -19,23 +19,23 @@ void Core::stop()
 {
 	close();
 	for (auto &graph : _graphs)
-		graph->stopRenderer();
+		graph->closeRenderer();
 	for (auto &game : _games)
-		game->stopGame();
+		game->stop();
 }
 
 void Core::close()
 {
-	_getGraph().closeRendering();
+	_getGraph().closeRenderer();
 }
 
 void Core::swapLib(Arcade::Keys key)
 {
 	if (key == Arcade::Keys::RIGHT || key == Arcade::Keys::LEFT) {
-		_getGraph().closeRendering();
+		_getGraph().closeRenderer();
 		_libGraphIncrementer = (_libGraphIncrementer +
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
-		_getGraph().openRendering();
+		_getGraph().openRenderer();
 	}
 }
 
@@ -45,7 +45,7 @@ void Core::run()
 
 	if (_graphs.size() == 0)
 		return ;
-	_getGraph().openRendering();
+	_getGraph().openRenderer();
 }
 
 bool Core::_initGraphs()
@@ -65,7 +65,7 @@ bool Core::_initGraphs()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
-		o->initRenderer();
+		o->openRenderer();//o->initRenderer();
 		_graphs.push_back(o);
 	}
 	return true;
@@ -88,7 +88,7 @@ bool Core::_initGames()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
-		o->initGame();
+		o->init();
 		_games.push_back(o);
 	}
 	return true;

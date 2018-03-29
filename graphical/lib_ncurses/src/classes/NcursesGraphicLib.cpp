@@ -13,24 +13,9 @@ Arcade::NcursesGraphicLib::NcursesGraphicLib()
 Arcade::NcursesGraphicLib::~NcursesGraphicLib()
 {}
 
-std::string Arcade::NcursesGraphicLib::getName()
+std::string Arcade::NcursesGraphicLib::getName() const
 {
 	return "NCurses";
-}
-
-bool Arcade::NcursesGraphicLib::supportSprite() const
-{
-	return false;
-}
-
-bool Arcade::NcursesGraphicLib::supportSound() const
-{
-	return false;
-}
-
-bool Arcade::NcursesGraphicLib::needFont() const
-{
-	return false;
 }
 
 bool Arcade::NcursesGraphicLib::isOpen() const
@@ -76,45 +61,21 @@ void Arcade::NcursesGraphicLib::refreshWindow()
 	refresh();
 }
 
-void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox *pixelBox)
+void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
 {
-	size_t x = pixelBox->getX();
-	size_t y = pixelBox->getY();
-	for (size_t xi = 0 ; xi < pixelBox->getWidth() ; ++xi)
-		for (size_t yi = 0 ; yi < pixelBox->getHeight() ; ++yi) {
-			Arcade::Color c = pixelBox->getPixel(Vect<size_t>(yi, xi));
+	size_t x = pixelBox.getX();
+	size_t y = pixelBox.getY();
+	for (size_t xi = 0 ; xi < pixelBox.getWidth() ; ++xi)
+		for (size_t yi = 0 ; yi < pixelBox.getHeight() ; ++yi) {
+			Arcade::Color c = pixelBox.getPixel(Vect<size_t>(yi, xi));
 			mvprintw(yi + y, xi + x, "%d", c.getAlpha());
 		}
 }
 
-void Arcade::NcursesGraphicLib::drawText(TextBox *textBox)
+void Arcade::NcursesGraphicLib::drawText(TextBox &textBox)
 {
-	mvprintw(textBox->getPosH(), textBox->getPosW(),
-		textBox->getValue().c_str());
-}
-
-void Arcade::NcursesGraphicLib::playSound(void *)
-{}
-
-void Arcade::NcursesGraphicLib::pauseSound(void *)
-{}
-
-void Arcade::NcursesGraphicLib::stopSound(void *)
-{}
-
-void *Arcade::NcursesGraphicLib::loadTextFont(std::string)
-{
-	return nullptr;
-}
-
-void *Arcade::NcursesGraphicLib::loadSprite(std::string)
-{
-	return nullptr;
-}
-
-void *Arcade::NcursesGraphicLib::loadSound(std::string)
-{
-	return nullptr;
+	mvprintw(textBox.getPosH(), textBox.getPosW(),
+		textBox.getValue().c_str());
 }
 
 Arcade::Keys Arcade::NcursesGraphicLib::getLastEvent()

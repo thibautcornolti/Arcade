@@ -57,25 +57,13 @@ void Arcade::PixelBox::setX(size_t x)
 
 void Arcade::PixelBox::putPixel(Vect<size_t> pos, Arcade::Color col)
 {
-	_colorTab[pos] = col;
 }
 
 Arcade::Color Arcade::PixelBox::getPixel(Vect<size_t> pos)
 {
-	return _colorTab[pos];
 }
 
-std::vector<Arcade::Color> Arcade::PixelBox::getPixelArray()
+std::vector<Arcade::Color> &Arcade::PixelBox::getPixelArray()
 {
-	std::vector<Arcade::Color> res;
-
-	for (size_t w = 0 ; w < getWidth() ; ++w)
-		for (size_t h = 0 ; h < getHeight() ; ++h)
-			res.push_back(_colorTab[Arcade::Vect<size_t>(w, h)]);
-	return res;
 }
 
-std::unordered_map<Arcade::Vect<size_t>, Arcade::Color> &Arcade::PixelBox::getPixelMap()
-{
-	return _colorTab;
-}

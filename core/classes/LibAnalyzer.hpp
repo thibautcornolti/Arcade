@@ -17,12 +17,12 @@ class LibAnalyzer {
 		LibAnalyzer();
 		~LibAnalyzer() = default;
 
-		std::vector<std::string> &getLibs();
+		std::vector<std::string> &getGraphs();
 		std::vector<std::string> &getGames();
 	protected:
 	private:
 		void _analyzeFolder(const std::string &,
 					std::vector<std::string> &);
-		std::vector<std::string> _libs;
+		std::vector<std::string> _graphs;
 		std::vector<std::string> _games;
 };

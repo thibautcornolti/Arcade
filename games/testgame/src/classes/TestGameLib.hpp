@@ -16,10 +16,10 @@ namespace Arcade {
 		~TestGameLib();
 
 		const std::string &getName() const final;
-		bool initGame() final;
-		bool stopGame() final;
-		bool openGame() final;
-		bool closeGame() final;
+		bool init() final;
+		bool stop() final;
+		bool open() final;
+		bool close() final;
 		bool loop(IGraphicLib *graphicsLib) final;
 	protected:
 	private:

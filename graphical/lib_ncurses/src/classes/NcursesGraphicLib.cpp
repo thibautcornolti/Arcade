@@ -23,22 +23,12 @@ bool Arcade::NcursesGraphicLib::isOpen() const
 	return _isRendering;
 }
 
-bool Arcade::NcursesGraphicLib::initRenderer()
-{
-	return true;
-}
-
-bool Arcade::NcursesGraphicLib::stopRenderer()
-{
-	return true;
-}
-
 void Arcade::NcursesGraphicLib::clearWindow()
 {
 	clear();
 }
 
-bool Arcade::NcursesGraphicLib::openRendering()
+void Arcade::NcursesGraphicLib::openRenderer()
 {
 	initscr();
 	noecho();
@@ -46,14 +36,12 @@ bool Arcade::NcursesGraphicLib::openRendering()
 	keypad(stdscr, TRUE);
 	timeout(0);
 	_isRendering = true;
-	return true;
 }
 
-bool Arcade::NcursesGraphicLib::closeRendering()
+void Arcade::NcursesGraphicLib::closeRenderer()
 {
 	endwin();
 	_isRendering = false;
-	return true;
 }
 
 void Arcade::NcursesGraphicLib::refreshWindow()
@@ -74,16 +62,18 @@ void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
 
 void Arcade::NcursesGraphicLib::drawText(TextBox &textBox)
 {
-	mvprintw(textBox.getPosH(), textBox.getPosW(),
+	mvprintw(textBox.getY(), textBox.getX(),
 		textBox.getValue().c_str());
 }
 
 Arcade::Keys Arcade::NcursesGraphicLib::getLastEvent()
 {
-	return _lastEvent;
+	Arcade::Keys temp = _lastEvent;
+	clearEvents();
+	return temp;
 }
 
-bool Arcade::NcursesGraphicLib::pollEvent()
+bool Arcade::NcursesGraphicLib::pollEvents()
 {
 	if (_isRendering == false)
 		return false;
@@ -98,7 +88,7 @@ bool Arcade::NcursesGraphicLib::pollEvent()
 	return true;
 }
 
-void Arcade::NcursesGraphicLib::cleanEvent()
+void Arcade::NcursesGraphicLib::clearEvents()
 {
 	_lastEvent = Arcade::Keys::NONE;
 }

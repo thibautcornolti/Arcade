@@ -48,17 +48,7 @@ void Menu::clear_selector(size_t i)
 
 void Menu::displayMenu()
 {
-	Arcade::Keys key = Arcade::Keys::NONE;
-
 	for (size_t i = 0; i < _text.size(); i++) {
-		_core._getGraph().pollEvents();
-		key = _core._getGraph().getLastEvent();
-		_core._getGraph().clearEvents();
-		if (key == Arcade::Keys::UP && _selector > 0) {
-			_selector--;
-		} else if (key == Arcade::Keys::DOWN &&
-			_selector < _record_lenght)
-			_selector++;
 		if (_selector == i)
 			add_selector(i);
 		_core._getGraph().drawText(_text[i]);
@@ -73,5 +63,15 @@ void Menu::run()
 		initMenu();
 	_core._getGraph().clearWindow();
 	displayMenu();
-	_core._getGraph().refreshWindow();
+	Arcade::Keys key = Arcade::Keys::NONE;
+	for (size_t i = 0 ; i < 16 ; ++i) {
+		_core._getGraph().pollEvents();
+		key = _core._getGraph().getLastEvent();
+		if (key == Arcade::Keys::UP && _selector > 0) {
+			_selector--;
+		} else if (key == Arcade::Keys::DOWN &&
+			_selector < _record_lenght)
+			_selector++;
+		usleep(1000);
+	}
 }

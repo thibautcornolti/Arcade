@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <map>
 #include <ncurses.h>
 #include "../../../../shared_header/IGraphicLib.hpp"
 
@@ -67,6 +68,8 @@ namespace Arcade {
 		int getMaxX() const final;
 	protected:
 	private:
+		std::map<long, short> _colors;
+		short _nbColor = 1;
 		bool _isRendering = false;
 		Keys _lastEvent = Arcade::Keys::NONE;
 		std::vector<std::pair<int, Arcade::Keys>> _keymap = {

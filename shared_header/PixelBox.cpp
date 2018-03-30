@@ -17,12 +17,12 @@ Arcade::PixelBox::PixelBox(Vect<size_t> size, Vect<size_t> pos, Color col)
 
 size_t Arcade::PixelBox::getY() const
 {
-	return _size.getY();
+	return _pos.getY();
 }
 
 size_t Arcade::PixelBox::getHeight() const
 {
-	return _pos.getY();
+	return _size.getY();
 }
 
 void Arcade::PixelBox::setY(size_t y)
@@ -37,12 +37,12 @@ void Arcade::PixelBox::setHeight(size_t height)
 
 size_t Arcade::PixelBox::getX() const
 {
-	return _size.getX();
+	return _pos.getX();
 }
 
 size_t Arcade::PixelBox::getWidth() const
 {
-	return _pos.getX();
+	return _size.getX();
 }
 
 void Arcade::PixelBox::setWidth(size_t width)

@@ -8,6 +8,7 @@
 #include "NcursesGraphicLib.hpp"
 
 Arcade::NcursesGraphicLib::NcursesGraphicLib()
+	: _colors()
 {}
 
 Arcade::NcursesGraphicLib::~NcursesGraphicLib()
@@ -34,6 +35,7 @@ void Arcade::NcursesGraphicLib::openRenderer()
 	noecho();
 	curs_set(FALSE);
 	keypad(stdscr, TRUE);
+	start_color();
 	timeout(0);
 	_isRendering = true;
 }
@@ -56,7 +58,20 @@ void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
 	for (size_t xi = 0 ; xi < pixelBox.getWidth() ; ++xi)
 		for (size_t yi = 0 ; yi < pixelBox.getHeight() ; ++yi) {
 			Arcade::Color c = pixelBox.getPixel(Vect<size_t>(yi, xi));
-			mvprintw(yi + y, xi + x, "%d", c.getAlpha());
+			long code = c.getRed() +
+				(c.getGreen() << 8) +
+				(c.getBlue() << 16);
+			short ic = _colors[code];
+			if (!ic) {
+				_colors[code] = _nbColor;
+				ic = _nbColor++;
+				init_color(ic, c.getRed(), c.getGreen(),
+					c.getBlue());
+				init_pair(ic, ic, ic);
+			}
+			attron(COLOR_PAIR(ic));
+			mvprintw(yi + y, xi + x, " ");
+			attroff(COLOR_PAIR(ic));
 		}
 }
 

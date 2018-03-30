@@ -36,6 +36,7 @@ void Menu::add_selector(size_t i)
 	txt.insert(txt.begin(), '<');
 	txt.insert(txt.end(), '>');
 	_text[i].setValue(txt);
+	_text[i].setX(_text[i].getX()-1);
 }
 
 void Menu::clear_selector(size_t i)
@@ -44,6 +45,7 @@ void Menu::clear_selector(size_t i)
 	txt.erase(txt.begin());
 	txt.erase(txt.end() - 1);
 	_text[i].setValue(txt);
+	_text[i].setX(_text[i].getX()+1);
 }
 
 void Menu::displayMenu()

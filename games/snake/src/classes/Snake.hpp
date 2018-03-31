@@ -7,10 +7,11 @@
 
 #pragma once
 
+#include <list>
 #include "../shared_header/IGameLib.hpp"
 
-#define MAP	25
-#define SPEED	300
+#define MAP	40
+#define SPEED	500000
 
 namespace Arcade {
 	class Snake : public Arcade::IGameLib {
@@ -27,21 +28,37 @@ namespace Arcade {
 		void update() final;
 		void refresh(IGraphicLib *) final;
 
-		enum Move {
+		enum STATUS {
+			RUNNING,
+			PAUSED,
+			ENDED
+		};
+
+		enum MOVE {
 			RIGHT,
 			LEFT,
 			TOP,
 			BOT
 		};
 
-		void display();
-		bool move(Move);
+		Arcade::Vect<size_t> getCoords(size_t) const;
+		void updatePixel(Arcade::PixelBox&);
+		void display(IGraphicLib *);
+
+		void addFood();
+		bool move(MOVE);
+
+	private:
+		typedef struct s_snake {
+			size_t pos;
+			Arcade::Vect<size_t> coord;
+		} t_snake;
 
 	private:
 		std::string _name = "Snake";
-		Move _current = RIGHT;
-		Arcade::TextBox _title;
-		Arcade::PixelBox _map;
-		Arcade::Vect<size_t> _player;
+		std::string _map;
+		std::list<t_snake> _snake;
+		MOVE _current = RIGHT;
+		STATUS _game = ENDED;
 	};
 }

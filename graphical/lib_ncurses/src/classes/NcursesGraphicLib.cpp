@@ -126,7 +126,11 @@ int Arcade::NcursesGraphicLib::_getPairCode(Arcade::Color f, Arcade::Color b)
 	long fcode = f.getRed() + (f.getGreen() << 8) + (f.getBlue() << 16);
 	long bcode = b.getRed() + (b.getGreen() << 8) + (b.getBlue() << 16);
 	short icf = _colors[fcode];
-	short icb = _colors[bcode];
+	short icb;
+	if (bcode == 0)
+		icb = 0;
+	else
+		icb = _colors[bcode];
 	double d = 1000 / 255;
 	if (!icf) {
 		_colors[fcode] = _nbColor;
@@ -134,7 +138,7 @@ int Arcade::NcursesGraphicLib::_getPairCode(Arcade::Color f, Arcade::Color b)
 		init_color(icf, f.getRed() * d, f.getGreen() * d,
 			f.getBlue() * d);
 	}
-	if (!icb) {
+	if (!icb && b.getRed() + b.getGreen() + b.getBlue()) {
 		_colors[bcode] = _nbColor;
 		icb = _nbColor++;
 		init_color(icb, b.getRed() * d, b.getGreen() * d,

@@ -6,7 +6,11 @@ CP = cp
 
 RM	= rm -f
 
-SRCS	=
+SRCS	= ./src/entry.cpp \
+		./src/classes/Snake.cpp \
+		../../shared_header/PixelBox.cpp \
+		../../shared_header/TextBox.cpp \
+		../../shared_header/Color.cpp
 
 OBJS	= $(SRCS:.cpp=.o)
 

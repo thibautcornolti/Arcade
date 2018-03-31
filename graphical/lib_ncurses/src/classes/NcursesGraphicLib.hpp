@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <ncurses.h>
-#include "../../../../shared_header/IGraphicLib.hpp"
+#include "../shared_header/IGraphicLib.hpp"
 
 namespace Arcade {
 	class NcursesGraphicLib : public Arcade::IGraphicLib {
@@ -70,6 +70,7 @@ namespace Arcade {
 		size_t getMaxX() const final;
 	protected:
 	private:
+		int _getPairCode(Arcade::Color, Arcade::Color);
 		std::map<long, short> _colors;
 		time_t _lastRefresh = 0;
 		short _nbColor = 1;

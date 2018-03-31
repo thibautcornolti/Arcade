@@ -61,18 +61,9 @@ void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
 	size_t y = pixelBox.getY();
 	for (size_t yi = 0 ; yi < pixelBox.getHeight() ; ++yi)
 		for (size_t xi = 0 ; xi < pixelBox.getWidth() ; ++xi) {
-			Arcade::Color c = pixelBox.getPixel(Vect<size_t>(xi, yi));
-			long code = c.getRed() +
-				(c.getGreen() << 8) +
-				(c.getBlue() << 16);
-			short ic = _colors[code];
-			if (!ic) {
-				_colors[code] = _nbColor;
-				ic = _nbColor++;
-				init_color(ic, c.getRed(), c.getGreen(),
-					c.getBlue());
-				init_pair(ic, ic, ic);
-			}
+			int ic = _getPairCode(
+				pixelBox.getPixel(Vect<size_t>(xi, yi)),
+				pixelBox.getPixel(Vect<size_t>(xi, yi)));
 			attron(COLOR_PAIR(ic));
 			mvprintw(yi + y, xi + x, " ");
 			attroff(COLOR_PAIR(ic));
@@ -81,8 +72,11 @@ void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
 
 void Arcade::NcursesGraphicLib::drawText(TextBox &textBox)
 {
+	int ic = _getPairCode(textBox.getColor(), textBox.getBackgroundColor());
+	attron(COLOR_PAIR(ic));
 	mvprintw(textBox.getY(), textBox.getX(),
 		textBox.getValue().c_str());
+	attroff(COLOR_PAIR(ic));
 }
 
 Arcade::Keys Arcade::NcursesGraphicLib::getLastEvent()
@@ -125,4 +119,27 @@ size_t Arcade::NcursesGraphicLib::getMaxY() const
 size_t Arcade::NcursesGraphicLib::getMaxX() const
 {
 	return COLS;
+}
+
+int Arcade::NcursesGraphicLib::_getPairCode(Arcade::Color f, Arcade::Color b)
+{
+	long fcode = f.getRed() + (f.getGreen() << 8) + (f.getBlue() << 16);
+	long bcode = b.getRed() + (b.getGreen() << 8) + (b.getBlue() << 16);
+	short icf = _colors[fcode];
+	short icb = _colors[bcode];
+	double d = 1000 / 255;
+	if (!icf) {
+		_colors[fcode] = _nbColor;
+		icf = _nbColor++;
+		init_color(icf, f.getRed() * d, f.getGreen() * d,
+			f.getBlue() * d);
+	}
+	if (!icb) {
+		_colors[bcode] = _nbColor;
+		icb = _nbColor++;
+		init_color(icb, b.getRed() * d, b.getGreen() * d,
+			b.getBlue() * d);
+	}
+	init_pair((icf << 4) + icb, icf, icb);
+	return (icf << 4) + icb;
 }

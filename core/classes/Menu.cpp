@@ -26,7 +26,7 @@ void Menu::_genMenu(Arcade::IGraphicLib *graph)
 			(height / (_games.size() + 1)) * (i + 1)
 		);
 		auto fontSize = 30UL;
-		auto color = Arcade::Color();
+		auto color = Arcade::Color(255, 255, 255, 255);
 		auto t = Arcade::TextBox(_games[i], pos, fontSize, color);
 		_text.push_back(t);
 	}

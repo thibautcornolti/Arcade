@@ -78,7 +78,7 @@ void Arcade::TestGameLib::update()
 use ZQSD to move\n\
 echap = return to lobby\n\
 tu peu revenir et le player sera la ou tu la laisser",
-		pos, 30UL, Arcade::Color(255));
+		pos, 30UL, Arcade::Color(255, 0, 0, 255));
 }
 
 void Arcade::TestGameLib::refresh(IGraphicLib *lib)

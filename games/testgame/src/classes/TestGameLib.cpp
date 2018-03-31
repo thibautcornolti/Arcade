@@ -8,6 +8,8 @@
 #include "TestGameLib.hpp"
 
 Arcade::TestGameLib::TestGameLib()
+	: _title("", Arcade::Vect<size_t>())
+	, _map()
 {
 }
 
@@ -22,6 +24,7 @@ const std::string &Arcade::TestGameLib::getName() const
 
 bool Arcade::TestGameLib::init()
 {
+	_player = Vect<size_t>();
 	return true;
 }
 
@@ -40,14 +43,49 @@ bool Arcade::TestGameLib::close()
 	return true;
 }
 
-bool Arcade::TestGameLib::loop(IGraphicLib *lib)
+void Arcade::TestGameLib::applyEvent(Arcade::Keys key)
 {
-	auto s = Arcade::Vect<size_t>(10, 10);
-	auto a = Arcade::PixelBox(s, s);
-	a.putPixel(Arcade::Vect<size_t>(4, 0), Arcade::Color(0, 0, 0, 1));
-	auto b = Arcade::TextBox("salut", 0, 0, 15, 10);
-	lib->drawPixelBox(a);
-	lib->drawText(b);
+	switch (key) {
+		case Arcade::Keys::Z:
+			if (_player.getY() > 0)
+				_player.setY(_player.getY() - 1);
+			break ;
+		case Arcade::Keys::S:
+			if (_player.getY() < _map.getHeight() - 1)
+				_player.setY(_player.getY() + 1);
+			break ;
+		case Arcade::Keys::D:
+			if (_player.getX() < _map.getWidth() - 1)
+				_player.setX(_player.getX() + 1);
+			break ;
+		case Arcade::Keys::Q:
+			if (_player.getX() > 0)
+				_player.setX(_player.getX() - 1);
+			break ;
+		default:
+			break ;
+	}
+}
+
+void Arcade::TestGameLib::update()
+{
+	auto size = Arcade::Vect<size_t>(30, 15);
+	auto pos = Arcade::Vect<size_t>(2, 1);
+	_map = Arcade::PixelBox(size, pos);
+	_map.putPixel(_player, Arcade::Color(255));
+	pos.setXY(0, 18);
+	_title = Arcade::TextBox("best game ever\n\
+use ZQSD to move\n\
+echap = return to lobby\n\
+tu peu revenir et le player sera la ou tu la laisser",
+		pos, 30UL, Arcade::Color(255));
+}
+
+void Arcade::TestGameLib::refresh(IGraphicLib *lib)
+{
+	lib->clearWindow();
+	
+	lib->drawPixelBox(_map);
+	lib->drawText(_title);
 	lib->refreshWindow();
-	return lib->isOpen();
 }

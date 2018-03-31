@@ -20,9 +20,14 @@ namespace Arcade {
 		bool stop() final;
 		bool open() final;
 		bool close() final;
-		bool loop(IGraphicLib *graphicsLib) final;
+		void applyEvent(Keys) final;
+		void update() final;
+		void refresh(IGraphicLib *) final;
 	protected:
 	private:
 		std::string _name = "Test";
+		Arcade::TextBox _title;
+		Arcade::PixelBox _map;
+		Arcade::Vect<size_t> _player;
 	};
 }

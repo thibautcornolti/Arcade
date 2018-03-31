@@ -48,6 +48,10 @@ void Arcade::NcursesGraphicLib::closeRenderer()
 
 void Arcade::NcursesGraphicLib::refreshWindow()
 {
+	auto current = time(NULL);
+	auto spent = current - _lastRefresh;
+	usleep(16000 - spent % 16000);
+	_lastRefresh = current;
 	refresh();
 }
 
@@ -55,9 +59,9 @@ void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
 {
 	size_t x = pixelBox.getX();
 	size_t y = pixelBox.getY();
-	for (size_t xi = 0 ; xi < pixelBox.getWidth() ; ++xi)
-		for (size_t yi = 0 ; yi < pixelBox.getHeight() ; ++yi) {
-			Arcade::Color c = pixelBox.getPixel(Vect<size_t>(yi, xi));
+	for (size_t yi = 0 ; yi < pixelBox.getHeight() ; ++yi)
+		for (size_t xi = 0 ; xi < pixelBox.getWidth() ; ++xi) {
+			Arcade::Color c = pixelBox.getPixel(Vect<size_t>(xi, yi));
 			long code = c.getRed() +
 				(c.getGreen() << 8) +
 				(c.getBlue() << 16);
@@ -113,12 +117,12 @@ Arcade::Vect<size_t> Arcade::NcursesGraphicLib::getScreenSize() const
 	return Arcade::Vect<size_t>(getMaxX(), getMaxY());
 }
 
-int Arcade::NcursesGraphicLib::getMaxY() const
+size_t Arcade::NcursesGraphicLib::getMaxY() const
 {
 	return LINES;
 }
 
-int Arcade::NcursesGraphicLib::getMaxX() const
+size_t Arcade::NcursesGraphicLib::getMaxX() const
 {
 	return COLS;
 }

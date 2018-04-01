@@ -10,8 +10,8 @@
 #include <list>
 #include "../shared_header/IGameLib.hpp"
 
-#define MAP	40
-#define SPEED	500000
+#define MAP	25
+#define SPEED	150
 
 namespace Arcade {
 	class Snake : public Arcade::IGameLib {
@@ -44,9 +44,14 @@ namespace Arcade {
 		Arcade::Vect<size_t> getCoords(size_t) const;
 		void updatePixel(Arcade::PixelBox&);
 		void display(IGraphicLib *);
+		std::string getStatus() const;
+		void displayGameInfo(IGraphicLib *);
 
+		bool restart();
+		bool collide();
+		void addLink();
 		void addFood();
-		void setMove(const MOVE);
+		void setMove(MOVE);
 		bool move();
 
 	private:
@@ -61,6 +66,6 @@ namespace Arcade {
 		std::string _map;
 		std::list<t_snake> _snake;
 		MOVE _current = RIGHT;
-		STATUS _game = ENDED;
+		STATUS _game = RUNNING;
 	};
 }

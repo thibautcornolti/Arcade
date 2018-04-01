@@ -35,10 +35,10 @@ namespace Arcade {
 		};
 
 		enum MOVE {
-			RIGHT,
-			LEFT,
-			TOP,
-			BOT
+			RIGHT = 1,
+			LEFT = -1,
+			TOP = -(MAP + 2),
+			BOT = (MAP + 2)
 		};
 
 		Arcade::Vect<size_t> getCoords(size_t) const;
@@ -46,12 +46,14 @@ namespace Arcade {
 		void display(IGraphicLib *);
 
 		void addFood();
-		bool move(MOVE);
+		void setMove(const MOVE);
+		bool move();
 
 	private:
 		typedef struct s_snake {
-			size_t pos;
-			Arcade::Vect<size_t> coord;
+			int id;
+			size_t currentPos;
+			size_t lastPos;
 		} t_snake;
 
 	private:

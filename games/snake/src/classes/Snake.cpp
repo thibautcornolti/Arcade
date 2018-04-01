@@ -42,7 +42,7 @@ bool Arcade::Snake::init()
 	addFood();
 	for (int i = 0; i < 4; i++) {
 		snakePos = _map.size() / 2 + (MAP / 2 + i);
-		snake = {snakePos, getCoords(snakePos)};
+		snake = {3 - i, snakePos, snakePos};
 		_snake.push_front(snake);
 	}
 	return true;
@@ -65,7 +65,22 @@ bool Arcade::Snake::close()
 
 void Arcade::Snake::applyEvent(Arcade::Keys key)
 {
-
+	switch (key) {
+		case Arcade::Keys::Z:
+			setMove(TOP);
+			break ;
+		case Arcade::Keys::S:
+			setMove(BOT);
+			break ;
+		case Arcade::Keys::D:
+			setMove(RIGHT);
+			break ;
+		case Arcade::Keys::Q:
+			setMove(LEFT);
+			break ;
+		default:
+			break ;
+	}
 }
 
 void Arcade::Snake::update()
@@ -79,8 +94,8 @@ void Arcade::Snake::update()
 void Arcade::Snake::refresh(IGraphicLib *lib)
 {
 	lib->clearWindow();
+	move();
 	display(lib);
-	move(RIGHT);
 	lib->refreshWindow();
 }
 
@@ -97,19 +112,15 @@ void Arcade::Snake::updatePixel(Arcade::PixelBox &map)
 		key = _map[i];
 		switch (key) {
 			case '#':
-				// Wall
 				map.putPixel(getCoords(i), {255, 0, 0, 255});
 				break;
 			case '0':
-				// Snake
 				map.putPixel(getCoords(i), {0, 0, 255, 255});
 				break;
 			case '1':
-				// Bouffe
 				map.putPixel(getCoords(i), {0, 255, 0, 255});
 				break;
 			default:
-				// Vide
 				map.putPixel(getCoords(i), {0, 0, 0, 255});
 				break;
 		}
@@ -124,13 +135,30 @@ void Arcade::Snake::display(IGraphicLib *lib)
 	lib->drawPixelBox(map);
 }
 
-bool Arcade::Snake::move(Arcade::Snake::MOVE)
+void Arcade::Snake::setMove(const Arcade::Snake::MOVE move)
+{
+	_current = move;
+}
+
+bool Arcade::Snake::move()
 {
 	usleep(SPEED);
-	for (auto &it : _snake) {
-		_map[it.pos] = ' ';
-		_map[it.pos + 1] = '0';
-		it.pos += 1;
+	size_t nextLinkPos;
+
+	for (auto it = _snake.begin(); it != _snake.end(); it++) {
+		_map[it->currentPos] = ' ';
+		if (it == _snake.begin()) {
+			_map[it->currentPos + _current] = '0';
+			it->lastPos = it->currentPos;
+			it->currentPos += _current;
+		} else {
+			std::advance(it, -1);
+			nextLinkPos = it->lastPos;
+			std::advance(it, 1);
+			_map[nextLinkPos] = '0';
+			it->lastPos = it->currentPos;
+			it->currentPos = nextLinkPos;
+		}
 	}
 	return true;
 }

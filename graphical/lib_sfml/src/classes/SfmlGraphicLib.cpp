@@ -7,6 +7,10 @@
 
 #include "SfmlGraphicLib.hpp"
 
+Arcade::SfmlGraphicLib::SfmlGraphicLib()
+	: _lastEvents()
+{}
+
 std::string Arcade::SfmlGraphicLib::getName() const
 {
 	return "Sfml";
@@ -68,8 +72,11 @@ void Arcade::SfmlGraphicLib::drawText(TextBox &textBox)
 
 Arcade::Keys Arcade::SfmlGraphicLib::getLastEvent()
 {
-	Arcade::Keys temp = _lastEvent;
-	clearEvents();
+	Arcade::Keys temp = Arcade::Keys::NONE;
+	if (_lastEvents.size()) {
+		temp = _lastEvents.back();
+		_lastEvents.pop_back();
+	}
 	return temp;
 }
 
@@ -83,7 +90,7 @@ bool Arcade::SfmlGraphicLib::pollEvents()
 
 	for (size_t i = 0 ; i < _keymap.size() ; ++i) {
 		if (k == _keymap[i].first) {
-			_lastEvent = _keymap[i].second;
+			_lastEvents.push_back(_keymap[i].second);
 			break ;
 		}
 	}
@@ -92,7 +99,7 @@ bool Arcade::SfmlGraphicLib::pollEvents()
 
 void Arcade::SfmlGraphicLib::clearEvents()
 {
-	_lastEvent = Arcade::Keys::NONE;
+	_lastEvents.clear();
 }
 
 Arcade::Vect<size_t> Arcade::SfmlGraphicLib::getScreenSize() const 

@@ -10,6 +10,7 @@
 Arcade::NcursesGraphicLib::NcursesGraphicLib()
 	: _colorToCode()
 	, _codeToPair()
+	, _lastEvents()
 {}
 
 std::string Arcade::NcursesGraphicLib::getName() const
@@ -79,8 +80,11 @@ void Arcade::NcursesGraphicLib::drawText(TextBox &textBox)
 
 Arcade::Keys Arcade::NcursesGraphicLib::getLastEvent()
 {
-	Arcade::Keys temp = _lastEvent;
-	clearEvents();
+	Arcade::Keys temp = Arcade::Keys::NONE;
+	if (_lastEvents.size()) {
+		temp = _lastEvents.back();
+		_lastEvents.pop_back();
+	}
 	return temp;
 }
 
@@ -92,7 +96,7 @@ bool Arcade::NcursesGraphicLib::pollEvents()
 
 	for (size_t i = 0 ; i < _keymap.size() ; ++i) {
 		if (k == _keymap[i].first) {
-			_lastEvent = _keymap[i].second;
+			_lastEvents.push_back(_keymap[i].second);
 			break ;
 		}
 	}
@@ -101,12 +105,12 @@ bool Arcade::NcursesGraphicLib::pollEvents()
 
 void Arcade::NcursesGraphicLib::clearEvents()
 {
-	_lastEvent = Arcade::Keys::NONE;
+	_lastEvents.clear();
 }
 
 Arcade::Vect<size_t> Arcade::NcursesGraphicLib::getScreenSize() const 
 {
-	return Arcade::Vect<size_t>(getMaxX(), getMaxY());
+	return {getMaxX(), getMaxY()};
 }
 
 size_t Arcade::NcursesGraphicLib::getMaxY() const

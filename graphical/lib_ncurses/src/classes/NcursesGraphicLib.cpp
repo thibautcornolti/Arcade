@@ -121,7 +121,7 @@ size_t Arcade::NcursesGraphicLib::getMaxX() const
 
 int Arcade::NcursesGraphicLib::_getColorCode(Arcade::Color c)
 {
-	short code = c.getRed() + (c.getGreen() << 8) + (c.getBlue() << 16);
+	long code = c.getRed() + (c.getGreen() << 8) + (c.getBlue() << 16);
 	if (!code)
 		return COLOR_BLACK;
 	if (!_colorToCode[code])

@@ -157,7 +157,7 @@ void Arcade::Snake::updatePixel(Arcade::PixelBox &map)
 				map.putPixel(getCoords(i), {255, 0, 0, 255});
 				break;
 			case '0':
-				map.putPixel(getCoords(i), {0, 255, 0, 255});
+				map.putPixel(getCoords(i), {0, 0, 255, 255});
 				break;
 			case '1':
 				map.putPixel(getCoords(i), {0, 255, 0, 255});

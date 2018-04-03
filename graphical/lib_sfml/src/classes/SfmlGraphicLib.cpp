@@ -51,18 +51,8 @@ void Arcade::SfmlGraphicLib::drawPixelBox(PixelBox &pixelBox)
 	size_t width = pixelBox.getWidth();
         texture.create(width, height);
         sf::Sprite sprite(texture);
-        sf::Uint8 *pixels = new sf::Uint8[width * height * 4];
-        auto cols = pixelBox.getPixelArray();
-	for (size_t x = 0; x < width; x++)
-                for (size_t y = 0; y < height; y++) {
-			auto col = cols[height * y + x];
-                        pixels[(x + (height * y)) * 4 + 0] = col.getRed();
-                        pixels[(x + (height * y)) * 4 + 1] = col.getGreen();
-                        pixels[(x + (height * y)) * 4 + 2] = col.getBlue();
-                        pixels[(x + (height * y)) * 4 + 3] = col.getAlpha();
-                }
-        texture.update(pixels);
-        sprite.setPosition(sf::Vector2f(pixelBox.getY(), pixelBox.getX()));
+        texture.update(&*(pixelBox.getPixelArray()[0]));
+        sprite.setPosition(sf::Vector2f(pixelBox.getX(), pixelBox.getY()));
         _window.draw(sprite);
 }
 

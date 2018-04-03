@@ -114,12 +114,12 @@ Arcade::Vect<size_t> Arcade::NcursesGraphicLib::getScreenSize() const
 
 size_t Arcade::NcursesGraphicLib::getMaxY() const
 {
-	return LINES;
+	return LINES + 1;
 }
 
 size_t Arcade::NcursesGraphicLib::getMaxX() const
 {
-	return COLS;
+	return COLS + 1;
 }
 
 int Arcade::NcursesGraphicLib::_getColorCode(Arcade::Color c)

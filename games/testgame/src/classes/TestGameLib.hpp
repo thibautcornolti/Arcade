@@ -26,8 +26,10 @@ namespace Arcade {
 	protected:
 	private:
 		std::string _name = "Test";
+		size_t _height = 10;
+		size_t _width = 15;
 		Arcade::TextBox _title;
-		Arcade::PixelBox _map;
+		Arcade::PixelBox _pixelBox;
 		Arcade::Vect<size_t> _player;
 	};
 }

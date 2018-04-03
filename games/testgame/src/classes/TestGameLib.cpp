@@ -9,8 +9,9 @@
 
 Arcade::TestGameLib::TestGameLib()
 	: _title("", Arcade::Vect<size_t>())
-	, _map()
+	, _pixelBox()
 {
+	
 }
 
 Arcade::TestGameLib::~TestGameLib()
@@ -51,11 +52,11 @@ void Arcade::TestGameLib::applyEvent(Arcade::Keys key)
 				_player.setY(_player.getY() - 1);
 			break ;
 		case Arcade::Keys::S:
-			if (_player.getY() < _map.getHeight() - 1)
+			if (_player.getY() < _height - 1)
 				_player.setY(_player.getY() + 1);
 			break ;
 		case Arcade::Keys::D:
-			if (_player.getX() < _map.getWidth() - 1)
+			if (_player.getX() < _width - 1)
 				_player.setX(_player.getX() + 1);
 			break ;
 		case Arcade::Keys::Q:
@@ -69,11 +70,7 @@ void Arcade::TestGameLib::applyEvent(Arcade::Keys key)
 
 void Arcade::TestGameLib::update()
 {
-	auto size = Arcade::Vect<size_t>(30, 15);
-	auto pos = Arcade::Vect<size_t>(2, 1);
-	_map = Arcade::PixelBox(size, pos);
-	_map.putPixel(_player, Arcade::Color(255));
-	pos.setXY(0, 18);
+	auto pos = Arcade::Vect<size_t>(0, 0);
 	_title = Arcade::TextBox("best game ever\n\
 use ZQSD to move\n\
 echap = return to lobby\n\
@@ -85,7 +82,13 @@ void Arcade::TestGameLib::refresh(IGraphicLib *lib)
 {
 	lib->clearWindow();
 	
-	lib->drawPixelBox(_map);
-	lib->drawText(_title);
+	auto size = Arcade::Vect<size_t>(lib->getMaxX(), lib->getMaxY());
+	auto pos = Arcade::Vect<size_t>(0, 0);
+	_pixelBox = Arcade::PixelBox(size, pos);
+	auto playerPos = _player;
+	playerPos.setXY((playerPos.getX() * lib->getMaxX()) / _width, (playerPos.getY() * lib->getMaxY()) / _height);
+	_pixelBox.putRect(playerPos, {lib->getMaxX() / _width, lib->getMaxY() / _height}, Arcade::Color(255));
+	lib->drawPixelBox(_pixelBox);
+	//lib->drawText(_title);
 	lib->refreshWindow();
 }

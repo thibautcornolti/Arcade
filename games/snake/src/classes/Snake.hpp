@@ -9,11 +9,14 @@
 
 #include "../shared_header/IGameLib.hpp"
 
+#define MAP	25
+#define SPEED	300
+
 namespace Arcade {
-	class TestGameLib : public Arcade::IGameLib {
+	class Snake : public Arcade::IGameLib {
 	public:
-		TestGameLib();
-		~TestGameLib();
+		Snake();
+		~Snake();
 
 		const std::string &getName() const final;
 		bool init() final;
@@ -23,9 +26,20 @@ namespace Arcade {
 		void applyEvent(Keys) final;
 		void update() final;
 		void refresh(IGraphicLib *) final;
-	protected:
+
+		enum Move {
+			RIGHT,
+			LEFT,
+			TOP,
+			BOT
+		};
+
+		void display();
+		bool move(Move);
+
 	private:
-		std::string _name = "Test";
+		std::string _name = "Snake";
+		Move _current = RIGHT;
 		Arcade::TextBox _title;
 		Arcade::PixelBox _map;
 		Arcade::Vect<size_t> _player;

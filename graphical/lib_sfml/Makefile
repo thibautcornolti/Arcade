@@ -1,4 +1,4 @@
-NAME	= game_snake.so
+NAME	= lib_sfml.so
 
 CC	= g++
 
@@ -7,10 +7,10 @@ CP = cp
 RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
-		./src/classes/Snake.cpp \
-		../../shared_header/PixelBox.cpp \
-		../../shared_header/TextBox.cpp \
-		../../shared_header/Color.cpp
+			./src/classes/SfmlGraphicLib.cpp \
+			../../shared_header/PixelBox.cpp \
+			../../shared_header/TextBox.cpp \
+			../../shared_header/Color.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 
@@ -18,7 +18,7 @@ CPPFLAGS = -I ./src/pp
 CPPFLAGS += -W -Wall -Wextra --std=c++11 -g 
 CPPFLAGS += -fPIC
 
-LDFLAGS += -lncurses -shared --std=c++11
+LDFLAGS += -lsfml-graphics -lsfml-window -shared --std=c++11
 
 all: $(NAME)
 

@@ -5,45 +5,45 @@
 ** arcade
 */
 
-#include "TestGameLib.hpp"
+#include "Snake.hpp"
 
-Arcade::TestGameLib::TestGameLib()
+Arcade::Snake::Snake()
 	: _title("", Arcade::Vect<size_t>())
 	, _map()
 {
 }
 
-Arcade::TestGameLib::~TestGameLib()
+Arcade::Snake::~Snake()
 {
 }
 
-const std::string &Arcade::TestGameLib::getName() const
+const std::string &Arcade::Snake::getName() const
 {
 	return _name;
 }
 
-bool Arcade::TestGameLib::init()
+bool Arcade::Snake::init()
 {
 	_player = Vect<size_t>();
 	return true;
 }
 
-bool Arcade::TestGameLib::stop()
+bool Arcade::Snake::stop()
 {
 	return true;
 }
 
-bool Arcade::TestGameLib::open()
+bool Arcade::Snake::open()
 {
 	return true;
 }
 
-bool Arcade::TestGameLib::close()
+bool Arcade::Snake::close()
 {
 	return true;
 }
 
-void Arcade::TestGameLib::applyEvent(Arcade::Keys key)
+void Arcade::Snake::applyEvent(Arcade::Keys key)
 {
 	switch (key) {
 		case Arcade::Keys::Z:
@@ -67,7 +67,7 @@ void Arcade::TestGameLib::applyEvent(Arcade::Keys key)
 	}
 }
 
-void Arcade::TestGameLib::update()
+void Arcade::Snake::update()
 {
 	auto size = Arcade::Vect<size_t>(30, 15);
 	auto pos = Arcade::Vect<size_t>(2, 1);
@@ -78,14 +78,24 @@ void Arcade::TestGameLib::update()
 use ZQSD to move\n\
 echap = return to lobby\n\
 tu peu revenir et le player sera la ou tu la laisser",
-		pos, 30UL, Arcade::Color(255, 0, 0, 255));
+		pos, 30UL, Arcade::Color(255));
 }
 
-void Arcade::TestGameLib::refresh(IGraphicLib *lib)
+void Arcade::Snake::refresh(IGraphicLib *lib)
 {
 	lib->clearWindow();
 	
 	lib->drawPixelBox(_map);
 	lib->drawText(_title);
 	lib->refreshWindow();
+}
+
+bool Arcade::Snake::move(Arcade::Snake::Move)
+{
+
+}
+
+void Arcade::Snake::display()
+{
+
 }

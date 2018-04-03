@@ -7,8 +7,11 @@
 
 #pragma once
 
+#include <map>
+#include <unistd.h>
+#include <time.h>
 #include <ncurses.h>
-#include "../../../../shared_header/IGraphicLib.hpp"
+#include "../shared_header/IGraphicLib.hpp"
 
 namespace Arcade {
 	class NcursesGraphicLib : public Arcade::IGraphicLib {
@@ -61,12 +64,16 @@ namespace Arcade {
 		Vect<size_t> getScreenSize() const final;
 		
 		// get the Y max of the windows
-		int getMaxY() const final;
+		size_t getMaxY() const final;
 		
 		// get the X max of the windows
-		int getMaxX() const final;
+		size_t getMaxX() const final;
 	protected:
 	private:
+		int _getPairCode(Arcade::Color, Arcade::Color);
+		std::map<long, short> _colors;
+		time_t _lastRefresh = 0;
+		short _nbColor = 1;
 		bool _isRendering = false;
 		Keys _lastEvent = Arcade::Keys::NONE;
 		std::vector<std::pair<int, Arcade::Keys>> _keymap = {

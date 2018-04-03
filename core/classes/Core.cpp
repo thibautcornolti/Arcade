@@ -6,46 +6,63 @@
 */
 
 #include "Core.hpp"
-
-Core::Core()
-{
-}
-
-Core::~Core()
-{
-}
-
-void Core::stop()
-{
-	close();
-	for (auto &graph : _graphs)
-		graph->closeRenderer();
-	for (auto &game : _games)
-		game->stop();
-}
-
-void Core::close()
-{
-	_getGraph().closeRenderer();
-}
+#include "Menu.hpp"
 
 void Core::swapLib(Arcade::Keys key)
 {
 	if (key == Arcade::Keys::RIGHT || key == Arcade::Keys::LEFT) {
-		_getGraph().closeRenderer();
+		getGraph().closeRenderer();
 		_libGraphIncrementer = (_libGraphIncrementer +
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
-		_getGraph().openRenderer();
+		getGraph().openRenderer();
+	} else if (key == Arcade::Keys::ESC && !_inMenu) {
+		getGame().close();
+		_inMenu = true;
 	}
+}
+
+void Core::openGame(size_t n)
+{
+	_libGameIncrementer = n;
+	getGame().open();
+	_inMenu = false;
+}
+
+void Core::close()
+{
+	if (!_inMenu)
+		getGame().close();
+	for (auto &g : _games)
+		g->stop();
+	getGraph().closeRenderer();
 }
 
 void Core::run()
 {
 	Arcade::Keys key;
+	Menu menu(_gamesName);
 
 	if (_graphs.size() == 0)
 		return ;
-	_getGraph().openRenderer();
+	getGraph().openRenderer();
+
+	while (getGraph().isOpen()) {
+		getGraph().clearEvents();
+		getGraph().pollEvents();
+		key = getGraph().getLastEvent();
+		if (key == Arcade::Keys::ESC && _inMenu)
+			return close();
+		else
+			swapLib(key);
+		if (_inMenu) {
+			menu.applyEvent(key, *this);
+			menu.refresh(&getGraph());
+		} else {
+			getGame().applyEvent(key);
+			getGame().update();
+			getGame().refresh(&getGraph());
+		}
+	}
 }
 
 bool Core::_initGraphs()
@@ -65,7 +82,6 @@ bool Core::_initGraphs()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
-		o->openRenderer();//o->initRenderer();
 		_graphs.push_back(o);
 	}
 	return true;
@@ -90,6 +106,7 @@ bool Core::_initGames()
 		}
 		o->init();
 		_games.push_back(o);
+		_gamesName.push_back(o->getName());
 	}
 	return true;
 }
@@ -101,16 +118,12 @@ bool Core::init()
 	return true;
 }
 
-Arcade::IGraphicLib &Core::_getGraph()
+Arcade::IGraphicLib &Core::getGraph()
 {
-	if (_graphs.size() == 0) {
-		fprintf(stderr, "No lib found\n");
-		exit(84);
-	}
 	return *(_graphs[_libGraphIncrementer % _graphs.size()]);
 }
 
-Arcade::IGameLib &Core::_getGame()
+Arcade::IGameLib &Core::getGame()
 {
 	if (_games.size() == 0) {
 		fprintf(stderr, "No game found\n");

@@ -1,4 +1,4 @@
-NAME	= program
+NAME	= arcade
 
 CC	= g++
 
@@ -7,7 +7,7 @@ RM	= rm -f
 SRCS	= ./classes/DLLoader.cpp \
 	  ./classes/LibAnalyzer.cpp \
 	  ./classes/Core.cpp \
-	  ./menu/Menu.cpp \
+	  ./classes/Menu.cpp \
 	  ./main.cpp  \
 	  ../shared_header/PixelBox.cpp \
 	  ../shared_header/TextBox.cpp \

@@ -71,7 +71,9 @@ namespace Arcade {
 	protected:
 	private:
 		int _getPairCode(Arcade::Color, Arcade::Color);
-		std::map<long, short> _colors;
+		int _getColorCode(Arcade::Color);
+		std::map<long, short> _colorToCode;
+		std::map<long, short> _codeToPair;
 		time_t _lastRefresh = 0;
 		short _nbColor = 1;
 		bool _isRendering = false;

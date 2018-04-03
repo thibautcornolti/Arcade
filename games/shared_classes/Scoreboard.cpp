@@ -12,32 +12,22 @@
 #include <map>
 #include "Scoreboard.hpp"
 
-Arcade::Scoreboard::Scoreboard(const std::string &gameName) :_gameName(gameName)
+Arcade::Scoreboard::Scoreboard(const std::string &gameName, const std::string &playerName) :_gameName(gameName), _playerName(playerName)
 {
-	_scores = readScores();
+	readScores();
 }
 
-Arcade::Scoreboard::~Scoreboard()
-{
-	int place = 3;
+Arcade::Scoreboard::~Scoreboard() {}
 
-	for (auto &player : _scores) {
-		while (player.second < _score && place != 0)
-			place--;
-	}
-	if (place < 3)
-		addPlayerToScoreboard(place);
-}
-
-std::vector<std::pair<std::string, size_t>> Arcade::Scoreboard::readScores() const
+void Arcade::Scoreboard::readScores()
 {
 	std::fstream file(SCOREBOARD, std::ios::in);
 	std::string line;
-	std::vector<std::pair<std::string, size_t>> score;
 	std::vector<std::string> tokens;
 
 	if (!file)
-		return score;
+		return ;
+	_scores.clear();
 	while(getline(file, line)) {
 		if (!line.find(_gameName)) {
 			std::istringstream split(line);
@@ -46,13 +36,12 @@ std::vector<std::pair<std::string, size_t>> Arcade::Scoreboard::readScores() con
 		}
 	}
 	for (size_t i = 1; i < tokens.size(); i += 2)
-		score.push_back({tokens[i], std::stol(tokens[i + 1])});
-	return score;
+		_scores.push_back({tokens[i], std::stol(tokens[i + 1])});
 }
 
 void Arcade::Scoreboard::addPlayerToScoreboard(int place)
 {
-	_scores[place].first = "Unknown";
+	_scores[place].first = _playerName;
 	_scores[place].second = _score;
 }
 
@@ -68,6 +57,38 @@ void Arcade::Scoreboard::updateScoreboard()
 		addPlayerToScoreboard(place);
 }
 
+std::string Arcade::Scoreboard::getFormattedScoreboard() const
+{
+	std::string scoresFormatted = _gameName;
+
+	for (size_t i = 0; i < _scores.size(); i++) {
+		scoresFormatted += ":" + _scores[i].first + ":" + std::to_string(_scores[i].second);
+	}
+	return scoresFormatted;
+}
+
+void Arcade::Scoreboard::saveScoreboard()
+{
+	std::fstream file(SCOREBOARD, std::ios::out | std::ios::in);
+	std::string line;
+	std::vector<std::string> allScores;
+	std::string scoresFormatted = getFormattedScoreboard();
+	int linePos = 0;
+
+	if (!file)
+		return;
+	while(getline(file, line)) {
+		if (line.find(_gameName))
+			linePos++;
+		allScores.push_back(line);
+	}
+	file.clear();
+	file.seekp(0, std::ios::beg);
+	allScores[linePos] = scoresFormatted;
+	for (auto &elem : allScores)
+		file << elem << std::endl;
+}
+
 std::vector<std::pair<std::string, size_t>> Arcade::Scoreboard::getScoreboard() const
 {
 	return _scores;
@@ -81,20 +102,12 @@ size_t Arcade::Scoreboard::getScores() const
 void Arcade::Scoreboard::addScores(const size_t &points)
 {
 	_score += points;
-	if (_score > _scores.end()->second)
+
+	if (_score > _scores.back().second)
 		updateScoreboard();
 }
 
-void Arcade::Scoreboard::removeScores(const size_t &points)
+void Arcade::Scoreboard::subScores(const size_t &points)
 {
 	_score -= points;
-}
-
-int main() {
-	Arcade::Scoreboard score("Snake");
-
-	for (auto &test : score.getScoreboard()) {
-		std::cout << test.first << test.second << std::endl;
-	}
-	return 0;
 }

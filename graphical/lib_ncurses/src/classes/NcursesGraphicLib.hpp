@@ -77,7 +77,7 @@ namespace Arcade {
 		time_t _lastRefresh = 0;
 		short _nbColor = 1;
 		bool _isRendering = false;
-		Keys _lastEvent = Arcade::Keys::NONE;
+		std::vector<Keys> _lastEvents;
 		std::vector<std::pair<int, Arcade::Keys>> _keymap = {
 			{'a', Arcade::Keys::A},
 			{'b', Arcade::Keys::B},

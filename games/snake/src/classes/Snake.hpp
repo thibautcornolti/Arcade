@@ -7,12 +7,14 @@
 
 #pragma once
 
+#include <chrono>
 #include <list>
 #include "../shared_header/IGameLib.hpp"
 #include "../../../shared_classes/Scoreboard.hpp"
 
-#define MAP	25
-#define SPEED	150
+#define ASSETS_PATH	"games/snake/map"
+#define MAP		25
+#define SPEED		150.0
 
 namespace Arcade {
 	class Snake : public Arcade::IGameLib {
@@ -22,6 +24,7 @@ namespace Arcade {
 
 		const std::string getName() const final;
 		void setPlayerName(const std::string &) final;
+		std::string getPlayerName() const;
 		bool init() final;
 		bool stop() final;
 		bool open() final;
@@ -48,8 +51,9 @@ namespace Arcade {
 		void display(IGraphicLib &);
 		std::string getStatus() const;
 		void displayGameInfo(IGraphicLib &);
+		void displayScoreboard(IGraphicLib &);
 		void initArcadeElements(IGraphicLib &);
-		void score();
+		bool isTimeToMove();
 
 		bool restart();
 		bool collide();
@@ -60,13 +64,15 @@ namespace Arcade {
 
 	private:
 		typedef struct s_snake {
-			int id;
 			size_t currentPos;
 			size_t lastPos;
 		} t_snake;
 
 	private:
+		Scoreboard *_score;
+		std::chrono::time_point<std::chrono::high_resolution_clock> _time;
 		std::string _name = "Snake";
+		std::string _playerName = "Unknown";
 		std::string _map;
 		Arcade::PixelBox _pixelMap;
 		std::list<t_snake> _snake;

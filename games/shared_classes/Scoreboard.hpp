@@ -10,28 +10,32 @@
 
 #include <vector>
 
-#define SCOREBOARD "../../scores"
+#define SCOREBOARD "scores"
 
 namespace Arcade {
 
 	class Scoreboard {
 		public:
-			Scoreboard(const std::string&);
+			Scoreboard(const std::string&, const std::string&);
 			~Scoreboard();
 
-			std::vector<std::pair<std::string, size_t>> readScores() const;
-
 			std::vector<std::pair<std::string, size_t>> getScoreboard() const;
-			void addPlayerToScoreboard(int);
-			void updateScoreboard();
+			void saveScoreboard();
 			size_t getScores() const;
 			void addScores(const size_t&);
-			void removeScores(const size_t&);
+			void subScores(const size_t&);
+
+		private:
+			void readScores();
+			std::string getFormattedScoreboard() const;
+			void addPlayerToScoreboard(int);
+			void updateScoreboard();
 
 		private:
 			const std::string _gameName;
+			const std::string _playerName;
 			std::vector<std::pair<std::string, size_t>> _scores = {{"Unknown", 0}};
-			size_t _score;
+			size_t _score = 0;
 	};
 
 }

@@ -16,7 +16,7 @@
 namespace Arcade {
 	class SfmlGraphicLib : public Arcade::IGraphicLib {
 	public:
-		SfmlGraphicLib() = default;
+		SfmlGraphicLib();
 		~SfmlGraphicLib() final = default;
 
 		/* Get the name of the library */
@@ -73,7 +73,7 @@ namespace Arcade {
 		size_t _width = 800;
 		size_t _height = 600;
 		sf::RenderWindow _window;
-		Keys _lastEvent = Arcade::Keys::NONE;
+		std::vector<Keys> _lastEvents;
 		std::vector<std::pair<sf::Keyboard::Key, Arcade::Keys>> _keymap = {
 			{sf::Keyboard::A, Arcade::Keys::A},
 			{sf::Keyboard::B, Arcade::Keys::B},

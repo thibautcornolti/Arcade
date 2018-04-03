@@ -46,13 +46,24 @@ void Arcade::SfmlGraphicLib::refreshWindow()
 
 void Arcade::SfmlGraphicLib::drawPixelBox(PixelBox &pixelBox)
 {
-	size_t x = pixelBox.getX();
-	size_t y = pixelBox.getY();
-	for (size_t yi = 0 ; yi < pixelBox.getHeight() ; ++yi)
-		for (size_t xi = 0 ; xi < pixelBox.getWidth() ; ++xi) {
-			Arcade::Color c = pixelBox.getPixel(Vect<size_t>(xi, yi));
-			
-		}
+        sf::Texture texture;
+	size_t height = pixelBox.getHeight();
+	size_t width = pixelBox.getWidth();
+        texture.create(width, height);
+        sf::Sprite sprite(texture);
+        sf::Uint8 *pixels = new sf::Uint8[width * height * 4];
+        auto cols = pixelBox.getPixelArray();
+	for (size_t x = 0; x < width; x++)
+                for (size_t y = 0; y < height; y++) {
+			auto col = cols[height * y + x];
+                        pixels[(x + (height * y)) * 4 + 0] = col.getRed();
+                        pixels[(x + (height * y)) * 4 + 1] = col.getGreen();
+                        pixels[(x + (height * y)) * 4 + 2] = col.getBlue();
+                        pixels[(x + (height * y)) * 4 + 3] = col.getAlpha();
+                }
+        texture.update(pixels);
+        sprite.setPosition(sf::Vector2f(pixelBox.getY(), pixelBox.getX()));
+        _window.draw(sprite);
 }
 
 void Arcade::SfmlGraphicLib::drawText(TextBox &textBox)

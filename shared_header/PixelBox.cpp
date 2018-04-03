@@ -60,6 +60,14 @@ void Arcade::PixelBox::putPixel(Vect<size_t> pos, Arcade::Color col)
 	_colorFrame[pos.getY() * _size.getX() + pos.getX()] = col;
 }
 
+void Arcade::PixelBox::putRect(Vect<size_t> size, Vect<size_t> pos, Color col)
+{
+        for (size_t y = 0; y < size.getY(); y++)
+                for (size_t x = 0; x < size.getX(); x++)
+                        putPixel(Arcade::Vect<size_t>(x + pos.getX(),
+				y + pos.getY()), col);
+}
+
 Arcade::Color Arcade::PixelBox::getPixel(Vect<size_t> pos) const
 {
 	return _colorFrame[pos.getY() * _size.getX() + pos.getX()];

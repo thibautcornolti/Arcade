@@ -82,13 +82,13 @@ bool Arcade::Pacman::readMap()
     buf << f.rdbuf();
     _map = buf.str();
     _map.erase(std::remove(_map.begin(), _map.end(), '\n'), _map.end());
-    dprintf(2, "%s\n", _map);
+    std::cerr << _map.length();
     return true;
 }
 
 Arcade::Vect<size_t> Arcade::Pacman::getCoords(size_t pos) const
 {
-    return {pos % (MAP_WIDTH + 2), pos / (MAP_HEIGHT + 2)};
+    return {pos / (MAP_WIDTH), pos % (MAP_HEIGHT)};
 }
 
 void Arcade::Pacman::display(Arcade::IGraphicLib &lib)

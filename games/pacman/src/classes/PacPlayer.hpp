@@ -9,7 +9,7 @@
 #define CPP_ARCADE_PACPLAYER_H
 
 #define MAP_WIDTH 28
-#define MAP_HEIGHT 31
+#define MAP_HEIGHT 28
 
 namespace Arcade {
     class PacPlayer {

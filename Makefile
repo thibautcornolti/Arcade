@@ -4,8 +4,8 @@ all:
 	make -C games/testgame/
 	make -C games/snake/
 	make -C games/pacman/
-	make -C core
-	mv core/arcade .
+	make -C core/
+	cp core/arcade .
 
 re:
 	make re -C graphical/lib_ncurses/
@@ -13,8 +13,8 @@ re:
 	make re -C games/testgame/
 	make re -C games/snake/
 	make re -C games/pacman/
-	make re -C core
-	mv core/arcade .
+	make re -C core/
+	cp core/arcade .
 
 clean:
 	make clean -C graphical/lib_ncurses/
@@ -22,7 +22,7 @@ clean:
 	make clean -C games/testgame/
 	make clean -C games/snake/
 	make clean -C games/pacman/
-	make clean -C core
+	make clean -C core/
 
 fclean:
 	rm core/arcade
@@ -31,4 +31,4 @@ fclean:
 	make fclean -C games/testgame/
 	make fclean -C games/snake/
 	make fclean -C games/pacman/
-	make fclean -C core
+	make fclean -C core/

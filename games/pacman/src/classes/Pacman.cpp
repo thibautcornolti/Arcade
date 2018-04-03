@@ -62,7 +62,7 @@ void Arcade::Pacman::update()
 void Arcade::Pacman::refresh(IGraphicLib &lib)
 {
     if (!_init) {
-        _pixelMap = Arcade::PixelBox({MAP_WIDTH, MAP_HEIGHT},
+        _pixelMap = Arcade::PixelBox({MAP_WIDTH, MAP_HEIGHT + 3},
             {lib.getMaxX() / 2 - MAP_WIDTH / 2,
             lib.getMaxY() / 2 - MAP_HEIGHT / 2});
         _init = true;
@@ -82,13 +82,14 @@ bool Arcade::Pacman::readMap()
     buf << f.rdbuf();
     _map = buf.str();
     _map.erase(std::remove(_map.begin(), _map.end(), '\n'), _map.end());
-    std::cerr << _map.length();
+    std::cerr << _map.length() << std::endl;
+	std::cerr << MAP_WIDTH * MAP_HEIGHT << std::endl;
     return true;
 }
 
 Arcade::Vect<size_t> Arcade::Pacman::getCoords(size_t pos) const
 {
-    return {pos / (MAP_WIDTH), pos % (MAP_HEIGHT)};
+    return {pos % (MAP_WIDTH), pos / (MAP_HEIGHT)};
 }
 
 void Arcade::Pacman::display(Arcade::IGraphicLib &lib)
@@ -99,22 +100,31 @@ void Arcade::Pacman::display(Arcade::IGraphicLib &lib)
 
 void Arcade::Pacman::updatePixel()
 {
-    for (size_t i = 0; i < _map.size(); ++i) {
-        switch (_map[i]) {
-            case '#':
-                _pixelMap.putPixel(getCoords(i), {255, 0, 0, 255});
-                break;
-            case '*':
-                _pixelMap.putPixel(getCoords(i), {0, 255, 0, 255});
-                break;
-            case 'P':
-                _pixelMap.putPixel(getCoords(i), {255, 255, 0, 255});
-                break;
-            default:
-                _pixelMap.putPixel(getCoords(i), {0, 0, 0, 255});
-                break;
-        }
-    }
+	Vect<size_t> pos;
+	for (size_t i = 0; i < _map.size(); ++i) {
+		switch (_map[i]) {
+			case '#':
+				_pixelMap.putPixel(getCoords(i),
+				                   {255, 0, 0, 255});
+				break;
+			case '*':
+				_pixelMap.putPixel(getCoords(i),
+				                   {0, 255, 0, 255});
+				break;
+			case 'P':
+				_pixelMap.putPixel(getCoords(i),
+				                   {255, 255, 0, 255});
+				break;
+			case '.':
+				_pixelMap.putPixel(getCoords(i),
+				                   {0, 0, 255, 255});
+				break;
+			default:
+				_pixelMap.putPixel(getCoords(i),
+				                   {255, 255, 255, 0});
+				break;
+		}
+	}
 }
 
 void Arcade::Pacman::setPlayerName(const std::string &name)

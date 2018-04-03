@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <ctime>
-#include <zconf.h>
 #include <chrono>
 #include <thread>
 #include "Snake.hpp"
@@ -23,6 +22,20 @@ Arcade::Snake::~Snake()
 const std::string &Arcade::Snake::getName() const
 {
 	return _name;
+}
+
+void Arcade::Snake::score()
+{
+}
+
+void Arcade::Snake::initArcadeElements(Arcade::IGraphicLib *lib)
+{
+	Arcade::PixelBox pixelMap(
+		{MAP + 2, MAP + 2},
+		{(lib->getMaxX() - MAP) / 2, (lib->getMaxY() - MAP) / 2});
+
+	_pixelMap = pixelMap;
+	_isRunning = true;
 }
 
 bool Arcade::Snake::init()
@@ -71,6 +84,7 @@ bool Arcade::Snake::restart()
 	_snake.clear();
 	_current = RIGHT;
 	_game = RUNNING;
+	_isRunning = false;
 	init();
 	return true;
 }
@@ -111,21 +125,17 @@ void Arcade::Snake::update()
 
 void Arcade::Snake::refresh(IGraphicLib *lib)
 {
-	static bool run = true;
-
-	if (run) {
-		lib->clearWindow();
-		if (_game != PAUSED) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(SPEED));
-			move();
-			if (collide()) {
-				_game = ENDED;
-				run = false;
-			}
-		}
-		display(lib);
-		lib->refreshWindow();
+	if (!_isRunning)
+		initArcadeElements(lib);
+	lib->clearWindow();
+	if (_game == RUNNING) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(SPEED));
+		move();
+		if (collide())
+			_game = ENDED;
 	}
+	display(lib);
+	lib->refreshWindow();
 }
 
 Arcade::Vect<size_t> Arcade::Snake::getCoords(size_t pos) const
@@ -185,11 +195,10 @@ void Arcade::Snake::displayGameInfo(IGraphicLib *lib)
 
 void Arcade::Snake::display(IGraphicLib *lib)
 {
-	Arcade::PixelBox map({MAP + 2, MAP + 2},
-		{(lib->getMaxX() - MAP) / 2, (lib->getMaxY() - MAP) / 2});
-	updatePixel(map);
+	if (_game == RUNNING)
+		updatePixel(_pixelMap);
 	displayGameInfo(lib);
-	lib->drawPixelBox(map);
+	lib->drawPixelBox(_pixelMap);
 }
 
 void Arcade::Snake::setMove(Arcade::Snake::MOVE move)

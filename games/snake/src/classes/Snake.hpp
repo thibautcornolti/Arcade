@@ -9,6 +9,7 @@
 
 #include <list>
 #include "../shared_header/IGameLib.hpp"
+#include "../../../shared_classes/Scoreboard.hpp"
 
 #define MAP	25
 #define SPEED	150
@@ -46,6 +47,8 @@ namespace Arcade {
 		void display(IGraphicLib *);
 		std::string getStatus() const;
 		void displayGameInfo(IGraphicLib *);
+		void initArcadeElements(IGraphicLib *);
+		void score();
 
 		bool restart();
 		bool collide();
@@ -64,8 +67,10 @@ namespace Arcade {
 	private:
 		std::string _name = "Snake";
 		std::string _map;
+		Arcade::PixelBox _pixelMap;
 		std::list<t_snake> _snake;
 		MOVE _current = RIGHT;
 		STATUS _game = RUNNING;
+		bool _isRunning = false;
 	};
 }

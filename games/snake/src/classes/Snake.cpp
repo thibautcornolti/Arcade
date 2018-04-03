@@ -6,13 +6,16 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <ctime>
-#include <chrono>
 #include <thread>
+#include <algorithm>
+#include <sstream>
 #include "Snake.hpp"
 
 Arcade::Snake::Snake()
 {
+	_score = new Scoreboard(_name, _playerName);
 }
 
 Arcade::Snake::~Snake()
@@ -24,11 +27,14 @@ const std::string Arcade::Snake::getName() const
 	return _name;
 }
 
-void Arcade::Snake::setPlayerName(const std::string &)
-{}
-
-void Arcade::Snake::score()
+void Arcade::Snake::setPlayerName(const std::string &playerName)
 {
+	_playerName = playerName;
+}
+
+std::string Arcade::Snake::getPlayerName() const
+{
+	return _playerName;
 }
 
 void Arcade::Snake::initArcadeElements(Arcade::IGraphicLib &lib)
@@ -36,33 +42,27 @@ void Arcade::Snake::initArcadeElements(Arcade::IGraphicLib &lib)
 	Arcade::PixelBox pixelMap(
 		{MAP + 2, MAP + 2},
 		{(lib.getMaxX() - MAP) / 2, (lib.getMaxY() - MAP) / 2});
-
 	_pixelMap = pixelMap;
 	_isRunning = true;
 }
 
 bool Arcade::Snake::init()
 {
-	_map = std::string((MAP + 2) * (MAP + 2), ' ');
-	std::pair<size_t , size_t> pos;
-	t_snake snake;
+	std::fstream file(ASSETS_PATH, std::ios::in);
+	std::stringstream buf;
 	size_t snakePos;
 
+	if (!file)
+		return false;
+	buf << file.rdbuf();
+	_map = buf.str();
+	_time = std::chrono::high_resolution_clock::now();
 	std::srand(std::time(nullptr));
-	_map.replace(_map.size() / 2, 4, 4, '0');
-	for (size_t i = 0; i < _map.size(); i++) {
-		pos.first = i % (MAP + 2);
-		pos.second = i / (MAP + 2);
-		if (pos.first == 0 || pos.second == 0 ||
-			pos.first == MAP + 1 || pos.second == MAP + 1)
-			_map[i] = '#';
-	}
+	_map.erase(std::remove(_map.begin(), _map.end(), '\n'), _map.end());
 	addFood();
-	for (int i = 0; i < 4; i++) {
-		snakePos = _map.size() / 2 + i;
-		snake = {3 - i, snakePos, snakePos};
-		_snake.push_front(snake);
-	}
+	snakePos = _map.find_first_of('0');
+	for (size_t i = snakePos; i < snakePos + 4; i++)
+		_snake.push_front({i, i});
 	return true;
 }
 
@@ -111,7 +111,7 @@ void Arcade::Snake::applyEvent(Arcade::Keys key)
 			if (_current != RIGHT)
 				setMove(LEFT);
 			break ;
-		case Arcade::Keys::P: //Pause
+		case Arcade::Keys::P:
 			_game = (_game == PAUSED) ? RUNNING : PAUSED;
 			break;
 		case Arcade::Keys::R:
@@ -131,14 +131,25 @@ void Arcade::Snake::refresh(IGraphicLib &lib)
 	if (!_isRunning)
 		initArcadeElements(lib);
 	lib.clearWindow();
-	if (_game == RUNNING) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(SPEED));
+	if (_game == RUNNING && isTimeToMove()) {
 		move();
 		if (collide())
 			_game = ENDED;
 	}
 	display(lib);
 	lib.refreshWindow();
+}
+
+bool Arcade::Snake::isTimeToMove()
+{
+	auto time = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration<double, std::milli>(time-_time).count();
+
+	if (duration >= SPEED) {
+		_time = time;
+		return true;
+	}
+	return false;
 }
 
 Arcade::Vect<size_t> Arcade::Snake::getCoords(size_t pos) const
@@ -157,9 +168,12 @@ void Arcade::Snake::updatePixel(Arcade::PixelBox &map)
 				map.putPixel(getCoords(i), {255, 0, 0, 255});
 				break;
 			case '0':
-				map.putPixel(getCoords(i), {0, 0, 255, 255});
+				map.putPixel(getCoords(i), {255, 255, 0, 255});
 				break;
 			case '1':
+				map.putPixel(getCoords(i), {0, 0, 255, 255});
+				break;
+			case '2':
 				map.putPixel(getCoords(i), {0, 255, 0, 255});
 				break;
 			default:
@@ -181,15 +195,22 @@ std::string Arcade::Snake::getStatus() const
 	}
 }
 
+void Arcade::Snake::displayScoreboard(Arcade::IGraphicLib &)
+{
+	auto scores = _score->getScoreboard();
+}
+
 void Arcade::Snake::displayGameInfo(IGraphicLib &lib)
 {
-	Arcade::TextBox title("Snake", {(lib.getMaxX() - 5) / 2, 5});
-	Arcade::TextBox statut("Statut: ", {(lib.getMaxX() - 5) / 2, 7});
-	Arcade::TextBox score("Score: ", {(lib.getMaxX() - 5) / 2, 8});
-	Arcade::TextBox scoreb("Scoreboard", {(lib.getMaxX()) / 3 * 2 + 10, 7});
+	Arcade::TextBox title("Snake", {(lib.getMaxX() - 5) / 2, 5}, 20);
+	Arcade::TextBox statut("Statut: ", {(lib.getMaxX() - 5) / 2, 7}, 20);
+	Arcade::TextBox score("Score: ", {(lib.getMaxX() - 5) / 2, 8}, 20);
+	Arcade::TextBox scoreb("Scoreboard", {(lib.getMaxX()) / 3 * 2 + 10, 7}, 20);
 
 	statut.setValue(statut.getValue() + getStatus());
 	statut.setX((lib.getMaxX() - statut.getValue().size()) / 2);
+	score.setValue(score.getValue() + std::to_string(_score->getScores()));
+	score.setX((lib.getMaxX() - score.getValue().size()) / 2);
 	lib.drawText(title);
 	lib.drawText(statut);
 	lib.drawText(score);
@@ -221,7 +242,8 @@ bool Arcade::Snake::collide()
 				return true;
 		escapeHead++;
 	}
-	if (_map.find_first_of('1', 0) == std::string::npos) {
+	if (_map.find_first_of('2', 0) == std::string::npos) {
+		_score->addScores(10);
 		addFood();
 		addLink();
 	}
@@ -253,7 +275,7 @@ bool Arcade::Snake::move()
 			std::advance(it, -1);
 			nextLinkPos = it->lastPos;
 			std::advance(it, 1);
-			_map[nextLinkPos] = '0';
+			_map[nextLinkPos] = '1';
 			it->lastPos = it->currentPos;
 			it->currentPos = nextLinkPos;
 		}
@@ -273,7 +295,7 @@ void Arcade::Snake::addFood()
 		if (coord.getX() >= 1 && coord.getY() >= 1 &&
 			coord.getX() <= MAP + 1 && coord.getY() <= MAP + 1 &&
 			_map[pos] == ' ') {
-			_map[pos] = '1';
+			_map[pos] = '2';
 			running = false;
 		}
 

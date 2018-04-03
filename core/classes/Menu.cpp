@@ -14,10 +14,10 @@ Menu::Menu(std::vector<std::string> &games)
 	, _games(games)
 {}
 
-void Menu::_genMenu(Arcade::IGraphicLib *graph)
+void Menu::_genMenu(Arcade::IGraphicLib &graph)
 {
-	auto height = graph->getMaxY();
-	auto width = graph->getMaxX();
+	auto height = graph.getMaxY();
+	auto width = graph.getMaxX();
 
 	_text.clear();
 	for (size_t i = 0 ; i < _games.size() ; ++i) {
@@ -62,16 +62,16 @@ void Menu::applyEvent(Arcade::Keys key, Core &core)
 	}
 }
 
-void Menu::refresh(Arcade::IGraphicLib *graph)
+void Menu::refresh(Arcade::IGraphicLib &graph)
 {
 	_genMenu(graph);
-	graph->clearWindow();
+	graph.clearWindow();
 	for (size_t i = 0; i < _text.size(); i++) {
 		if (_selector == i)
 			_addSelector(i);
-		graph->drawText(_text[i]);
+		graph.drawText(_text[i]);
 		if (_selector == i)
 			_clearSelector(i);
 	}
-	graph->refreshWindow();
+	graph.refreshWindow();
 }

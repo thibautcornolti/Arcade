@@ -15,9 +15,11 @@ namespace Arcade {
 		virtual ~IGameLib() = default;
 
 		/* Get the name of the game */
-		virtual const std::string &getName() const = 0;
+		virtual const std::string getName() const = 0;
 
-
+		/* Set the player name */
+		virtual void setPlayerName(const std::string &name) = 0;
+		
 		/* Resources handling */
 		// Initializes the library
 		virtual bool init() = 0;
@@ -38,6 +40,6 @@ namespace Arcade {
 		virtual void update() = 0;
 		
 		// Renders the game state to the screen. This should call IGraphicLib::refresh() to display content to the user.
-		virtual void refresh(IGraphicLib *graphicLib) = 0;
+		virtual void refresh(IGraphicLib &graphicLib) = 0;
 	};
 };

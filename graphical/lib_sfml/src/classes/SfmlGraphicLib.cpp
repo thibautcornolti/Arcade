@@ -7,12 +7,6 @@
 
 #include "SfmlGraphicLib.hpp"
 
-Arcade::SfmlGraphicLib::SfmlGraphicLib()
-{}
-
-Arcade::SfmlGraphicLib::~SfmlGraphicLib()
-{}
-
 std::string Arcade::SfmlGraphicLib::getName() const
 {
 	return "Sfml";
@@ -28,9 +22,9 @@ void Arcade::SfmlGraphicLib::clearWindow()
 	_window.clear();
 }
 
-void Arcade::SfmlGraphicLib::openRenderer()
+void Arcade::SfmlGraphicLib::openRenderer(std::string const &title)
 {
-	_window.create(sf::VideoMode(_width, _height, 32), "Arcade");
+	_window.create(sf::VideoMode(_width, _height, 32), title);
 	_window.setVerticalSyncEnabled(true);
 }
 

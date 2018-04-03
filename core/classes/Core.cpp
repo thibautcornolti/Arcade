@@ -14,7 +14,7 @@ void Core::swapLib(Arcade::Keys key)
 		getGraph().closeRenderer();
 		_libGraphIncrementer = (_libGraphIncrementer +
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
-		getGraph().openRenderer();
+		getGraph().openRenderer("Arcade");
 	} else if (key == Arcade::Keys::ESC && !_inMenu) {
 		getGame().close();
 		_inMenu = true;
@@ -44,7 +44,7 @@ void Core::run()
 
 	if (_graphs.size() == 0)
 		return ;
-	getGraph().openRenderer();
+	getGraph().openRenderer("Arcade");
 
 	while (getGraph().isOpen()) {
 		getGraph().clearEvents();
@@ -56,11 +56,11 @@ void Core::run()
 			swapLib(key);
 		if (_inMenu) {
 			menu.applyEvent(key, *this);
-			menu.refresh(&getGraph());
+			menu.refresh(getGraph());
 		} else {
 			getGame().applyEvent(key);
 			getGame().update();
-			getGame().refresh(&getGraph());
+			getGame().refresh(getGraph());
 		}
 	}
 }

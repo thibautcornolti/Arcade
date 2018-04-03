@@ -12,9 +12,6 @@ Arcade::NcursesGraphicLib::NcursesGraphicLib()
 	, _codeToPair()
 {}
 
-Arcade::NcursesGraphicLib::~NcursesGraphicLib()
-{}
-
 std::string Arcade::NcursesGraphicLib::getName() const
 {
 	return "NCurses";
@@ -30,7 +27,7 @@ void Arcade::NcursesGraphicLib::clearWindow()
 	clear();
 }
 
-void Arcade::NcursesGraphicLib::openRenderer()
+void Arcade::NcursesGraphicLib::openRenderer(std::string const &)
 {
 	initscr();
 	noecho();

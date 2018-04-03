@@ -16,8 +16,8 @@
 namespace Arcade {
 	class SfmlGraphicLib : public Arcade::IGraphicLib {
 	public:
-		SfmlGraphicLib();
-		~SfmlGraphicLib() final;
+		SfmlGraphicLib() = default;
+		~SfmlGraphicLib() final = default;
 
 		/* Get the name of the library */
 		std::string getName() const final;
@@ -31,8 +31,8 @@ namespace Arcade {
 		void closeRenderer() final;
 		
 		// Opens the window => start loop
-		void openRenderer() final;
-		
+		void openRenderer(std::string const &) final;
+
 		// Clears the screen
 		void clearWindow() final;
 

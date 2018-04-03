@@ -20,14 +20,15 @@ namespace Arcade {
 		Snake();
 		~Snake();
 
-		const std::string &getName() const final;
+		const std::string getName() const final;
+		void setPlayerName(const std::string &) final;
 		bool init() final;
 		bool stop() final;
 		bool open() final;
 		bool close() final;
 		void applyEvent(Keys) final;
 		void update() final;
-		void refresh(IGraphicLib *) final;
+		void refresh(IGraphicLib &) final;
 
 		enum STATUS {
 			RUNNING,
@@ -43,11 +44,11 @@ namespace Arcade {
 		};
 
 		Arcade::Vect<size_t> getCoords(size_t) const;
-		void updatePixel(Arcade::PixelBox&);
-		void display(IGraphicLib *);
+		void updatePixel(Arcade::PixelBox &);
+		void display(IGraphicLib &);
 		std::string getStatus() const;
-		void displayGameInfo(IGraphicLib *);
-		void initArcadeElements(IGraphicLib *);
+		void displayGameInfo(IGraphicLib &);
+		void initArcadeElements(IGraphicLib &);
 		void score();
 
 		bool restart();

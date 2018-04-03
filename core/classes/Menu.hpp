@@ -18,10 +18,10 @@ public:
 	~Menu() = default;
 
 	void applyEvent(Arcade::Keys, Core &);
-	void refresh(Arcade::IGraphicLib *);
+	void refresh(Arcade::IGraphicLib &);
 
 private:
-	void _genMenu(Arcade::IGraphicLib *);
+	void _genMenu(Arcade::IGraphicLib &);
 	void _addSelector(size_t);
 	void _clearSelector(size_t);
 

@@ -17,7 +17,7 @@ namespace Arcade {
 	class NcursesGraphicLib : public Arcade::IGraphicLib {
 	public:
 		NcursesGraphicLib();
-		~NcursesGraphicLib() final;
+		~NcursesGraphicLib() final = default;
 
 		/* Get the name of the library */
 		std::string getName() const final;
@@ -31,7 +31,7 @@ namespace Arcade {
 		void closeRenderer() final;
 		
 		// Opens the window => start loop
-		void openRenderer() final;
+		void openRenderer(std::string const &) final;
 		
 		// Clears the screen
 		void clearWindow() final;

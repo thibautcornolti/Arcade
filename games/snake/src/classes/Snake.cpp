@@ -19,20 +19,23 @@ Arcade::Snake::~Snake()
 {
 }
 
-const std::string &Arcade::Snake::getName() const
+const std::string Arcade::Snake::getName() const
 {
 	return _name;
 }
+
+void Arcade::Snake::setPlayerName(const std::string &)
+{}
 
 void Arcade::Snake::score()
 {
 }
 
-void Arcade::Snake::initArcadeElements(Arcade::IGraphicLib *lib)
+void Arcade::Snake::initArcadeElements(Arcade::IGraphicLib &lib)
 {
 	Arcade::PixelBox pixelMap(
 		{MAP + 2, MAP + 2},
-		{(lib->getMaxX() - MAP) / 2, (lib->getMaxY() - MAP) / 2});
+		{(lib.getMaxX() - MAP) / 2, (lib.getMaxY() - MAP) / 2});
 
 	_pixelMap = pixelMap;
 	_isRunning = true;
@@ -123,11 +126,11 @@ void Arcade::Snake::update()
 {
 }
 
-void Arcade::Snake::refresh(IGraphicLib *lib)
+void Arcade::Snake::refresh(IGraphicLib &lib)
 {
 	if (!_isRunning)
 		initArcadeElements(lib);
-	lib->clearWindow();
+	lib.clearWindow();
 	if (_game == RUNNING) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(SPEED));
 		move();
@@ -135,7 +138,7 @@ void Arcade::Snake::refresh(IGraphicLib *lib)
 			_game = ENDED;
 	}
 	display(lib);
-	lib->refreshWindow();
+	lib.refreshWindow();
 }
 
 Arcade::Vect<size_t> Arcade::Snake::getCoords(size_t pos) const
@@ -178,27 +181,27 @@ std::string Arcade::Snake::getStatus() const
 	}
 }
 
-void Arcade::Snake::displayGameInfo(IGraphicLib *lib)
+void Arcade::Snake::displayGameInfo(IGraphicLib &lib)
 {
-	Arcade::TextBox title("Snake", {(lib->getMaxX() - 5) / 2, 5});
-	Arcade::TextBox statut("Statut: ", {(lib->getMaxX() - 5) / 2, 7});
-	Arcade::TextBox score("Score: ", {(lib->getMaxX() - 5) / 2, 8});
-	Arcade::TextBox scoreb("Scoreboard", {(lib->getMaxX()) / 3 * 2 + 10, 7});
+	Arcade::TextBox title("Snake", {(lib.getMaxX() - 5) / 2, 5});
+	Arcade::TextBox statut("Statut: ", {(lib.getMaxX() - 5) / 2, 7});
+	Arcade::TextBox score("Score: ", {(lib.getMaxX() - 5) / 2, 8});
+	Arcade::TextBox scoreb("Scoreboard", {(lib.getMaxX()) / 3 * 2 + 10, 7});
 
 	statut.setValue(statut.getValue() + getStatus());
-	statut.setX((lib->getMaxX() - statut.getValue().size()) / 2);
-	lib->drawText(title);
-	lib->drawText(statut);
-	lib->drawText(score);
-	lib->drawText(scoreb);
+	statut.setX((lib.getMaxX() - statut.getValue().size()) / 2);
+	lib.drawText(title);
+	lib.drawText(statut);
+	lib.drawText(score);
+	lib.drawText(scoreb);
 }
 
-void Arcade::Snake::display(IGraphicLib *lib)
+void Arcade::Snake::display(IGraphicLib &lib)
 {
 	if (_game == RUNNING)
 		updatePixel(_pixelMap);
 	displayGameInfo(lib);
-	lib->drawPixelBox(_pixelMap);
+	lib.drawPixelBox(_pixelMap);
 }
 
 void Arcade::Snake::setMove(Arcade::Snake::MOVE move)

@@ -15,14 +15,15 @@ namespace Arcade {
 		TestGameLib();
 		~TestGameLib();
 
-		const std::string &getName() const final;
+		const std::string getName() const final;
+		void setPlayerName(const std::string &) final;
 		bool init() final;
 		bool stop() final;
 		bool open() final;
 		bool close() final;
 		void applyEvent(Keys) final;
 		void update() final;
-		void refresh(IGraphicLib *) final;
+		void refresh(IGraphicLib &) final;
 	protected:
 	private:
 		std::string _name = "Test";

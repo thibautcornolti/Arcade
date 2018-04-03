@@ -8,7 +8,8 @@
 #include "NcursesGraphicLib.hpp"
 
 Arcade::NcursesGraphicLib::NcursesGraphicLib()
-	: _colors()
+	: _colorToCode()
+	, _codeToPair()
 {}
 
 Arcade::NcursesGraphicLib::~NcursesGraphicLib()
@@ -121,29 +122,33 @@ size_t Arcade::NcursesGraphicLib::getMaxX() const
 	return COLS;
 }
 
+int Arcade::NcursesGraphicLib::_getColorCode(Arcade::Color c)
+{
+	short code = c.getRed() + (c.getGreen() << 8) + (c.getBlue() << 16);
+	if (!code)
+		return COLOR_BLACK;
+	if (!_colorToCode[code])
+		_colorToCode[code] = _nbColor++ % (COLOR_PAIRS - 1);
+	double d = 1000 / 255;
+	init_color(_colorToCode[code], c.getRed() * d, c.getGreen() * d, c.getBlue() * d);
+	return _colorToCode[code];
+}
+
 int Arcade::NcursesGraphicLib::_getPairCode(Arcade::Color f, Arcade::Color b)
 {
-	long fcode = f.getRed() + (f.getGreen() << 8) + (f.getBlue() << 16);
-	long bcode = b.getRed() + (b.getGreen() << 8) + (b.getBlue() << 16);
-	short icf = _colors[fcode];
-	short icb;
-	if (bcode == 0)
-		icb = 0;
-	else
-		icb = _colors[bcode];
-	double d = 1000 / 255;
-	if (!icf) {
-		_colors[fcode] = _nbColor;
-		icf = _nbColor++;
-		init_color(icf, f.getRed() * d, f.getGreen() * d,
-			f.getBlue() * d);
-	}
-	if (!icb && b.getRed() + b.getGreen() + b.getBlue()) {
-		_colors[bcode] = _nbColor;
-		icb = _nbColor++;
-		init_color(icb, b.getRed() * d, b.getGreen() * d,
-			b.getBlue() * d);
-	}
-	init_pair((icf << 4) + icb, icf, icb);
-	return (icf << 4) + icb;
+	short code_front;
+	short code_back;
+	short code_pair;
+	long shift_pair;
+
+	code_front = _getColorCode(f);
+	code_back = _getColorCode(b);
+	shift_pair =  code_front + (code_back << 16);
+	if (!_codeToPair[shift_pair]) {
+		code_pair = _nbColor % (COLOR_PAIRS - 1);
+		_codeToPair[shift_pair] = _nbColor++ % (COLOR_PAIRS - 1);
+	} else
+		code_pair = _codeToPair[shift_pair];
+	init_pair(code_pair, code_front, code_back);
+	return code_pair;
 }

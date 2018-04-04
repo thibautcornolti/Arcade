@@ -36,6 +36,7 @@ bool Arcade::Pacman::init()
         std::cerr << "Can not find initial player position in map" << std::endl;
         return false;
     }
+    _initial_pos = _current_pos;
     return true;
 }
 
@@ -75,7 +76,7 @@ void Arcade::Pacman::applyEvent(Arcade::Keys key)
             _move = Arcade::Pacman::MOVE::RIGHT;
             break;
         case Arcade::Keys::P:
-            _status = (_status == PAUSED) ? RUNING : PAUSED;
+            _status = (_status == PAUSED) ? RUNNING : PAUSED;
             break;
         case Arcade::Keys::R:
             restart();
@@ -96,9 +97,11 @@ void Arcade::Pacman::refresh(IGraphicLib &lib)
         _pixelMap = Arcade::PixelBox({MAP_WIDTH, MAP_HEIGHT + 3},
             {lib.getMaxX() / 2 - MAP_WIDTH / 2,
             lib.getMaxY() / 2 - MAP_HEIGHT / 2});
-        _init = true;
-        _status = Arcade::Pacman::STATUS::RUNING;
-    if (_status == Arcade::Pacman::STATUS::RUNING &&
+        if (_init == false) {
+            _init = true;
+            _status = Arcade::Pacman::STATUS::RUNNING;
+        }
+    if (_status == Arcade::Pacman::STATUS::RUNNING &&
         _move != Arcade::Pacman::MOVE::STILL) {
         move();
     }
@@ -127,13 +130,43 @@ Arcade::Vect<size_t> Arcade::Pacman::getCoords(size_t pos) const
     return {pos % (MAP_WIDTH), pos / (MAP_HEIGHT)};
 }
 
+std::string Arcade::Pacman::getStatus() const
+{
+    switch (_status) {
+        case RUNNING:
+            return "Running";
+        case PAUSED:
+            return "Paused";
+        default:
+            return "Ended";
+    }
+}
+
 void Arcade::Pacman::display(Arcade::IGraphicLib &lib)
 {
     updatePixel();
     _scale->setCentering(Scale::BOTH);
     _scale->setWindowSize({lib.getMaxX(), lib.getMaxY()});
-    _scale->scalePixelBox({50, 50}, {25, 50}, _pixelMap);
+    _scale->scalePixelBox({50, 50}, {50, 50}, _pixelMap);
+    displayGameInfo(lib);
     lib.drawPixelBox(_pixelMap);
+}
+
+void Arcade::Pacman::displayGameInfo(IGraphicLib &lib)
+{
+    Arcade::TextBox title("Snake", {(lib.getMaxX() - 5) / 2, 5}, 20);
+    Arcade::TextBox statut("Statut: ", {(lib.getMaxX() - 5) / 2, 7}, 20);
+    Arcade::TextBox score("Score: ", {(lib.getMaxX() - 5) / 2, 8}, 20);
+    Arcade::TextBox scoreb("Scoreboard", {(lib.getMaxX()) / 3 * 2 + 10, 7}, 20);
+
+    statut.setValue(statut.getValue() + getStatus());
+    statut.setX((lib.getMaxX() - statut.getValue().size()) / 2);
+    score.setValue(score.getValue() + std::to_string(_score->getScores()));
+    score.setX((lib.getMaxX() - score.getValue().size()) / 2);
+    lib.drawText(title);
+    lib.drawText(statut);
+    lib.drawText(score);
+    lib.drawText(scoreb);
 }
 
 void Arcade::Pacman::updatePixel()
@@ -175,8 +208,8 @@ void Arcade::Pacman::move()
         _move = Arcade::Pacman::MOVE::STILL;
         return;
     }
-    /*if (_map[_current_pos] == '.')
-        _score->addScores(10);*/
+    if (_map[_current_pos + _move] == '.')
+        _score->addScores(10);
     _map[_current_pos] = ' ';
     _current_pos += _move;
     _map[_current_pos] = 'P';
@@ -190,3 +223,10 @@ size_t Arcade::Pacman::findPlayer()
     }
     return UINT32_MAX;
 }
+
+//TODO link door from side to side
+//TODO god mode with candy
+//TODO make the ghost class
+//TODO chase and flee ia
+//TODO kill and win condition
+//TODO ghost replacement when killed by god mode

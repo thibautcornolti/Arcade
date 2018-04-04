@@ -38,7 +38,9 @@ namespace Arcade {
         void refresh(IGraphicLib &) final;
         bool restart();
         bool readMap();
+        std::string getStatus() const;
         void display(IGraphicLib &);
+        void displayGameInfo(IGraphicLib &);
         void updatePixel();
         void move();
         size_t findPlayer();
@@ -46,7 +48,7 @@ namespace Arcade {
 
         enum STATUS {
             INIT,
-            RUNING,
+            RUNNING,
             PAUSED,
             ENDED
         };
@@ -66,6 +68,7 @@ namespace Arcade {
         Scale *_scale;
         MOVE _move = STILL;
         size_t _current_pos;
+        size_t _initial_pos;
         bool _init = false;
         STATUS _status = INIT;
         Arcade::PacPlayer _player;

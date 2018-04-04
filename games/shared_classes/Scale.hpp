@@ -27,11 +27,11 @@ namespace Arcade {
 			};
 
 			void setCentering(const CENTERING&);
-			void computeCentering(Arcade::Vect<size_t> &pos, Arcade::PixelBox &pixelBox);
 			void scalePixelBox(const Arcade::Vect<size_t> &pos, const Arcade::Vect<size_t> &size, Arcade::PixelBox &pixelBox);
 			void setWindowSize(const Arcade::Vect<size_t> &windowsSize);
 
-			void debug(const Arcade::Vect<size_t> &pos, const Arcade::Vect<size_t> &size, Arcade::PixelBox &pixelBox);
+		private:
+			void computeCentering(Arcade::Vect<size_t> &pos, Arcade::PixelBox &pixelBox);
 
 		private:
 			Arcade::Vect<size_t> _windowSize;

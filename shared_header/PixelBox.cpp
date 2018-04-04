@@ -71,6 +71,16 @@ void Arcade::PixelBox::setSize(Arcade::Vect<size_t> size)
 		_colorFrame[i] = _defaultColor;
 }
 
+Arcade::Vect<size_t> Arcade::PixelBox::getSize() const
+{
+	return {getWidth(), getHeight()};
+}
+
+Arcade::Vect<size_t> Arcade::PixelBox::getPos() const
+{
+	return {getX(), getY()};
+}
+
 void Arcade::PixelBox::putPixel(Vect<size_t> pos, Arcade::Color col)
 {
 	_colorFrame[pos.getY() * _size.getX() + pos.getX()] = col;

@@ -52,6 +52,10 @@ void Arcade::Scale::scalePixelBox(const Arcade::Vect<size_t> &pos,
 	Arcade::Vect<size_t> pixelRatio = {nbPixelFree.getX() / pixelBox.getWidth(), nbPixelFree.getY() / pixelBox.getHeight()};
 	Arcade::Vect<size_t> rectPos = {0, 0};
 
+	if (pixelRatio.getX() < 1)
+		pixelRatio.setX(1);
+	if (pixelRatio.getY() < 1)
+		pixelRatio.setY(1);
 	pixelBox.setSize({pixelRatio.getX() * newPixelBox.getWidth(), pixelRatio.getY() * newPixelBox.getHeight()});
 	computeCentering(posPixelBox, pixelBox);
 	pixelBox.setPos({posPixelBox.getX(), posPixelBox.getY()});

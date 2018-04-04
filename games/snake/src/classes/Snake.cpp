@@ -48,9 +48,9 @@ bool Arcade::Snake::init()
 		return false;
 	buf << file.rdbuf();
 	_map = buf.str();
+	_map.erase(std::remove(_map.begin(), _map.end(), '\n'), _map.end());
 	_time = std::chrono::high_resolution_clock::now();
 	std::srand(std::time(nullptr));
-	_map.erase(std::remove(_map.begin(), _map.end(), '\n'), _map.end());
 	addFood();
 	snakePos = _map.find_first_of('0');
 	for (size_t i = snakePos; i < snakePos + 4; i++)
@@ -213,7 +213,7 @@ void Arcade::Snake::display(IGraphicLib &lib)
 	updatePixel(pixelMap);
 	_scale->setCentering(Scale::CENTERING::BOTH);
 	_scale->setWindowSize({lib.getMaxX(), lib.getMaxY()});
-	_scale->scalePixelBox({50, 50}, {70, 50}, pixelMap);
+	_scale->scalePixelBox({50, 50}, {50, 50}, pixelMap);
 	displayGameInfo(lib);
 	lib.drawPixelBox(pixelMap);
 }

@@ -13,7 +13,8 @@
 #include "../../../shared_classes/Scoreboard.hpp"
 #include "../../../shared_classes/Scale.hpp"
 
-#define ASSETS_PATH	"games/snake/map"
+#define ASSETS_PATH	"games/snake/src/assets/map"
+#define ASSETS_TITLE	"games/snake/src/assets/title"
 #define MAP		25
 #define SPEED		150.0
 

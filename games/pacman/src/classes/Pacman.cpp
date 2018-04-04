@@ -11,7 +11,8 @@
 
 Arcade::Pacman::Pacman()
 {
-
+    _score = new Scoreboard(_name, _playerName);
+    _scale = new Scale();
 }
 
 Arcade::Pacman::~Pacman()
@@ -92,13 +93,11 @@ void Arcade::Pacman::update()
 
 void Arcade::Pacman::refresh(IGraphicLib &lib)
 {
-    if (!_init) {
         _pixelMap = Arcade::PixelBox({MAP_WIDTH, MAP_HEIGHT + 3},
             {lib.getMaxX() / 2 - MAP_WIDTH / 2,
             lib.getMaxY() / 2 - MAP_HEIGHT / 2});
         _init = true;
         _status = Arcade::Pacman::STATUS::RUNING;
-    }
     if (_status == Arcade::Pacman::STATUS::RUNING &&
         _move != Arcade::Pacman::MOVE::STILL) {
         move();
@@ -131,12 +130,14 @@ Arcade::Vect<size_t> Arcade::Pacman::getCoords(size_t pos) const
 void Arcade::Pacman::display(Arcade::IGraphicLib &lib)
 {
     updatePixel();
+    _scale->setCentering(Scale::BOTH);
+    _scale->setWindowSize({lib.getMaxX(), lib.getMaxY()});
+    _scale->scalePixelBox({50, 50}, {25, 50}, _pixelMap);
     lib.drawPixelBox(_pixelMap);
 }
 
 void Arcade::Pacman::updatePixel()
 {
-	Vect<size_t> pos;
 	for (size_t i = 0; i < _map.size(); ++i) {
 		switch (_map[i]) {
 			case '#':
@@ -174,6 +175,8 @@ void Arcade::Pacman::move()
         _move = Arcade::Pacman::MOVE::STILL;
         return;
     }
+    /*if (_map[_current_pos] == '.')
+        _score->addScores(10);*/
     _map[_current_pos] = ' ';
     _current_pos += _move;
     _map[_current_pos] = 'P';

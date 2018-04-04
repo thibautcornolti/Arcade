@@ -10,6 +10,8 @@ SRCS	= ./src/entry.cpp \
 		./src/classes/Pacman.cpp \
 		./src/classes/PacPlayer.cpp \
 		./src/classes/Ghost.cpp \
+		../shared_classes/Scoreboard.cpp \
+		../shared_classes/Scale.cpp \
 		../../shared_header/PixelBox.cpp \
 		../../shared_header/TextBox.cpp \
 		../../shared_header/Color.cpp

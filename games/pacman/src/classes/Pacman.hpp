@@ -14,6 +14,8 @@
 #include "Ghost.hpp"
 #include "../shared_header/IGameLib.hpp"
 #include "../../../shared_classes/Scoreboard.hpp"
+#include "../../../shared_classes/Scale.hpp"
+
 
 #define MAP_WIDTH 28
 #define MAP_HEIGHT 28
@@ -58,7 +60,10 @@ namespace Arcade {
 
     private:
         std::string _name = "Pacman";
+        std::string _playerName = "Unknown";
         std::string _map;
+        Scoreboard *_score;
+        Scale *_scale;
         MOVE _move = STILL;
         size_t _current_pos;
         bool _init = false;

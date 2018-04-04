@@ -8,6 +8,7 @@
 #include "PixelBox.hpp"
 
 Arcade::PixelBox::PixelBox(Vect<size_t> size, Vect<size_t> pos, Color col)
+	: _defaultColor(col)
 {
 	_pos = pos;
 	_size = size;
@@ -53,6 +54,21 @@ void Arcade::PixelBox::setWidth(size_t width)
 void Arcade::PixelBox::setX(size_t x)
 {
 	_pos.setX(x);
+}
+
+void Arcade::PixelBox::setPos(Arcade::Vect<size_t> pos)
+{
+	setX(pos.getX());
+	setY(pos.getY());
+}
+
+void Arcade::PixelBox::setSize(Arcade::Vect<size_t> size)
+{
+	setWidth(size.getX());
+	setHeight(size.getY());
+	_colorFrame.reserve(getWidth() * getHeight());
+	for (size_t i = 0 ; i < size.getX() * size.getY() ; ++i)
+		_colorFrame[i] = _defaultColor;
 }
 
 void Arcade::PixelBox::putPixel(Vect<size_t> pos, Arcade::Color col)

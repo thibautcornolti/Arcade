@@ -9,6 +9,7 @@ RM	= rm -f
 SRCS	= ./src/entry.cpp \
 		./src/classes/Snake.cpp \
 		../shared_classes/Scoreboard.cpp \
+		../shared_classes/Scale.cpp \
 		../../shared_header/PixelBox.cpp \
 		../../shared_header/TextBox.cpp \
 		../../shared_header/Color.cpp

@@ -30,7 +30,11 @@ bool Arcade::Pacman::init()
     _ghosts.assign(4, Ghost());
     if (!readMap())
         return false;
-
+    _current_pos = findPlayer();
+    if (_current_pos == UINT32_MAX) {
+        std::cerr << "Can not find initial player position in map" << std::endl;
+        return false;
+    }
     return true;
 }
 
@@ -49,9 +53,36 @@ bool Arcade::Pacman::close()
     return false;
 }
 
-void Arcade::Pacman::applyEvent(Arcade::Keys)
+bool Arcade::Pacman::restart()
 {
 
+}
+
+void Arcade::Pacman::applyEvent(Arcade::Keys key)
+{
+    switch (key) {
+        case Arcade::Keys::Z:
+            _move = Arcade::Pacman::MOVE::TOP;
+            break;
+        case Arcade::Keys::S:
+            _move = Arcade::Pacman::MOVE::BOT;
+            break;
+        case Arcade::Keys::Q:
+            _move = Arcade::Pacman::MOVE::LEFT;
+            break;
+        case Arcade::Keys::D:
+            _move = Arcade::Pacman::MOVE::RIGHT;
+            break;
+        case Arcade::Keys::P:
+            _status = (_status == PAUSED) ? RUNING : PAUSED;
+            break;
+        case Arcade::Keys::R:
+            restart();
+            break;
+        default:
+            _move = Arcade::Pacman::MOVE::STILL;
+            break;
+    }
 }
 
 void Arcade::Pacman::update()
@@ -66,6 +97,11 @@ void Arcade::Pacman::refresh(IGraphicLib &lib)
             {lib.getMaxX() / 2 - MAP_WIDTH / 2,
             lib.getMaxY() / 2 - MAP_HEIGHT / 2});
         _init = true;
+        _status = Arcade::Pacman::STATUS::RUNING;
+    }
+    if (_status == Arcade::Pacman::STATUS::RUNING &&
+        _move != Arcade::Pacman::MOVE::STILL) {
+        move();
     }
     lib.clearWindow();
     display(lib);
@@ -121,7 +157,7 @@ void Arcade::Pacman::updatePixel()
 				break;
 			default:
 				_pixelMap.putPixel(getCoords(i),
-				                   {255, 255, 255, 0});
+				                   {0, 0, 0, 255});
 				break;
 		}
 	}
@@ -130,4 +166,24 @@ void Arcade::Pacman::updatePixel()
 void Arcade::Pacman::setPlayerName(const std::string &name)
 {
 
+}
+
+void Arcade::Pacman::move()
+{
+    if (_map[_current_pos + _move] == '#') {
+        _move = Arcade::Pacman::MOVE::STILL;
+        return;
+    }
+    _map[_current_pos] = ' ';
+    _current_pos += _move;
+    _map[_current_pos] = 'P';
+}
+
+size_t Arcade::Pacman::findPlayer()
+{
+    for (size_t i = 0; i < _map.size(); ++i) {
+        if (_map[i] == 'P')
+            return i;
+    }
+    return UINT32_MAX;
 }

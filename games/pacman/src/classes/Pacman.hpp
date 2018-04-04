@@ -34,21 +34,35 @@ namespace Arcade {
         void update() final;
         void setPlayerName(const std::string &name) final;
         void refresh(IGraphicLib &) final;
+        bool restart();
         bool readMap();
         void display(IGraphicLib &);
         void updatePixel();
+        void move();
+        size_t findPlayer();
         Arcade::Vect<size_t> getCoords(size_t) const;
 
         enum STATUS {
+            INIT,
             RUNING,
             PAUSED,
             ENDED
+        };
+        enum MOVE {
+            RIGHT = 1,
+            LEFT = -1,
+            TOP = -(MAP_HEIGHT),
+            BOT = (MAP_HEIGHT),
+            STILL = 0
         };
 
     private:
         std::string _name = "Pacman";
         std::string _map;
+        MOVE _move = STILL;
+        size_t _current_pos;
         bool _init = false;
+        STATUS _status = INIT;
         Arcade::PacPlayer _player;
         std::vector<Arcade::Ghost> _ghosts;
         Arcade::PixelBox _pixelMap;

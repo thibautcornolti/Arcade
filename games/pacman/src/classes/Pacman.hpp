@@ -16,7 +16,7 @@
 #include "../../../shared_classes/Scoreboard.hpp"
 
 #define MAP_WIDTH 28
-#define MAP_HEIGHT 31
+#define MAP_HEIGHT 28
 #define ASSETS_PATH "games/pacman/assets/map.txt"
 
 namespace Arcade {

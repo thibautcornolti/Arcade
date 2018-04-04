@@ -43,6 +43,7 @@ namespace Arcade {
 		std::vector<Color> &getPixelArray();
 
 	private:
+		Color _defaultColor;
 		std::vector<Color> _colorFrame;
 		Vect<size_t> _size;
 		Vect<size_t> _pos;

@@ -16,6 +16,7 @@
 Arcade::Snake::Snake()
 {
 	_score = new Scoreboard(_name, _playerName);
+	_scale = new Scale();
 }
 
 Arcade::Snake::~Snake()
@@ -35,15 +36,6 @@ void Arcade::Snake::setPlayerName(const std::string &playerName)
 std::string Arcade::Snake::getPlayerName() const
 {
 	return _playerName;
-}
-
-void Arcade::Snake::initArcadeElements(Arcade::IGraphicLib &lib)
-{
-	Arcade::PixelBox pixelMap(
-		{MAP + 2, MAP + 2},
-		{(lib.getMaxX() - MAP) / 2, (lib.getMaxY() - MAP) / 2});
-	_pixelMap = pixelMap;
-	_isRunning = true;
 }
 
 bool Arcade::Snake::init()
@@ -87,7 +79,6 @@ bool Arcade::Snake::restart()
 	_snake.clear();
 	_current = RIGHT;
 	_game = RUNNING;
-	_isRunning = false;
 	init();
 	return true;
 }
@@ -128,8 +119,6 @@ void Arcade::Snake::update()
 
 void Arcade::Snake::refresh(IGraphicLib &lib)
 {
-	if (!_isRunning)
-		initArcadeElements(lib);
 	lib.clearWindow();
 	if (_game == RUNNING && isTimeToMove()) {
 		move();
@@ -219,10 +208,14 @@ void Arcade::Snake::displayGameInfo(IGraphicLib &lib)
 
 void Arcade::Snake::display(IGraphicLib &lib)
 {
-	if (_game == RUNNING)
-		updatePixel(_pixelMap);
+	Arcade::PixelBox pixelMap({MAP + 2, MAP + 2}, {0, 0});
+
+	updatePixel(pixelMap);
+	_scale->setCentering(Scale::CENTERING::BOTH);
+	_scale->setWindowSize({lib.getMaxX(), lib.getMaxY()});
+	_scale->scalePixelBox({50, 50}, {70, 50}, pixelMap);
 	displayGameInfo(lib);
-	lib.drawPixelBox(_pixelMap);
+	lib.drawPixelBox(pixelMap);
 }
 
 void Arcade::Snake::setMove(Arcade::Snake::MOVE move)

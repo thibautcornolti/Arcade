@@ -11,6 +11,7 @@
 #include <list>
 #include "../shared_header/IGameLib.hpp"
 #include "../../../shared_classes/Scoreboard.hpp"
+#include "../../../shared_classes/Scale.hpp"
 
 #define ASSETS_PATH	"games/snake/map"
 #define MAP		25
@@ -52,7 +53,6 @@ namespace Arcade {
 		std::string getStatus() const;
 		void displayGameInfo(IGraphicLib &);
 		void displayScoreboard(IGraphicLib &);
-		void initArcadeElements(IGraphicLib &);
 		bool isTimeToMove();
 
 		bool restart();
@@ -70,14 +70,14 @@ namespace Arcade {
 
 	private:
 		Scoreboard *_score;
+		Scale *_scale;
+
 		std::chrono::time_point<std::chrono::high_resolution_clock> _time;
 		std::string _name = "Snake";
 		std::string _playerName = "Unknown";
 		std::string _map;
-		Arcade::PixelBox _pixelMap;
 		std::list<t_snake> _snake;
 		MOVE _current = RIGHT;
 		STATUS _game = RUNNING;
-		bool _isRunning = false;
 	};
 }

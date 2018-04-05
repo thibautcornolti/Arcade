@@ -79,6 +79,7 @@ bool Arcade::Snake::restart()
 	_snake.clear();
 	_current = RIGHT;
 	_game = RUNNING;
+	_score->resetScores();
 	init();
 	return true;
 }
@@ -108,6 +109,9 @@ void Arcade::Snake::applyEvent(Arcade::Keys key)
 		case Arcade::Keys::R:
 			restart();
 			break;
+		case Arcade::Keys::C:
+			_game = (_game == CHEAT) ? RUNNING : CHEAT;
+			break;
 		default:
 			break ;
 	}
@@ -120,10 +124,9 @@ void Arcade::Snake::update()
 void Arcade::Snake::refresh(IGraphicLib &lib)
 {
 	lib.clearWindow();
-	if (_game == RUNNING && isTimeToMove()) {
+	if ((_game == RUNNING || _game == CHEAT) && isTimeToMove()) {
 		move();
-		if (collide())
-			_game = ENDED;
+		food();
 	}
 	display(lib);
 	lib.refreshWindow();
@@ -179,31 +182,33 @@ std::string Arcade::Snake::getStatus() const
 			return "Running";
 		case PAUSED:
 			return "Paused";
+		case CHEAT:
+			return "GODMODE";
 		default:
 			return "Ended";
 	}
 }
 
-void Arcade::Snake::displayScoreboard(Arcade::IGraphicLib &)
-{
-	auto scores = _score->getScoreboard();
-}
+static const std::map<const std::string, const Arcade::Vect<double>> _text = {
+	{"Snake", {47, 1}},
+	{"Statut: ", {42, 2}},
+	{"Score: ", {45, 3}},
+};
 
 void Arcade::Snake::displayGameInfo(IGraphicLib &lib)
 {
-	Arcade::TextBox title("Snake", {(lib.getMaxX() - 5) / 2, 5}, 20);
-	Arcade::TextBox statut("Statut: ", {(lib.getMaxX() - 5) / 2, 7}, 20);
-	Arcade::TextBox score("Score: ", {(lib.getMaxX() - 5) / 2, 8}, 20);
-	Arcade::TextBox scoreb("Scoreboard", {(lib.getMaxX()) / 3 * 2 + 10, 7}, 20);
+	Arcade::TextBox text("Ramdom", {0, 0}, 20);
 
-	statut.setValue(statut.getValue() + getStatus());
-	statut.setX((lib.getMaxX() - statut.getValue().size()) / 2);
-	score.setValue(score.getValue() + std::to_string(_score->getScores()));
-	score.setX((lib.getMaxX() - score.getValue().size()) / 2);
-	lib.drawText(title);
-	lib.drawText(statut);
-	lib.drawText(score);
-	lib.drawText(scoreb);
+	for (auto &elem : _text) {
+		if (!elem.first.find("Statut"))
+			text.setValue(elem.first + getStatus());
+		else if (!elem.first.find("Score"))
+			text.setValue(elem.first + std::to_string(_score->getScores()));
+		else
+			text.setValue(elem.first);
+		_scale->scaleTextBox(elem.second, text);
+		lib.drawText(text);
+	}
 }
 
 void Arcade::Snake::display(IGraphicLib &lib)
@@ -223,26 +228,13 @@ void Arcade::Snake::setMove(Arcade::Snake::MOVE move)
 	_current = move;
 }
 
-bool Arcade::Snake::collide()
+bool Arcade::Snake::food()
 {
-	size_t headLink = _snake.front().currentPos;
-	Arcade::Vect<size_t> coord = getCoords(headLink);
-	int escapeHead = 0;
-
-	for (auto &&it : _snake) {
-		if (escapeHead != 0)
-			if (headLink == it.currentPos)
-				return true;
-		escapeHead++;
-	}
 	if (_map.find_first_of('2', 0) == std::string::npos) {
 		_score->addScores(10);
 		addFood();
 		addLink();
 	}
-	if (coord.getX() == 0 || coord.getY() == 0 ||
-	    coord.getX() == MAP + 1 || coord.getY() == MAP + 1)
-		return true;
 	return false;
 }
 
@@ -253,18 +245,32 @@ void Arcade::Snake::addLink()
 	_snake.push_back(snake);
 }
 
+bool Arcade::Snake::collide(size_t &currentPos)
+{
+	if (_map[currentPos + _current] != ' ' &&
+		_map[currentPos + _current] != '2') {
+		if (_game != CHEAT) {
+			_game = ENDED;
+		}
+		return true;
+	}
+	return false;
+}
 
 bool Arcade::Snake::move()
 {
 	size_t nextLinkPos;
 
 	for (auto it = _snake.begin(); it != _snake.end(); ++it) {
-		_map[it->currentPos] = ' ';
 		if (it == _snake.begin()) {
+			if (collide(it->currentPos))
+				return false;
+			_map[it->currentPos] = ' ';
 			_map[it->currentPos + _current] = '0';
 			it->lastPos = it->currentPos;
 			it->currentPos += _current;
 		} else {
+			_map[it->currentPos] = ' ';
 			std::advance(it, -1);
 			nextLinkPos = it->lastPos;
 			std::advance(it, 1);

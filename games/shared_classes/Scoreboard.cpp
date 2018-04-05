@@ -111,3 +111,8 @@ void Arcade::Scoreboard::subScores(const size_t &points)
 {
 	_score -= points;
 }
+
+void Arcade::Scoreboard::resetScores()
+{
+	_score = 0;
+}

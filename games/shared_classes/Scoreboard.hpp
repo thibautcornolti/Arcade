@@ -24,6 +24,7 @@ namespace Arcade {
 			size_t getScores() const;
 			void addScores(const size_t&);
 			void subScores(const size_t&);
+			void resetScores();
 
 		private:
 			void readScores();

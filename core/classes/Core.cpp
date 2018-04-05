@@ -40,7 +40,7 @@ void Core::close()
 void Core::run()
 {
 	Arcade::Keys key;
-	Menu menu(_gamesName);
+	Arcade::Menu menu(_gamesName);
 
 	if (_graphs.size() == 0)
 		return ;

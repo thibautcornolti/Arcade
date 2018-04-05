@@ -120,8 +120,7 @@ bool Arcade::Pacman::readMap()
     buf << f.rdbuf();
     _map = buf.str();
     _map.erase(std::remove(_map.begin(), _map.end(), '\n'), _map.end());
-    std::cerr << _map.length() << std::endl;
-	std::cerr << MAP_WIDTH * MAP_HEIGHT << std::endl;
+    linkDoors();
     return true;
 }
 
@@ -222,6 +221,20 @@ size_t Arcade::Pacman::findPlayer()
             return i;
     }
     return UINT32_MAX;
+}
+
+bool Arcade::Pacman::linkDoors()
+{
+    Vect<size_t> pos;
+    for (size_t i = 0; i < _map.size(); ++i) {
+        if (_map[i] == '|') {
+            pos = getCoords(i);
+            for (int j = 1; j + pos.getX() < MAP_WIDTH; ++j) {
+                if (_map[pos.getY() * MAP_WIDTH + j + pos.getX()] == '|')
+                    _link.push_back({pos, getCoords(pos.getY() * MAP_WIDTH + j + pos.getX())});
+            }
+        }
+    }
 }
 
 //TODO link door from side to side

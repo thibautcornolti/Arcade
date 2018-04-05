@@ -45,6 +45,8 @@ namespace Arcade {
         void move();
         size_t findPlayer();
         Arcade::Vect<size_t> getCoords(size_t) const;
+        bool linkDoors();
+        static void printLink(const std::pair<Vect<size_t>, Vect<size_t >> &);
 
         enum STATUS {
             INIT,
@@ -74,6 +76,7 @@ namespace Arcade {
         Arcade::PacPlayer _player;
         std::vector<Arcade::Ghost> _ghosts;
         Arcade::PixelBox _pixelMap;
+        std::vector<std::pair<Vect<size_t>, Vect<size_t>>> _link;
     };
 }
 

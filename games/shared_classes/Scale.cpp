@@ -39,6 +39,8 @@ void Arcade::Scale::computeCentering(Arcade::Vect<size_t> &pos, Arcade::PixelBox
 			pos.setX(pos.getX() - pixelBox.getWidth() / 2);
 			pos.setY(pos.getY() - pixelBox.getHeight() / 2);
 			break;
+		case NONE:
+			break;
 	}
 }
 
@@ -67,4 +69,12 @@ void Arcade::Scale::scalePixelBox(const Arcade::Vect<size_t> &pos,
 		rectPos.setY(rectPos.getY() + pixelRatio.getY());
 		rectPos.setX(0);
 	}
+}
+
+void Arcade::Scale::scaleTextBox(const Arcade::Vect<double> &pos,
+				 Arcade::TextBox &textBox)
+{
+	Arcade::Vect<double> test = {static_cast<double>(_windowSize.getX()) * pos.getX() / 100, static_cast<double>(_windowSize.getY()) * (5 * pos.getY()) / 100};
+
+	textBox.setPos({static_cast<size_t >(test.getX()), static_cast<size_t >(test.getY())});
 }

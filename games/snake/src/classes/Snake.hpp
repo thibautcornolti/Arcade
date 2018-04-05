@@ -9,6 +9,7 @@
 
 #include <chrono>
 #include <list>
+#include <map>
 #include "../shared_header/IGameLib.hpp"
 #include "../../../shared_classes/Scoreboard.hpp"
 #include "../../../shared_classes/Scale.hpp"
@@ -38,6 +39,7 @@ namespace Arcade {
 		enum STATUS {
 			RUNNING,
 			PAUSED,
+			CHEAT,
 			ENDED
 		};
 
@@ -53,11 +55,11 @@ namespace Arcade {
 		void display(IGraphicLib &);
 		std::string getStatus() const;
 		void displayGameInfo(IGraphicLib &);
-		void displayScoreboard(IGraphicLib &);
 		bool isTimeToMove();
 
 		bool restart();
-		bool collide();
+		bool food();
+		bool collide(size_t&);
 		void addLink();
 		void addFood();
 		void setMove(MOVE);

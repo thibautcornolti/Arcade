@@ -11,6 +11,7 @@
 #include <string>
 #include "../../shared_header/Vect.hpp"
 #include "../snake/src/shared_header/PixelBox.hpp"
+#include "../snake/src/shared_header/TextBox.hpp"
 
 namespace Arcade {
 
@@ -27,8 +28,10 @@ namespace Arcade {
 			};
 
 			void setCentering(const CENTERING&);
-			void scalePixelBox(const Arcade::Vect<size_t> &pos, const Arcade::Vect<size_t> &size, Arcade::PixelBox &pixelBox);
 			void setWindowSize(const Arcade::Vect<size_t> &windowsSize);
+
+			void scalePixelBox(const Arcade::Vect<size_t> &pos, const Arcade::Vect<size_t> &size, Arcade::PixelBox &pixelBox);
+			void scaleTextBox(const Arcade::Vect<double> &pos, Arcade::TextBox &textBox);
 
 		private:
 			void computeCentering(Arcade::Vect<size_t> &pos, Arcade::PixelBox &pixelBox);

@@ -16,7 +16,7 @@ void Core::swapLib(Arcade::Keys key)
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
 		getGraph().openRenderer("Arcade");
 	} else if (key == Arcade::Keys::ESC && !_inMenu) {
-		getGame().close();
+		getGame().stop();
 		_inMenu = true;
 	}
 }
@@ -34,16 +34,13 @@ void Core::openGraph(const std::string &s)
 void Core::openGame(size_t n)
 {
 	_libGameIncrementer = n;
-	getGame().open();
+	getGame().init();
 	_inMenu = false;
 }
 
 void Core::close()
 {
-	if (!_inMenu)
-		getGame().close();
-	for (auto &g : _games)
-		g->stop();
+	getGame().stop();
 	getGraph().closeRenderer();
 }
 
@@ -115,7 +112,6 @@ bool Core::_initGames()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
-		o->init();
 		_games.push_back(o);
 		_gamesName.push_back(o->getName());
 	}

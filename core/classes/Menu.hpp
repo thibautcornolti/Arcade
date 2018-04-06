@@ -20,7 +20,6 @@
 #include "../shared_header/PixelBox.hpp"
 
 namespace Arcade {
-
 	class Menu {
 	public:
 		Menu(std::vector<std::string> &);
@@ -46,7 +45,7 @@ namespace Arcade {
 		std::map<const Arcade::Keys, std::function<void()>> _keyboard;
 		bool _capsActive = false;
 	};
-}
+};
 
 
 #endif /* !PROJECT_MENU_HPP */

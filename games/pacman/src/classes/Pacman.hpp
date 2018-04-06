@@ -10,7 +10,6 @@
 
 #include <iostream>
 #include <fstream>
-#include "PacPlayer.hpp"
 #include "Ghost.hpp"
 #include <pthread.h>
 #include "../shared_header/IGameLib.hpp"

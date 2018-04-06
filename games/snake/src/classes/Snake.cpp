@@ -15,7 +15,7 @@
 
 Arcade::Snake::Snake()
 {
-	_score = new Scoreboard(_name, _playerName);
+	_score = new Scoreboard();
 	_scale = new Scale();
 }
 
@@ -33,17 +33,42 @@ std::string Arcade::Snake::getPlayerName() const
 	return _playerName;
 }
 
+void Arcade::Snake::initMap()
+{
+	_map = "###########################"
+	       "#                         #"
+	       "#   ##               ##   #"
+	       "# ##                   ## #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#           0001          #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#                         #"
+	       "#  ##                  ## #"
+	       "#    ##              ##   #"
+	       "#                         #"
+	       "###########################";
+}
+
 bool Arcade::Snake::init()
 {
-	std::fstream file(ASSETS_PATH, std::ios::in);
-	std::stringstream buf;
 	size_t snakePos;
 
-	if (!file)
-		return false;
-	buf << file.rdbuf();
-	_map = buf.str();
-	_map.erase(std::remove(_map.begin(), _map.end(), '\n'), _map.end());
+	initMap();
 	_time = std::chrono::high_resolution_clock::now();
 	std::srand(std::time(nullptr));
 	addFood();
@@ -55,6 +80,11 @@ bool Arcade::Snake::init()
 
 bool Arcade::Snake::stop()
 {
+	_map.clear();
+	_snake.clear();
+	_current = RIGHT;
+	_game = RUNNING;
+	_score->resetScores();
 	return true;
 }
 
@@ -105,6 +135,8 @@ bool Arcade::Snake::applyEvent(Arcade::Keys key)
 
 bool Arcade::Snake::update()
 {
+	if (_game == ENDED)
+		return false;
 	return true;
 }
 
@@ -210,7 +242,7 @@ void Arcade::Snake::display(IGraphicLib &lib)
 	updatePixel(pixelMap);
 	_scale->setCentering(Scale::CENTERING::BOTH);
 	_scale->setWindowSize({lib.getMaxX(), lib.getMaxY()});
-	_scale->scalePixelBox({50, 50}, {50, 50}, pixelMap);
+	_scale->scalePixelBox({50, 55}, {75, 75}, pixelMap);
 	displayGameInfo(lib);
 	lib.drawPixelBox(pixelMap);
 }

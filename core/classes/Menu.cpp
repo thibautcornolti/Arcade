@@ -69,11 +69,11 @@ void Arcade::Menu::addLetter(char letter)
 
 void Arcade::Menu::displayScoreboard(Arcade::IGraphicLib &lib)
 {
-	Arcade::PixelBox test({1, 1}, {0, 0});
+	Arcade::PixelBox background({1, 1}, {0, 0});
 
 	_scale->setCentering(Scale::CENTERING::VERTICAL);
-	_scale->scalePixelBox({50, 50}, {45, 80}, test);
-	lib.drawPixelBox(test);
+	_scale->scalePixelBox({50, 50}, {45, 80}, background);
+	lib.drawPixelBox(background);
 }
 
 void Arcade::Menu::selector(Arcade::IGraphicLib &lib)
@@ -84,10 +84,10 @@ void Arcade::Menu::selector(Arcade::IGraphicLib &lib)
 	for (size_t i = 0; i < _games.size(); i++) {
 		if (i == _selection) {
 			games.setValue("==> " + _games[i] + " <==");
-			_scale->scaleTextBox({18, line}, games);
+			_scale->scaleTextBox({15, line}, games);
 		} else {
 			games.setValue(_games[i]);
-			_scale->scaleTextBox({23, line}, games);
+			_scale->scaleTextBox({20, line}, games);
 		}
 		lib.drawText(games);
 		line += 5;

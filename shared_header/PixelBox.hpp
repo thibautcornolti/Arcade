@@ -30,9 +30,9 @@ namespace Arcade {
 		void setWidth(size_t width);
 		void setX(size_t x);
 
-		Arcade::Vect<size_t> getSize() const;
+		Vect<size_t> getSize() const;
 		void setSize(Vect<size_t> size);
-		Arcade::Vect<size_t> getPos() const;
+		Vect<size_t> getPos() const;
 		void setPos(Vect<size_t> pos);
 
 		void putPixel(Vect<size_t> pos, Color col);

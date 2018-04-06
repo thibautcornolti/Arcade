@@ -41,7 +41,6 @@ namespace Arcade {
 		void putRect(Vect<size_t> pos, Vect<size_t> size, Color col);
 
 		std::vector<Color> &getPixelArray();
-
 	private:
 		Color _defaultColor;
 		std::vector<Color> _colorFrame;

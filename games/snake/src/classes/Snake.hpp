@@ -14,8 +14,7 @@
 #include "../shared_header/Scoreboard.hpp"
 #include "../shared_header/Scale.hpp"
 
-#define ASSETS_PATH	"games/snake/src/assets/map"
-#define ASSETS_TITLE	"games/snake/src/assets/title"
+#define ASSETS_PATH	"assets/snake/maps/map"
 #define MAP		25
 #define SPEED		150.0
 
@@ -53,8 +52,9 @@ namespace Arcade {
 		void display(IGraphicLib &);
 		std::string getStatus() const;
 		void displayGameInfo(IGraphicLib &);
-		bool isTimeToMove();
 
+		void initMap();
+		bool isTimeToMove();
 		bool restart();
 		bool food();
 		bool collide(size_t&);

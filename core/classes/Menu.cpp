@@ -7,9 +7,13 @@
 
 #include "Menu.hpp"
 
-Arcade::Menu::Menu(std::vector<std::string> &games)
-	: _games(games),
-	  _keyboard({{Arcade::Keys::DELETE, std::bind(&Arcade::Menu::resetPlayer, this)},
+Arcade::Menu::Menu(
+		std::vector<std::string> &games,
+		std::vector<std::string> &graphs
+	)
+	: _games(games)
+	, _graphs(graphs)
+	, _keyboard({{Arcade::Keys::DELETE, std::bind(&Arcade::Menu::resetPlayer, this)},
 		     {Arcade::Keys::SPACE, std::bind(&Arcade::Menu::activeCaps, this)},
 		     {Arcade::Keys::BACKSPACE, std::bind(&Arcade::Menu::removeLetter, this)},
 		     {Arcade::Keys::A, std::bind(&Arcade::Menu::addLetter, this, 'a')},

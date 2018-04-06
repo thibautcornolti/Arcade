@@ -24,6 +24,7 @@ class Core {
 		void run(const std::string &);
 		bool init();
 		void openGame(size_t);
+		void openGraph(size_t n);
 		void openGraph(const std::string &);
 		void swapLib(Arcade::Keys);
 		void runGame(const std::string &);
@@ -35,7 +36,7 @@ protected:
 		bool _initGames();
 
 		std::vector<Arcade::IGraphicLib *> _graphs;
-		std::vector<std::string> _graphPaths;
+		std::vector<std::string> _graphsName;
 		std::vector<Arcade::IGameLib *> _games;
 		std::vector<std::string> _gamesName;
 		std::vector<std::shared_ptr<DLLoader>> _loaders;

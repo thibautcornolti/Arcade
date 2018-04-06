@@ -22,7 +22,7 @@
 namespace Arcade {
 	class Menu {
 	public:
-		Menu(std::vector<std::string> &);
+		Menu(std::vector<std::string> &, std::vector<std::string> &);
 		~Menu() = default;
 
 		void applyEvent(Arcade::Keys, Core &);
@@ -39,6 +39,7 @@ namespace Arcade {
 		Scale *_scale;
 
 		std::vector<std::string> _games;
+		std::vector<std::string> _graphs;
 		std::string _playerName;
 		size_t _selection = 0;
 

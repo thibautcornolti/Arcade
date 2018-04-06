@@ -28,11 +28,6 @@ const std::string Arcade::Snake::getName() const
 	return _name;
 }
 
-void Arcade::Snake::setPlayerName(const std::string &playerName)
-{
-	_playerName = playerName;
-}
-
 std::string Arcade::Snake::getPlayerName() const
 {
 	return _playerName;
@@ -63,16 +58,6 @@ bool Arcade::Snake::stop()
 	return true;
 }
 
-bool Arcade::Snake::open()
-{
-	return true;
-}
-
-bool Arcade::Snake::close()
-{
-	return true;
-}
-
 bool Arcade::Snake::restart()
 {
 	_map.clear();
@@ -84,7 +69,7 @@ bool Arcade::Snake::restart()
 	return true;
 }
 
-void Arcade::Snake::applyEvent(Arcade::Keys key)
+bool Arcade::Snake::applyEvent(Arcade::Keys key)
 {
 	switch (key) {
 		case Arcade::Keys::Z:
@@ -115,10 +100,12 @@ void Arcade::Snake::applyEvent(Arcade::Keys key)
 		default:
 			break ;
 	}
+	return true;
 }
 
-void Arcade::Snake::update()
+bool Arcade::Snake::update()
 {
+	return true;
 }
 
 void Arcade::Snake::refresh(IGraphicLib &lib)
@@ -130,6 +117,11 @@ void Arcade::Snake::refresh(IGraphicLib &lib)
 	}
 	display(lib);
 	lib.refreshWindow();
+}
+
+size_t Arcade::Snake::getScore()
+{
+	return _score->getScores();
 }
 
 bool Arcade::Snake::isTimeToMove()

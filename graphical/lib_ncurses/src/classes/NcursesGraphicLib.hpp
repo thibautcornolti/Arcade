@@ -112,7 +112,7 @@ namespace Arcade {
 			{10, Arcade::Keys::ENTER},
 			{32, Arcade::Keys::SPACE},
 			{KEY_DC, Arcade::Keys::DELETE},
-			{KEY_BACKSPACE, Arcade::Keys::BACKSPACE},
+			{127, Arcade::Keys::BACKSPACE},
 			{KEY_STAB, Arcade::Keys::TAB},
 			{27, Arcade::Keys::ESC},
 			{KEY_MOUSE, Arcade::Keys::MOUSELEFT},

@@ -93,7 +93,6 @@ bool Arcade::NcursesGraphicLib::pollEvents()
 	if (_isRendering == false)
 		return false;
 	auto k = getch();
-
 	for (size_t i = 0 ; i < _keymap.size() ; ++i) {
 		if (k == _keymap[i].first) {
 			_lastEvents.push_back(_keymap[i].second);

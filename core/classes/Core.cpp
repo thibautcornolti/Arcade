@@ -50,7 +50,7 @@ void Core::close()
 void Core::run(const std::string &graphLibName)
 {
 	Arcade::Keys key;
-	Menu menu(_gamesName);
+	Arcade::Menu menu(_gamesName);
 
 	if (_graphs.size() == 0)
 		return ;

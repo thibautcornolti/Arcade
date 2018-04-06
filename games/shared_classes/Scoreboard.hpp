@@ -9,6 +9,7 @@
 #define CPP_ARCADE_SCOREBOARD_HPP
 
 #include <vector>
+#include <map>
 
 #define SCOREBOARD "scores"
 
@@ -16,26 +17,22 @@ namespace Arcade {
 
 	class Scoreboard {
 		public:
-			Scoreboard(const std::string&, const std::string&);
+			Scoreboard();
 			~Scoreboard();
 
-			std::vector<std::pair<std::string, size_t>> getScoreboard() const;
-			void saveScoreboard();
+			void setGameName(const std::string &gameName);
+			bool readScoreboard();
+			std::map<const std::string, std::vector<std::string>> getScoreboard() const;
+
+
 			size_t getScores() const;
 			void addScores(const size_t&);
 			void subScores(const size_t&);
 			void resetScores();
 
 		private:
-			void readScores();
-			std::string getFormattedScoreboard() const;
-			void addPlayerToScoreboard(int);
-			void updateScoreboard();
-
-		private:
-			const std::string _gameName;
-			const std::string _playerName;
-			std::vector<std::pair<std::string, size_t>> _scores = {{"Unknown", 0}};
+			std::string _gameName;
+			std::map<const std::string, std::vector<std::string>> _allScores;
 			size_t _score = 0;
 	};
 

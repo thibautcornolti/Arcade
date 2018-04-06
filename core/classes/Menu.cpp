@@ -43,7 +43,7 @@ Arcade::Menu::Menu(
 		     {Arcade::Keys::Y, std::bind(&Arcade::Menu::addLetter, this, 'y')},
 		     {Arcade::Keys::Z, std::bind(&Arcade::Menu::addLetter, this, 'z')}})
 {
-	_score = new Scoreboard("General", "Master");
+	_score = new Scoreboard();
 	_scale = new Scale();
 }
 
@@ -74,10 +74,26 @@ void Arcade::Menu::addLetter(char letter)
 void Arcade::Menu::displayScoreboard(Arcade::IGraphicLib &lib)
 {
 	Arcade::PixelBox background({1, 1}, {0, 0});
+	Arcade::TextBox scoreboard("", {0, 0}, 20, Arcade::Color(0, 0, 0, 255), Arcade::Color(255, 255, 255, 255));
+	auto scores = _score->getScoreboard();
+	double position = 3;
 
 	_scale->setCentering(Scale::CENTERING::VERTICAL);
 	_scale->scalePixelBox({50, 50}, {45, 80}, background);
 	lib.drawPixelBox(background);
+	for (auto &elem : scores) {
+		scoreboard.setValue(elem.first);
+		_scale->scaleTextBox({70, position}, scoreboard);
+		position += 0.7;
+		lib.drawText(scoreboard);
+		for (size_t i = 1; i < elem.second.size(); ++i) {
+			scoreboard.setValue(elem.second[i]);
+			_scale->scaleTextBox({65, position}, scoreboard);
+			position += 0.7;
+			lib.drawText(scoreboard);
+		}
+		position += 0.5;
+	}
 }
 
 void Arcade::Menu::selector(Arcade::IGraphicLib &lib)
@@ -129,6 +145,7 @@ void Arcade::Menu::refresh(Arcade::IGraphicLib &graph)
 	Arcade::TextBox player("Player: ", {0, 0}, 20);
 
 	graph.clearWindow();
+	_score->readScoreboard();
 	playerName.setValue(_playerName);
 	_scale->setWindowSize({graph.getMaxX(), graph.getMaxY()});
 	_scale->scaleTextBox({0, 0}, player);

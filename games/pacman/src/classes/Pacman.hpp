@@ -33,6 +33,7 @@ namespace Arcade {
                 bool applyEvent(Keys) final;
                 bool update() final;
                 void refresh(IGraphicLib &) final;
+                size_t getScore() final;
 
                 bool restart();
                 bool readMap();

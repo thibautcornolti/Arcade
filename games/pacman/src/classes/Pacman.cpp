@@ -12,7 +12,7 @@
 
 Arcade::Pacman::Pacman()
 {
-        _score = new Scoreboard(_name, _playerName);
+        _score = new Scoreboard();
         _scale = new Scale();
 }
 
@@ -280,6 +280,12 @@ bool Arcade::Pacman::linkDoors()
                         }
                 }
         }
+        return true;
+}
+
+size_t Arcade::Pacman::getScore()
+{
+        return _score->getScores();
 }
 
 //TODO make the ghost class

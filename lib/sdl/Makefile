@@ -1,4 +1,4 @@
-NAME	= game_testgame.so
+NAME	= lib_arcade_sfml.so
 
 CC	= g++
 
@@ -7,7 +7,7 @@ CP = cp
 RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
-			./src/classes/TestGameLib.cpp \
+			./src/classes/SdlGraphicLib.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 
@@ -15,7 +15,7 @@ CPPFLAGS = -I ./src/pp
 CPPFLAGS += -W -Wall -Wextra --std=c++11 -g 
 CPPFLAGS += -fPIC
 
-LDFLAGS += -lncurses -shared --std=c++11
+LDFLAGS += -lsfml-graphics -lsfml-window -shared --std=c++11
 
 all: $(NAME)
 

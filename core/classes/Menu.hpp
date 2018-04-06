@@ -13,8 +13,8 @@
 #include <map>
 #include <string>
 #include "Core.hpp"
-#include "../../games/shared_classes/Scoreboard.hpp"
-#include "../../games/shared_classes/Scale.hpp"
+#include "../shared_header/Scoreboard.hpp"
+#include "../shared_header/Scale.hpp"
 #include "../shared_header/IGraphicLib.hpp"
 #include "../shared_header/TextBox.hpp"
 #include "../shared_header/PixelBox.hpp"

@@ -13,7 +13,7 @@
 #include "PacPlayer.hpp"
 #include "Ghost.hpp"
 #include "../shared_header/IGameLib.hpp"
-#include "../../../shared_classes/Scoreboard.hpp"
+#include "../shared_header/Scoreboard.hpp"
 
 #define MAP_WIDTH 28
 #define MAP_HEIGHT 28

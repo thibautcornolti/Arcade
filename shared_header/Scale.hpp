@@ -9,9 +9,9 @@
 #define CPP_ARCADE_SCALE_HPP
 
 #include <string>
-#include "../../shared_header/Vect.hpp"
-#include "../snake/src/shared_header/PixelBox.hpp"
-#include "../snake/src/shared_header/TextBox.hpp"
+#include "Vect.hpp"
+#include "PixelBox.hpp"
+#include "TextBox.hpp"
 
 namespace Arcade {
 

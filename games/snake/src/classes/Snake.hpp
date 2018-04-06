@@ -11,8 +11,8 @@
 #include <list>
 #include <map>
 #include "../shared_header/IGameLib.hpp"
-#include "../../../shared_classes/Scoreboard.hpp"
-#include "../../../shared_classes/Scale.hpp"
+#include "../shared_header/Scoreboard.hpp"
+#include "../shared_header/Scale.hpp"
 
 #define ASSETS_PATH	"games/snake/src/assets/map"
 #define ASSETS_TITLE	"games/snake/src/assets/title"

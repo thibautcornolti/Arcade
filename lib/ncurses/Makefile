@@ -1,4 +1,4 @@
-NAME	= lib_ncurses.so
+NAME	= lib_arcade_ncurses.so
 
 CC	= g++
 
@@ -8,9 +8,6 @@ RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
 			./src/classes/NcursesGraphicLib.cpp \
-			../../shared_header/PixelBox.cpp \
-			../../shared_header/TextBox.cpp \
-			../../shared_header/Color.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 

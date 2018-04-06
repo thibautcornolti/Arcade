@@ -73,7 +73,6 @@ namespace Arcade {
                 bool _init = false;
                 bool _godmode = false;
                 STATUS _status = INIT;
-                Arcade::PacPlayer _player;
                 std::vector<Arcade::Ghost> _ghosts;
                 Arcade::PixelBox _pixelMap;
                 pthread_t _id;

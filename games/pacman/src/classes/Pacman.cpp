@@ -29,7 +29,6 @@ const std::string Arcade::Pacman::getName() const
 bool Arcade::Pacman::init()
 {
         std::cerr << "INIT PACMAN" << std::endl;
-        _player = PacPlayer();
         _ghosts.assign(4, Ghost());
         if (!readMap())
                 return false;

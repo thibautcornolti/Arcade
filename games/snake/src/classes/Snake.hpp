@@ -26,15 +26,13 @@ namespace Arcade {
 		~Snake();
 
 		const std::string getName() const final;
-		void setPlayerName(const std::string &) final;
 		std::string getPlayerName() const;
 		bool init() final;
 		bool stop() final;
-		bool open() final;
-		bool close() final;
-		void applyEvent(Keys) final;
-		void update() final;
+		bool applyEvent(Keys) final;
+		bool update() final;
 		void refresh(IGraphicLib &) final;
+		size_t getScore() final;
 
 		enum STATUS {
 			RUNNING,

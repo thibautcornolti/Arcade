@@ -8,7 +8,7 @@
 #include "Core.hpp"
 #include "Menu.hpp"
 
-void Core::swapLib(Arcade::Keys key)
+void Arcade::Core::swapLib(Arcade::Keys key)
 {
 	if (key == Arcade::Keys::RIGHT || key == Arcade::Keys::LEFT) {
 		getGraph().closeRenderer();
@@ -16,36 +16,65 @@ void Core::swapLib(Arcade::Keys key)
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
 		getGraph().openRenderer("Arcade");
 	} else if (key == Arcade::Keys::ESC && !_inMenu) {
-		getGame().close();
+		getGame().stop();
 		_inMenu = true;
 	}
 }
 
-void Core::openGame(size_t n)
+void Arcade::Core::openGraph(const std::string &s)
+{
+	for (size_t i = 0 ; i < _graphsName.size() ; ++i)
+		if (s == GRAPH_FOLDER"/" + _graphsName[i]) {
+			getGraph().closeRenderer();
+			_libGraphIncrementer = i;
+			getGraph().openRenderer("Arcade");
+		}
+}
+
+void Arcade::Core::openGraph(size_t n)
+{
+	getGraph().closeRenderer();
+	_libGraphIncrementer = n;
+	getGraph().openRenderer("Arcade");
+}
+
+void Arcade::Core::openGame(size_t n)
 {
 	_libGameIncrementer = n;
-	getGame().open();
+	getGame().init();
 	_inMenu = false;
 }
 
-void Core::close()
+void Arcade::Core::close()
 {
-	if (!_inMenu)
-		getGame().close();
-	for (auto &g : _games)
-		g->stop();
+	getGame().stop();
 	getGraph().closeRenderer();
 }
 
-void Core::run()
+bool Arcade::Core::_update(Arcade::Menu *menu, Arcade::Keys key)
+{
+	bool mustExit = false;
+	if (_inMenu) {
+		menu->applyEvent(key, *this);
+		menu->refresh(getGraph());
+	} else {
+		getGame().applyEvent(key);
+		if (!getGame().update())
+			mustExit = true;
+		getGame().refresh(getGraph());
+	}
+	return !mustExit;
+}
+
+void Arcade::Core::run(const std::string &graphLibName)
 {
 	Arcade::Keys key;
-	Menu menu(_gamesName);
+	Arcade::Menu menu(_gamesName, _graphsName);
 
 	if (_graphs.size() == 0)
 		return ;
 	getGraph().openRenderer("Arcade");
-
+	openGraph(graphLibName);
 	while (getGraph().isOpen()) {
 		getGraph().clearEvents();
 		getGraph().pollEvents();
@@ -54,18 +83,12 @@ void Core::run()
 			return close();
 		else
 			swapLib(key);
-		if (_inMenu) {
-			menu.applyEvent(key, *this);
-			menu.refresh(getGraph());
-		} else {
-			getGame().applyEvent(key);
-			getGame().update();
-			getGame().refresh(getGraph());
-		}
+		if (!_update(&menu, key))
+			swapLib(Arcade::Keys::ESC);
 	}
 }
 
-bool Core::_initGraphs()
+bool Arcade::Core::_initGraphs()
 {
 	LibAnalyzer l;
 	
@@ -82,12 +105,13 @@ bool Core::_initGraphs()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
+		_graphsName.push_back(lib);
 		_graphs.push_back(o);
 	}
 	return true;
 }
 
-bool Core::_initGames()
+bool Arcade::Core::_initGames()
 {
 	LibAnalyzer l;
 	
@@ -104,26 +128,25 @@ bool Core::_initGames()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
-		o->init();
 		_games.push_back(o);
 		_gamesName.push_back(o->getName());
 	}
 	return true;
 }
 
-bool Core::init()
+bool Arcade::Core::init()
 {	
 	if (!_initGraphs() || !_initGames())
 		return false;
 	return true;
 }
 
-Arcade::IGraphicLib &Core::getGraph()
+Arcade::IGraphicLib &Arcade::Core::getGraph()
 {
 	return *(_graphs[_libGraphIncrementer % _graphs.size()]);
 }
 
-Arcade::IGameLib &Core::getGame()
+Arcade::IGameLib &Arcade::Core::getGame()
 {
 	if (_games.size() == 0) {
 		fprintf(stderr, "No game found\n");

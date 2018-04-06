@@ -12,14 +12,15 @@
 #include <stdio.h>
 #include <iostream>
 #include <memory>
+#include <string>
 #include "classes/LibAnalyzer.hpp"
 #include "classes/DLLoader.hpp"
 #include "classes/Core.hpp"
 #include "../shared_header/IGraphicLib.hpp"
 
-Core *coreGetter(Core *set)
+Arcade::Core *coreGetter(Arcade::Core *set)
 {
-	static Core *core = nullptr;
+	static Arcade::Core *core = nullptr;
 
 	if (set)
 		core = set;
@@ -31,14 +32,14 @@ void sighandler(int)
 	coreGetter(nullptr)->close();
 }
 
-int main()
+int main(int, char **av)
 {
-	Core core;
+	Arcade::Core core;
 
 	coreGetter(&core);
 	signal(SIGINT, sighandler);
 	if (core.init())
-		core.run();
+		core.run((av[1] ? std::string(av[1]) : ""));
 	return (0);
 }
 

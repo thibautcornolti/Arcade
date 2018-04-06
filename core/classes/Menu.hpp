@@ -9,26 +9,43 @@
 #define PROJECT_MENU_HPP
 
 #include <vector>
+#include <functional>
+#include <map>
+#include <string>
+#include "Core.hpp"
+#include "../../games/shared_classes/Scoreboard.hpp"
+#include "../../games/shared_classes/Scale.hpp"
 #include "../shared_header/IGraphicLib.hpp"
 #include "../shared_header/TextBox.hpp"
+#include "../shared_header/PixelBox.hpp"
 
-class Menu {
-public:
-	Menu(std::vector<std::string> &);
-	~Menu() = default;
+namespace Arcade {
+	class Menu {
+	public:
+		Menu(std::vector<std::string> &, std::vector<std::string> &);
+		~Menu() = default;
 
-	void applyEvent(Arcade::Keys, Core &);
-	void refresh(Arcade::IGraphicLib &);
+		void applyEvent(Arcade::Keys, Arcade::Core &);
+		void refresh(Arcade::IGraphicLib &);
+		void addLetter(char letter = 'A');
+		void activeCaps();
+		void removeLetter();
+		void resetPlayer();
+		void selector(Arcade::IGraphicLib&);
+		void displayScoreboard(Arcade::IGraphicLib&);
 
-private:
-	void _genMenu(Arcade::IGraphicLib &);
-	void _addSelector(size_t);
-	void _clearSelector(size_t);
+	private:
+		Scoreboard *_score;
+		Scale *_scale;
 
-private:
-	std::vector<Arcade::TextBox> _text;
-	std::vector<std::string> _games;
-	size_t _selector = 0;
+		std::vector<std::string> _games;
+		std::vector<std::string> _graphs;
+		std::string _playerName;
+		size_t _selection = 0;
+
+		std::map<const Arcade::Keys, std::function<void()>> _keyboard;
+		bool _capsActive = false;
+	};
 };
 
 

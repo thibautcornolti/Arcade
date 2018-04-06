@@ -23,9 +23,6 @@ const std::string Arcade::TestGameLib::getName() const
 	return _name;
 }
 
-void Arcade::TestGameLib::setPlayerName(const std::string &)
-{}
-
 bool Arcade::TestGameLib::init()
 {
 	_player = Vect<size_t>();
@@ -37,17 +34,7 @@ bool Arcade::TestGameLib::stop()
 	return true;
 }
 
-bool Arcade::TestGameLib::open()
-{
-	return true;
-}
-
-bool Arcade::TestGameLib::close()
-{
-	return true;
-}
-
-void Arcade::TestGameLib::applyEvent(Arcade::Keys key)
+bool Arcade::TestGameLib::applyEvent(Arcade::Keys key)
 {
 	switch (key) {
 		case Arcade::Keys::Z:
@@ -69,9 +56,10 @@ void Arcade::TestGameLib::applyEvent(Arcade::Keys key)
 		default:
 			break ;
 	}
+	return true;
 }
 
-void Arcade::TestGameLib::update()
+bool Arcade::TestGameLib::update()
 {
 	auto pos = Arcade::Vect<size_t>(0, 0);
 	_title = Arcade::TextBox("best game ever\n\
@@ -79,6 +67,7 @@ use ZQSD to move\n\
 echap = return to lobby\n\
 tu peu revenir et le player sera la ou tu la laisser",
 		pos, 30UL, Arcade::Color(255, 0, 0, 255));
+	return true;
 }
 
 void Arcade::TestGameLib::refresh(IGraphicLib &lib)
@@ -93,4 +82,9 @@ void Arcade::TestGameLib::refresh(IGraphicLib &lib)
 	lib.drawPixelBox(_pixelBox);
 	//lib.drawText(_title);
 	lib.refreshWindow();
+}
+
+size_t Arcade::TestGameLib::getScore()
+{
+	return 0;
 }

@@ -149,11 +149,11 @@ void Arcade::Pacman::display(Arcade::IGraphicLib &lib)
 
 void Arcade::Pacman::displayGameInfo(IGraphicLib &lib)
 {
-        Arcade::TextBox title("Snake", {(lib.getMaxX() - 5) / 2, 5}, 20);
+        Arcade::TextBox title("Pacman", {(lib.getMaxX() - 5) / 2, 5}, 20);
         Arcade::TextBox statut("Statut: ", {(lib.getMaxX() - 5) / 2, 7}, 20);
         Arcade::TextBox score("Score: ", {(lib.getMaxX() - 5) / 2, 8}, 20);
         Arcade::TextBox scoreb("Scoreboard", {(lib.getMaxX()) / 3 * 2 + 10, 7}, 20);
-        Arcade::TextBox godmode("Gode Mode: ", {(lib.getMaxX()) / 3 * 2 + 10, 10}, 20);
+        Arcade::TextBox godmode("God Mode: ", {(lib.getMaxX()) / 3 * 2 + 10, 10}, 20);
 
         statut.setValue(statut.getValue() + getStatus());
         statut.setX((lib.getMaxX() - statut.getValue().size()) / 2);

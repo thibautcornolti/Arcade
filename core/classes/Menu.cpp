@@ -98,7 +98,7 @@ void Arcade::Menu::selector(Arcade::IGraphicLib &lib)
 	}
 }
 
-void Arcade::Menu::applyEvent(Arcade::Keys key, Core &core)
+void Arcade::Menu::applyEvent(Arcade::Keys key, Arcade::Core &core)
 {
 	if (_keyboard.count(key))
 		_keyboard[key]();

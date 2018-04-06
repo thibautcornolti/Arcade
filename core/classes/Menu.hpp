@@ -25,7 +25,7 @@ namespace Arcade {
 		Menu(std::vector<std::string> &, std::vector<std::string> &);
 		~Menu() = default;
 
-		void applyEvent(Arcade::Keys, Core &);
+		void applyEvent(Arcade::Keys, Arcade::Core &);
 		void refresh(Arcade::IGraphicLib &);
 		void addLetter(char letter = 'A');
 		void activeCaps();

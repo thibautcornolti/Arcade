@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <memory>
+#include <string>
 #include "classes/LibAnalyzer.hpp"
 #include "classes/DLLoader.hpp"
 #include "classes/Core.hpp"
@@ -31,14 +32,14 @@ void sighandler(int)
 	coreGetter(nullptr)->close();
 }
 
-int main()
+int main(int, char **av)
 {
 	Core core;
 
 	coreGetter(&core);
 	signal(SIGINT, sighandler);
 	if (core.init())
-		core.run();
+		core.run((av[1] ? std::string(av[1]) : ""));
 	return (0);
 }
 

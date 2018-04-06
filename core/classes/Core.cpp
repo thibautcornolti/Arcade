@@ -21,6 +21,16 @@ void Core::swapLib(Arcade::Keys key)
 	}
 }
 
+void Core::openGraph(const std::string &s)
+{
+	for (size_t i = 0 ; i <_graphPaths.size() ; ++i)
+		if (s == _graphPaths[i]) {
+			getGraph().closeRenderer();
+			_libGraphIncrementer = i;
+			getGraph().openRenderer("Arcade");
+		}
+}
+
 void Core::openGame(size_t n)
 {
 	_libGameIncrementer = n;
@@ -37,7 +47,7 @@ void Core::close()
 	getGraph().closeRenderer();
 }
 
-void Core::run()
+void Core::run(const std::string &graphLibName)
 {
 	Arcade::Keys key;
 	Menu menu(_gamesName);
@@ -45,7 +55,7 @@ void Core::run()
 	if (_graphs.size() == 0)
 		return ;
 	getGraph().openRenderer("Arcade");
-
+	openGraph(graphLibName);
 	while (getGraph().isOpen()) {
 		getGraph().clearEvents();
 		getGraph().pollEvents();
@@ -82,6 +92,7 @@ bool Core::_initGraphs()
 			std::cout << dl->getError() << std::endl;
 			return false;
 		}
+		_graphPaths.push_back(GRAPH_FOLDER"/" + lib);
 		_graphs.push_back(o);
 	}
 	return true;

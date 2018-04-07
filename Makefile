@@ -52,3 +52,5 @@ fclean:
 	make fclean -C games/nibbler/
 	make fclean -C games/pacman/
 	make fclean -C core/
+
+.PHONY: all clean fclean re games graphicals core

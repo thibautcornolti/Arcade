@@ -8,7 +8,6 @@ RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
 		./src/classes/Pacman.cpp \
-		./src/classes/PacPlayer.cpp \
 		./src/classes/Ghost.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)

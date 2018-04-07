@@ -29,6 +29,7 @@ clean:
 
 fclean:
 	rm core/arcade
+	rm arcade
 	make fclean -C lib/sdl/
 	make fclean -C lib/ncurses/
 	make fclean -C lib/sfml/

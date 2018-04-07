@@ -8,7 +8,6 @@
 #include "PixelBox.hpp"
 
 Arcade::PixelBox::PixelBox(Vect<size_t> size, Vect<size_t> pos, Color col)
-	: _defaultColor(col)
 {
 	_pos = pos;
 	_size = size;
@@ -34,6 +33,9 @@ void Arcade::PixelBox::setY(size_t y)
 void Arcade::PixelBox::setHeight(size_t height)
 {
 	_size.setY(height);
+	_colorFrame.reserve(getWidth() * getHeight());
+	for (size_t i = 0 ; i < _size.getX() * _size.getY() ; ++i)
+		_colorFrame[i] = Arcade::Color();
 }
 
 size_t Arcade::PixelBox::getX() const
@@ -49,6 +51,9 @@ size_t Arcade::PixelBox::getWidth() const
 void Arcade::PixelBox::setWidth(size_t width)
 {
 	_size.setX(width);
+	_colorFrame.reserve(getWidth() * getHeight());
+	for (size_t i = 0 ; i < _size.getX() * _size.getY() ; ++i)
+		_colorFrame[i] = Arcade::Color();
 }
 
 void Arcade::PixelBox::setX(size_t x)
@@ -64,11 +69,10 @@ void Arcade::PixelBox::setPos(Arcade::Vect<size_t> pos)
 
 void Arcade::PixelBox::setSize(Arcade::Vect<size_t> size)
 {
-	setWidth(size.getX());
-	setHeight(size.getY());
+	_size = size;
 	_colorFrame.reserve(getWidth() * getHeight());
 	for (size_t i = 0 ; i < size.getX() * size.getY() ; ++i)
-		_colorFrame[i] = _defaultColor;
+		_colorFrame[i] = Arcade::Color();
 }
 
 Arcade::Vect<size_t> Arcade::PixelBox::getSize() const

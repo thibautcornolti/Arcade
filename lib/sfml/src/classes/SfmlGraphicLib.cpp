@@ -59,7 +59,7 @@ void Arcade::SfmlGraphicLib::drawText(TextBox const &textBox)
 {
 	sf::Text text;
 	sf::Font font;
-	font.loadFromFile("lib/sfml/expressway rg.ttf");
+	font.loadFromFile("assets/font/expressway rg.ttf");
 	text.setCharacterSize(textBox.getFontSize());
 	text.setPosition(textBox.getX(), textBox.getY());
 	auto col = textBox.getColor();

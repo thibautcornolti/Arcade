@@ -17,10 +17,18 @@ Arcade::SdlGraphicLib::SdlGraphicLib()
 			<< std::endl;
     		exit(84);
 	}
+	ret = TTF_Init();
+	if(ret < 0) {
+    		std::cerr <<"Unable to Init TTF: "
+			<< TTF_GetError()
+			<< std::endl;
+    		exit(84);
+	}
 }
 
 Arcade::SdlGraphicLib::~SdlGraphicLib()
 {
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -96,18 +104,25 @@ void Arcade::SdlGraphicLib::drawPixelBox(PixelBox const &pixelBox)
 
 void Arcade::SdlGraphicLib::drawText(TextBox const &textBox)
 {
-	// sf::Text text;
-	// sf::Font font;
-	// font.loadFromFile("graphical/lib_sfml/expressway rg.ttf");
-	// text.setCharacterSize(textBox.getFontSize());
-	// text.setPosition(textBox.getX(), textBox.getY());
-	// auto col = textBox.getColor();
-	// auto sfCol = sf::Color(col.getRed(), col.getGreen(),
-	// 		col.getBlue(), col.getAlpha());
-	// text.setFillColor(sfCol);
-	// text.setString(textBox.getValue());
-	// text.setFont(font);
-	// _window.draw(text);
+	if (textBox.getValue().size() == 0)
+		return ;
+	TTF_Font *font = TTF_OpenFont("assets/font/expressway rg.ttf",
+		textBox.getFontSize());
+	if (font == NULL)
+		return ;
+	Arcade::Color c = textBox.getColor();
+	SDL_Color col = {c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha()};
+	auto t = TTF_RenderText_Blended(font, textBox.getValue().c_str(), col);
+	if (t == NULL)
+		return ;
+	SDL_Texture *text = SDL_CreateTextureFromSurface(_renderer, t);
+	SDL_Rect text_rect;
+	text_rect.x = static_cast<int>(textBox.getPos().getX());
+	text_rect.y = static_cast<int>(textBox.getPos().getY());
+	text_rect.w = t->w;
+	text_rect.h = t->h;
+	SDL_RenderCopy(_renderer, text, nullptr, &text_rect);
+	TTF_CloseFont(font);
 }
 
 Arcade::Keys Arcade::SdlGraphicLib::getLastEvent()

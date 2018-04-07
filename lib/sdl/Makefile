@@ -15,7 +15,7 @@ CPPFLAGS = -I ./src/pp
 CPPFLAGS += -W -Wall -Wextra --std=c++11 -g 
 CPPFLAGS += -fPIC
 
-LDFLAGS += -lSDL2 -shared --std=c++11
+LDFLAGS += -lSDL2 -lSDL2_ttf -shared --std=c++11
 
 all: $(NAME)
 

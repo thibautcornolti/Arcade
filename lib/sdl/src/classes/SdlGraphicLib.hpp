@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "../shared_header/IGraphicLib.hpp"
 
 namespace Arcade {

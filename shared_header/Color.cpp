@@ -68,3 +68,11 @@ Arcade::Color::operator unsigned char *()
 {
 	return &_red;
 }
+
+bool Arcade::Color::operator==(const Arcade::Color &other) const
+{
+	return _red == other._red &&
+		_green == other._green &&
+		_blue == other._blue &&
+		_alpha == other._alpha;
+}

@@ -7,25 +7,25 @@
 
 #include <stdio.h>
 #include <memory>
-#include "classes/SfmlGraphicLib.hpp"
+#include "classes/SdlGraphicLib.hpp"
 
-Arcade::SfmlGraphicLib *main_instance;
+Arcade::SdlGraphicLib *main_instance;
 
 __attribute__((constructor))
 void cons()
 {
-	printf("[libfoo] Loading sfml library ...\n");
-	main_instance = new Arcade::SfmlGraphicLib();
+	printf("[libfoo] Loading sdl library ...\n");
+	main_instance = new Arcade::SdlGraphicLib();
 }
 
 __attribute__((destructor))
 void dest()
 {
-	printf("[libfoo] Destroying sfml library ...\n");
+	printf("[libfoo] Destroying sdl library ...\n");
 	delete main_instance;
 }
 
-extern "C" Arcade::SfmlGraphicLib *entryPoint()
+extern "C" Arcade::SdlGraphicLib *entryPoint()
 {
  	return main_instance;
 }

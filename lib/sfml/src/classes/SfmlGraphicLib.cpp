@@ -42,19 +42,20 @@ void Arcade::SfmlGraphicLib::refreshWindow()
 	_window.display();
 }
 
-void Arcade::SfmlGraphicLib::drawPixelBox(PixelBox &pixelBox)
+void Arcade::SfmlGraphicLib::drawPixelBox(PixelBox const &pixelBox)
 {
         sf::Texture texture;
 	size_t height = pixelBox.getHeight();
 	size_t width = pixelBox.getWidth();
         texture.create(width, height);
         sf::Sprite sprite(texture);
-        texture.update(&*(pixelBox.getPixelArray()[0]));
+	auto *col = (unsigned char *)(&pixelBox.getPixelArray()[0]);
+        texture.update(col);
         sprite.setPosition(sf::Vector2f(pixelBox.getX(), pixelBox.getY()));
         _window.draw(sprite);
 }
 
-void Arcade::SfmlGraphicLib::drawText(TextBox &textBox)
+void Arcade::SfmlGraphicLib::drawText(TextBox const &textBox)
 {
 	sf::Text text;
 	sf::Font font;

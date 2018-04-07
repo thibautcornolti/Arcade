@@ -8,16 +8,17 @@
 #pragma once
 
 #include <map>
+#include <iostream>
 #include <unistd.h>
 #include <time.h>
-#include <SDL2/SDL.hpp>
+#include <SDL2/SDL.h>
 #include "../shared_header/IGraphicLib.hpp"
 
 namespace Arcade {
 	class SdlGraphicLib : public Arcade::IGraphicLib {
 	public:
 		SdlGraphicLib();
-		~SdlGraphicLib() final = default;
+		~SdlGraphicLib() final;
 
 		/* Get the name of the library */
 		std::string getName() const final;
@@ -42,10 +43,10 @@ namespace Arcade {
 
 		/* Rendering functions */
 		// Draws a PixelBox or the sprite if supported
-		void drawPixelBox(PixelBox &) final;
-		
+		void drawPixelBox(PixelBox const &) final;
+
 		// Draws a TextBox
-		void drawText(TextBox &) final;
+		void drawText(TextBox const &) final;
 
 
 		/* Events handling */
@@ -70,47 +71,50 @@ namespace Arcade {
 		size_t getMaxX() const final;
 	protected:
 	private:
+		bool _isRendering = false;
 		size_t _width = 800;
 		size_t _height = 600;
-		sf::RenderWindow _window;
+		SDL_Window *_window;
+		SDL_Renderer *_renderer;
+		SDL_Surface *_primarySurface;
 		std::vector<Keys> _lastEvents;
-		std::vector<std::pair<sf::Keyboard::Key, Arcade::Keys>> _keymap = {
-			{sf::Keyboard::A, Arcade::Keys::A},
-			{sf::Keyboard::B, Arcade::Keys::B},
-			{sf::Keyboard::C, Arcade::Keys::C},
-			{sf::Keyboard::D, Arcade::Keys::D},
-			{sf::Keyboard::E, Arcade::Keys::E},
-			{sf::Keyboard::F, Arcade::Keys::F},
-			{sf::Keyboard::G, Arcade::Keys::G},
-			{sf::Keyboard::H, Arcade::Keys::H},
-			{sf::Keyboard::I, Arcade::Keys::I},
-			{sf::Keyboard::J, Arcade::Keys::J},
-			{sf::Keyboard::K, Arcade::Keys::K},
-			{sf::Keyboard::L, Arcade::Keys::L},
-			{sf::Keyboard::M, Arcade::Keys::M},
-			{sf::Keyboard::N, Arcade::Keys::N},
-			{sf::Keyboard::O, Arcade::Keys::O},
-			{sf::Keyboard::P, Arcade::Keys::P},
-			{sf::Keyboard::Q, Arcade::Keys::Q},
-			{sf::Keyboard::R, Arcade::Keys::R},
-			{sf::Keyboard::S, Arcade::Keys::S},
-			{sf::Keyboard::T, Arcade::Keys::T},
-			{sf::Keyboard::U, Arcade::Keys::U},
-			{sf::Keyboard::V, Arcade::Keys::V},
-			{sf::Keyboard::W, Arcade::Keys::W},
-			{sf::Keyboard::X, Arcade::Keys::X},
-			{sf::Keyboard::Y, Arcade::Keys::Y},
-			{sf::Keyboard::Z, Arcade::Keys::Z},
-			{sf::Keyboard::Left, Arcade::Keys::LEFT},
-			{sf::Keyboard::Right, Arcade::Keys::RIGHT},
-			{sf::Keyboard::Up, Arcade::Keys::UP},
-			{sf::Keyboard::Down, Arcade::Keys::DOWN},
-			{sf::Keyboard::Return, Arcade::Keys::ENTER},
-			{sf::Keyboard::Space, Arcade::Keys::SPACE},
-			{sf::Keyboard::Delete, Arcade::Keys::DELETE},
-			{sf::Keyboard::BackSpace, Arcade::Keys::BACKSPACE},
-			{sf::Keyboard::Tab, Arcade::Keys::TAB},
-			{sf::Keyboard::Escape, Arcade::Keys::ESC},
+		std::vector<std::pair<SDL_Keycode, Arcade::Keys>> _keymap = {
+			{SDLK_a, Arcade::Keys::A},
+			{SDLK_b, Arcade::Keys::B},
+			{SDLK_c, Arcade::Keys::C},
+			{SDLK_d, Arcade::Keys::D},
+			{SDLK_e, Arcade::Keys::E},
+			{SDLK_f, Arcade::Keys::F},
+			{SDLK_g, Arcade::Keys::G},
+			{SDLK_h, Arcade::Keys::H},
+			{SDLK_i, Arcade::Keys::I},
+			{SDLK_j, Arcade::Keys::J},
+			{SDLK_k, Arcade::Keys::K},
+			{SDLK_l, Arcade::Keys::L},
+			{SDLK_m, Arcade::Keys::M},
+			{SDLK_n, Arcade::Keys::N},
+			{SDLK_o, Arcade::Keys::O},
+			{SDLK_p, Arcade::Keys::P},
+			{SDLK_q, Arcade::Keys::Q},
+			{SDLK_r, Arcade::Keys::R},
+			{SDLK_s, Arcade::Keys::S},
+			{SDLK_t, Arcade::Keys::T},
+			{SDLK_u, Arcade::Keys::U},
+			{SDLK_v, Arcade::Keys::V},
+			{SDLK_w, Arcade::Keys::W},
+			{SDLK_x, Arcade::Keys::X},
+			{SDLK_y, Arcade::Keys::Y},
+			{SDLK_z, Arcade::Keys::Z},
+			{SDLK_LEFT, Arcade::Keys::LEFT},
+			{SDLK_RIGHT, Arcade::Keys::RIGHT},
+			{SDLK_UP, Arcade::Keys::UP},
+			{SDLK_DOWN, Arcade::Keys::DOWN},
+			{SDLK_RETURN, Arcade::Keys::ENTER},
+			{SDLK_SPACE, Arcade::Keys::SPACE},
+			{SDLK_DELETE, Arcade::Keys::DELETE},
+			{SDLK_BACKSPACE, Arcade::Keys::BACKSPACE},
+			{SDLK_TAB, Arcade::Keys::TAB},
+			{SDLK_ESCAPE, Arcade::Keys::ESC},
 		};
 	};
 };

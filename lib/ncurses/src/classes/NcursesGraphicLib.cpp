@@ -54,7 +54,7 @@ void Arcade::NcursesGraphicLib::refreshWindow()
 	refresh();
 }
 
-void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
+void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox const &pixelBox)
 {
 	size_t x = pixelBox.getX();
 	size_t y = pixelBox.getY();
@@ -69,7 +69,7 @@ void Arcade::NcursesGraphicLib::drawPixelBox(PixelBox &pixelBox)
 		}
 }
 
-void Arcade::NcursesGraphicLib::drawText(TextBox &textBox)
+void Arcade::NcursesGraphicLib::drawText(TextBox const &textBox)
 {
 	int ic = _getPairCode(textBox.getColor(), textBox.getBackgroundColor());
 	attron(COLOR_PAIR(ic));

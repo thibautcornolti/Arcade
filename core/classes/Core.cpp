@@ -12,7 +12,7 @@ void Arcade::Core::swapLib(Arcade::Keys key)
 {
 	if (key == Arcade::Keys::RIGHT || key == Arcade::Keys::LEFT) {
 		getGraph().closeRenderer();
-		_libGraphIncrementer = (_libGraphIncrementer +
+		_libGraphIncrementer = (_graphs.size() + _libGraphIncrementer +
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
 		getGraph().openRenderer("Arcade");
 	} else if (key == Arcade::Keys::ESC && !_inMenu) {
@@ -53,17 +53,16 @@ void Arcade::Core::close()
 
 bool Arcade::Core::_update(Arcade::Menu *menu, Arcade::Keys key)
 {
-	bool mustExit = false;
+	bool mustContinue = true;
 	if (_inMenu) {
 		menu->applyEvent(key, *this);
 		menu->refresh(getGraph());
 	} else {
 		getGame().applyEvent(key);
-		if (!getGame().update())
-			mustExit = true;
+		mustContinue = getGame().update();
 		getGame().refresh(getGraph());
 	}
-	return !mustExit;
+	return mustContinue;
 }
 
 void Arcade::Core::run(const std::string &graphLibName)

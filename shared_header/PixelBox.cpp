@@ -99,7 +99,7 @@ Arcade::Color Arcade::PixelBox::getPixel(Vect<size_t> pos) const
 	return _colorFrame[pos.getY() * _size.getX() + pos.getX()];
 }
 
-std::vector<Arcade::Color> &Arcade::PixelBox::getPixelArray()
+std::vector<Arcade::Color> const &Arcade::PixelBox::getPixelArray() const
 {
 	return _colorFrame;
 }

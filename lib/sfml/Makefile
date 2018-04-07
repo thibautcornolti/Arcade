@@ -1,4 +1,4 @@
-NAME	= lib_sfml.so
+NAME	= lib_arcade_sfml.so
 
 CC	= g++
 

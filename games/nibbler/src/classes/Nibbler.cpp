@@ -37,8 +37,8 @@ void Arcade::Nibbler::initMap()
 {
 	_map = "###########################"
 	       "#                         #"
-	       "#   ##               ##   #"
-	       "# ##                   ## #"
+	       "#     #             #     #"
+	       "# ###                 ### #"
 	       "#                         #"
 	       "#                         #"
 	       "#                         #"
@@ -58,8 +58,8 @@ void Arcade::Nibbler::initMap()
 	       "#                         #"
 	       "#                         #"
 	       "#                         #"
-	       "#  ##                  ## #"
-	       "#    ##              ##   #"
+	       "# ###                 ### #"
+	       "#     #             #     #"
 	       "#                         #"
 	       "###########################";
 }
@@ -161,7 +161,7 @@ bool Arcade::Nibbler::isTimeToMove()
 	auto time = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration<double, std::milli>(time-_time).count();
 
-	if (duration >= SPEED) {
+	if (duration >= _speed) {
 		_time = time;
 		return true;
 	}
@@ -256,6 +256,7 @@ bool Arcade::Nibbler::food()
 {
 	if (_map.find_first_of('2', 0) == std::string::npos) {
 		_score->addScores(10);
+		_speed -= 1;
 		addFood();
 		addLink();
 	}
@@ -314,10 +315,7 @@ void Arcade::Nibbler::addFood()
 
 	while (running) {
 		pos = std::rand() % _map.size();
-		coord = getCoords(pos);
-		if (coord.getX() >= 1 && coord.getY() >= 1 &&
-			coord.getX() <= MAP + 1 && coord.getY() <= MAP + 1 &&
-			_map[pos] == ' ') {
+		if (_map[pos] == ' ') {
 			_map[pos] = '2';
 			running = false;
 		}

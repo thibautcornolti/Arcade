@@ -16,7 +16,6 @@
 
 #define ASSETS_PATH	"assets/nibbler/maps/map"
 #define MAP		25
-#define SPEED		150.0
 
 namespace Arcade {
 	class Nibbler : public Arcade::IGameLib {
@@ -75,6 +74,7 @@ namespace Arcade {
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _time;
 		std::string _name = "Nibbler";
+		double _speed = 150.0;
 		std::string _playerName = "Unknown";
 		std::string _map;
 		std::list<t_nibbler> _nibbler;

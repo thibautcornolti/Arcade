@@ -37,9 +37,19 @@ std::map<const std::string, std::vector<std::string>> Arcade::Scoreboard::getSco
 	return _allScores;
 }
 
+size_t Arcade::Scoreboard::getLastPlayerScore() const
+{
+	return _allScoresComputed.back().second;
+}
+
 void Arcade::Scoreboard::setGameName(const std::string &gameName)
 {
 	_gameName = gameName;
+}
+
+void Arcade::Scoreboard::setPlayerName(const std::string &playerName)
+{
+	_playerName = playerName;
 }
 
 size_t Arcade::Scoreboard::getScores() const

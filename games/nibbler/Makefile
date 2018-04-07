@@ -1,4 +1,4 @@
-NAME	= lib_arcade_snake.so
+NAME	= lib_arcade_nibbler.so
 
 CC	= g++
 
@@ -7,7 +7,9 @@ CP = cp
 RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
-		./src/classes/Snake.cpp \
+		./src/classes/Nibbler.cpp \
+		./src/shared_header/Scoreboard.cpp \
+		./src/shared_header/Scale.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 

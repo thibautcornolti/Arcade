@@ -11,29 +11,29 @@
 #include <thread>
 #include <algorithm>
 #include <sstream>
-#include "Snake.hpp"
+#include "Nibbler.hpp"
 
-Arcade::Snake::Snake()
+Arcade::Nibbler::Nibbler()
 {
 	_score = new Scoreboard();
 	_scale = new Scale();
 }
 
-Arcade::Snake::~Snake()
+Arcade::Nibbler::~Nibbler()
 {
 }
 
-const std::string Arcade::Snake::getName() const
+const std::string Arcade::Nibbler::getName() const
 {
 	return _name;
 }
 
-std::string Arcade::Snake::getPlayerName() const
+std::string Arcade::Nibbler::getPlayerName() const
 {
 	return _playerName;
 }
 
-void Arcade::Snake::initMap()
+void Arcade::Nibbler::initMap()
 {
 	_map = "###########################"
 	       "#                         #"
@@ -64,34 +64,34 @@ void Arcade::Snake::initMap()
 	       "###########################";
 }
 
-bool Arcade::Snake::init()
+bool Arcade::Nibbler::init()
 {
-	size_t snakePos;
+	size_t nibblerPos;
 
 	initMap();
 	_time = std::chrono::high_resolution_clock::now();
 	std::srand(std::time(nullptr));
 	addFood();
-	snakePos = _map.find_first_of('0');
-	for (size_t i = snakePos; i < snakePos + 4; i++)
-		_snake.push_front({i, i});
+	nibblerPos = _map.find_first_of('0');
+	for (size_t i = nibblerPos; i < nibblerPos + 4; i++)
+		_nibbler.push_front({i, i});
 	return true;
 }
 
-bool Arcade::Snake::stop()
+bool Arcade::Nibbler::stop()
 {
 	_map.clear();
-	_snake.clear();
+	_nibbler.clear();
 	_current = RIGHT;
 	_game = RUNNING;
 	_score->resetScores();
 	return true;
 }
 
-bool Arcade::Snake::restart()
+bool Arcade::Nibbler::restart()
 {
 	_map.clear();
-	_snake.clear();
+	_nibbler.clear();
 	_current = RIGHT;
 	_game = RUNNING;
 	_score->resetScores();
@@ -99,7 +99,7 @@ bool Arcade::Snake::restart()
 	return true;
 }
 
-bool Arcade::Snake::applyEvent(Arcade::Keys key)
+bool Arcade::Nibbler::applyEvent(Arcade::Keys key)
 {
 	switch (key) {
 		case Arcade::Keys::Z:
@@ -133,14 +133,14 @@ bool Arcade::Snake::applyEvent(Arcade::Keys key)
 	return true;
 }
 
-bool Arcade::Snake::update()
+bool Arcade::Nibbler::update()
 {
 	if (_game == ENDED)
 		return false;
 	return true;
 }
 
-void Arcade::Snake::refresh(IGraphicLib &lib)
+void Arcade::Nibbler::refresh(IGraphicLib &lib)
 {
 	lib.clearWindow();
 	if ((_game == RUNNING || _game == CHEAT) && isTimeToMove()) {
@@ -151,12 +151,12 @@ void Arcade::Snake::refresh(IGraphicLib &lib)
 	lib.refreshWindow();
 }
 
-size_t Arcade::Snake::getScore()
+size_t Arcade::Nibbler::getScore()
 {
 	return _score->getScores();
 }
 
-bool Arcade::Snake::isTimeToMove()
+bool Arcade::Nibbler::isTimeToMove()
 {
 	auto time = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration<double, std::milli>(time-_time).count();
@@ -168,12 +168,12 @@ bool Arcade::Snake::isTimeToMove()
 	return false;
 }
 
-Arcade::Vect<size_t> Arcade::Snake::getCoords(size_t pos) const
+Arcade::Vect<size_t> Arcade::Nibbler::getCoords(size_t pos) const
 {
 	return {pos % (MAP + 2), pos / (MAP + 2)};
 }
 
-void Arcade::Snake::updatePixel(Arcade::PixelBox &map)
+void Arcade::Nibbler::updatePixel(Arcade::PixelBox &map)
 {
 	char key;
 
@@ -199,7 +199,7 @@ void Arcade::Snake::updatePixel(Arcade::PixelBox &map)
 	}
 }
 
-std::string Arcade::Snake::getStatus() const
+std::string Arcade::Nibbler::getStatus() const
 {
 	switch (_game) {
 		case RUNNING:
@@ -214,12 +214,12 @@ std::string Arcade::Snake::getStatus() const
 }
 
 static const std::map<const std::string, const Arcade::Vect<double>> _text = {
-	{"Snake", {47, 1}},
+	{"Nibbler", {47, 1}},
 	{"Statut: ", {42, 2}},
 	{"Score: ", {45, 3}},
 };
 
-void Arcade::Snake::displayGameInfo(IGraphicLib &lib)
+void Arcade::Nibbler::displayGameInfo(IGraphicLib &lib)
 {
 	Arcade::TextBox text("Ramdom", {0, 0}, 20);
 
@@ -235,7 +235,7 @@ void Arcade::Snake::displayGameInfo(IGraphicLib &lib)
 	}
 }
 
-void Arcade::Snake::display(IGraphicLib &lib)
+void Arcade::Nibbler::display(IGraphicLib &lib)
 {
 	Arcade::PixelBox pixelMap({MAP + 2, MAP + 2}, {0, 0});
 
@@ -247,12 +247,12 @@ void Arcade::Snake::display(IGraphicLib &lib)
 	lib.drawPixelBox(pixelMap);
 }
 
-void Arcade::Snake::setMove(Arcade::Snake::MOVE move)
+void Arcade::Nibbler::setMove(Arcade::Nibbler::MOVE move)
 {
 	_current = move;
 }
 
-bool Arcade::Snake::food()
+bool Arcade::Nibbler::food()
 {
 	if (_map.find_first_of('2', 0) == std::string::npos) {
 		_score->addScores(10);
@@ -262,14 +262,14 @@ bool Arcade::Snake::food()
 	return false;
 }
 
-void Arcade::Snake::addLink()
+void Arcade::Nibbler::addLink()
 {
-	t_snake snake = _snake.back();
+	t_nibbler nibbler = _nibbler.back();
 
-	_snake.push_back(snake);
+	_nibbler.push_back(nibbler);
 }
 
-bool Arcade::Snake::collide(size_t &currentPos)
+bool Arcade::Nibbler::collide(size_t &currentPos)
 {
 	if (_map[currentPos + _current] != ' ' &&
 		_map[currentPos + _current] != '2') {
@@ -281,12 +281,12 @@ bool Arcade::Snake::collide(size_t &currentPos)
 	return false;
 }
 
-bool Arcade::Snake::move()
+bool Arcade::Nibbler::move()
 {
 	size_t nextLinkPos;
 
-	for (auto it = _snake.begin(); it != _snake.end(); ++it) {
-		if (it == _snake.begin()) {
+	for (auto it = _nibbler.begin(); it != _nibbler.end(); ++it) {
+		if (it == _nibbler.begin()) {
 			if (collide(it->currentPos))
 				return false;
 			_map[it->currentPos] = ' ';
@@ -306,7 +306,7 @@ bool Arcade::Snake::move()
 	return true;
 }
 
-void Arcade::Snake::addFood()
+void Arcade::Nibbler::addFood()
 {
 	Arcade::Vect<size_t> coord;
 	bool running = true;

@@ -7,25 +7,25 @@
 
 #include <stdio.h>
 #include <memory>
-#include "classes/Snake.hpp"
+#include "classes/Nibbler.hpp"
 
-Arcade::Snake *main_instance;
+Arcade::Nibbler *main_instance;
 
 __attribute__((constructor))
 void cons()
 {
-	printf("[libfoo] Loading snake game ...\n");
-	main_instance = new Arcade::Snake();
+	printf("[libfoo] Loading nibbler game ...\n");
+	main_instance = new Arcade::Nibbler();
 }
 
 __attribute__((destructor))
 void dest()
 {
-	printf("[libfoo] Destroying snake game ...\n");
+	printf("[libfoo] Destroying nibbler game ...\n");
 	delete main_instance;
 }
 
-extern "C" Arcade::Snake *entryPoint()
+extern "C" Arcade::Nibbler *entryPoint()
 {
  	return main_instance;
 }

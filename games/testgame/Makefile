@@ -1,4 +1,4 @@
-NAME	= game_testgame.so
+NAME	= lib_arcade_testgame.so
 
 CC	= g++
 

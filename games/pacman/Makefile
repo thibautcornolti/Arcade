@@ -1,4 +1,4 @@
-NAME	= game_pacman.so
+NAME	= lib_arcade_pacman.so
 
 CC	= g++
 

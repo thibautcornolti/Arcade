@@ -1,4 +1,4 @@
-NAME	= game_snake.so
+NAME	= lib_arcade_snake.so
 
 CC	= g++
 

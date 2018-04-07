@@ -36,32 +36,32 @@ std::string Arcade::Nibbler::getPlayerName() const
 void Arcade::Nibbler::initMap()
 {
 	_map = "###########################"
-	       "#                         #"
-	       "#     #             #     #"
-	       "# ###                 ### #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#           0001          #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "#                         #"
-	       "# ###                 ### #"
-	       "#     #             #     #"
-	       "#                         #"
-	       "###########################";
+	"#                         #"
+ 	"#     #             #     #"
+  	"# ###                 ### #"
+   	"#                         #"
+    	"#                         #"
+     	"#                         #"
+      	"#                         #"
+       	"#                         #"
+	"#                         #"
+ 	"#                         #"
+  	"#                         #"
+   	"#                         #"
+    	"#           0001          #"
+     	"#                         #"
+      	"#                         #"
+       	"#                         #"
+	"#                         #"
+ 	"#                         #"
+  	"#                         #"
+   	"#                         #"
+    	"#                         #"
+     	"#                         #"
+      	"# ###                 ### #"
+       	"#     #             #     #"
+	"#                         #"
+ 	"###########################";
 }
 
 bool Arcade::Nibbler::init()
@@ -84,6 +84,7 @@ bool Arcade::Nibbler::stop()
 	_nibbler.clear();
 	_current = RIGHT;
 	_game = RUNNING;
+	_gameOverTimer = 10;
 	_score->resetScores();
 	return true;
 }
@@ -94,6 +95,7 @@ bool Arcade::Nibbler::restart()
 	_nibbler.clear();
 	_current = RIGHT;
 	_game = RUNNING;
+	_gameOverTimer = 10;
 	_score->resetScores();
 	init();
 	return true;
@@ -126,6 +128,8 @@ bool Arcade::Nibbler::applyEvent(Arcade::Keys key)
 			break;
 		case Arcade::Keys::C:
 			_game = (_game == CHEAT) ? RUNNING : CHEAT;
+			if (_game == CHEAT)
+				_gameOverTimer = 10;
 			break;
 		default:
 			break ;
@@ -140,6 +144,29 @@ bool Arcade::Nibbler::update()
 	return true;
 }
 
+void Arcade::Nibbler::gameOver(IGraphicLib &lib)
+{
+	auto time = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration<double, std::milli>(time-_gameOver).count();
+	Arcade::TextBox gameover("Game Over", {0, 0});
+	Arcade::TextBox gameCounter("SinonCaSEGV", {0, 1});
+	Arcade::TextBox help("Press R to restart", {0, 1});
+
+	gameCounter.setValue(std::to_string(_gameOverTimer));
+	_scale->scaleTextBox({0, 0}, gameover);
+	_scale->scaleTextBox({10, 1}, gameCounter);
+	_scale->scaleTextBox({0, 1.8}, help);
+	if (duration >= 1000) {
+		_gameOver = time;
+		_gameOverTimer--;
+	}
+	if (_gameOverTimer == 0)
+		_game = ENDED;
+	lib.drawText(gameover);
+	lib.drawText(gameCounter);
+	lib.drawText(help);
+}
+
 void Arcade::Nibbler::refresh(IGraphicLib &lib)
 {
 	lib.clearWindow();
@@ -147,6 +174,8 @@ void Arcade::Nibbler::refresh(IGraphicLib &lib)
 		move();
 		food();
 	}
+	if (_game == WAITING)
+		gameOver(lib);
 	display(lib);
 	lib.refreshWindow();
 }
@@ -208,6 +237,8 @@ std::string Arcade::Nibbler::getStatus() const
 			return "Paused";
 		case CHEAT:
 			return "GODMODE";
+		case WAITING:
+			return "Waiting";
 		default:
 			return "Ended";
 	}
@@ -222,7 +253,10 @@ static const std::map<const std::string, const Arcade::Vect<double>> _text = {
 void Arcade::Nibbler::displayGameInfo(IGraphicLib &lib)
 {
 	Arcade::TextBox text("Ramdom", {0, 0}, 20);
+	Arcade::TextBox help("Press P for pause", {0, 0});
+	Arcade::TextBox cheat("Press C for cheat :p", {0, 1});
 
+	_scale->scaleTextBox({0, 1}, cheat);
 	for (auto &elem : _text) {
 		if (!elem.first.find("Statut"))
 			text.setValue(elem.first + getStatus());
@@ -232,6 +266,10 @@ void Arcade::Nibbler::displayGameInfo(IGraphicLib &lib)
 			text.setValue(elem.first);
 		_scale->scaleTextBox(elem.second, text);
 		lib.drawText(text);
+	}
+	if (_game != WAITING) {
+		lib.drawText(help);
+		lib.drawText(cheat);
 	}
 }
 
@@ -275,7 +313,7 @@ bool Arcade::Nibbler::collide(size_t &currentPos)
 	if (_map[currentPos + _current] != ' ' &&
 		_map[currentPos + _current] != '2') {
 		if (_game != CHEAT) {
-			_game = ENDED;
+			_game = WAITING;
 		}
 		return true;
 	}
@@ -309,7 +347,6 @@ bool Arcade::Nibbler::move()
 
 void Arcade::Nibbler::addFood()
 {
-	Arcade::Vect<size_t> coord;
 	bool running = true;
 	size_t pos;
 

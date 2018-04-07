@@ -36,6 +36,7 @@ namespace Arcade {
 			RUNNING,
 			PAUSED,
 			CHEAT,
+			WAITING,
 			ENDED
 		};
 
@@ -47,12 +48,13 @@ namespace Arcade {
 		};
 
 		Arcade::Vect<size_t> getCoords(size_t) const;
-		void updatePixel(Arcade::PixelBox &);
+		void updatePixel(Arcade::PixelBox&);
 		void display(IGraphicLib &);
 		std::string getStatus() const;
 		void displayGameInfo(IGraphicLib &);
-
 		void initMap();
+
+		void gameOver(IGraphicLib &);
 		bool isTimeToMove();
 		bool restart();
 		bool food();
@@ -73,10 +75,12 @@ namespace Arcade {
 		Scale *_scale;
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _time;
+		std::chrono::time_point<std::chrono::high_resolution_clock> _gameOver;
 		std::string _name = "Nibbler";
-		double _speed = 150.0;
 		std::string _playerName = "Unknown";
 		std::string _map;
+		size_t _gameOverTimer = 10;
+		double _speed = 150.0;
 		std::list<t_nibbler> _nibbler;
 		MOVE _current = RIGHT;
 		STATUS _game = RUNNING;

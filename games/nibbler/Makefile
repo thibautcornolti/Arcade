@@ -2,7 +2,7 @@ NAME	= lib_arcade_nibbler.so
 
 CC	= g++
 
-CP = cp
+CP = mv
 
 RM	= rm -f
 

@@ -1,12 +1,26 @@
 all:
 	make -C lib/sdl/
-	make re -C lib/ncurses/
+	make -C lib/ncurses/
 	make -C lib/sfml/
 	make -C games/testgame/
 	make -C games/nibbler/
 	make -C games/pacman/
 	make -C core/
-	cp core/arcade .
+	mv core/arcade .
+
+core:
+	make -C core/
+	mv core/arcade .
+
+games:
+	make -C games/testgame/
+	make -C games/nibbler/
+	make -C games/pacman/
+
+graphicals:
+	make -C lib/sdl/
+	make -C lib/ncurses/
+	make -C lib/sfml/
 
 re:
 	make re -C lib/sdl/
@@ -16,7 +30,7 @@ re:
 	make re -C games/nibbler/
 	make re -C games/pacman/
 	make re -C core/
-	cp core/arcade .
+	mv core/arcade .
 
 clean:
 	make clean -C lib/sdl/
@@ -28,8 +42,9 @@ clean:
 	make clean -C core/
 
 fclean:
-	rm core/arcade
-	rm arcade
+	rm -rf arcade
+	rm -rf lib/*.so
+	rm -rf games/*.so
 	make fclean -C lib/sdl/
 	make fclean -C lib/ncurses/
 	make fclean -C lib/sfml/

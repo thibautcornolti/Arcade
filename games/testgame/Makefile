@@ -2,7 +2,7 @@ NAME	= lib_arcade_testgame.so
 
 CC	= g++
 
-CP = cp
+CP = mv
 
 RM	= rm -f
 

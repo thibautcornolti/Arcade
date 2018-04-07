@@ -44,7 +44,6 @@ namespace Arcade {
 
 	private:
 		std::vector<Color> _colorFrame;
-		Color _defaultColor;
 		Vect<size_t> _size;
 		Vect<size_t> _pos;
 	};

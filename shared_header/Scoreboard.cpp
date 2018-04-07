@@ -23,9 +23,13 @@ bool Arcade::Scoreboard::readScoreboard()
 
 	if (!file)
 		return false;
-	while(getline(file, line)) {
+	while (getline(file, line)) {
 		std::istringstream split(line);
-		for(std::string each; std::getline(split, each, ':'); tokens.push_back(each));
+		for (
+			std::string each;
+			std::getline(split, each, ':');
+			tokens.push_back(each)
+		);
 		_allScores[tokens.front()] = tokens;
 		tokens.clear();
 	}

@@ -9,7 +9,11 @@
 
 Arcade::SfmlGraphicLib::SfmlGraphicLib()
 	: _lastEvents()
-{}
+{
+	_window.create(sf::VideoMode(_width, _height, 32), "init");
+	_window.setVerticalSyncEnabled(true);
+	_window.close();
+}
 
 std::string Arcade::SfmlGraphicLib::getName() const
 {

@@ -69,7 +69,7 @@ void Arcade::PixelBox::setPos(Arcade::Vect<size_t> pos)
 
 void Arcade::PixelBox::setSize(Arcade::Vect<size_t> size)
 {
-	_size =size;
+	_size = size;
 	_colorFrame.reserve(getWidth() * getHeight());
 	for (size_t i = 0 ; i < size.getX() * size.getY() ; ++i)
 		_colorFrame[i] = Arcade::Color();

@@ -9,17 +9,21 @@
 #include <cstring>
 #include "Ghost.hpp"
 
-Arcade::Ghost::Ghost(std::string &map, Arcade::Pacman &pac) :
+Arcade::Ghost::Ghost(std::string &map, const std::string &name, Arcade::Pacman &pac) :
         _map(map),
-        _pac(pac) {
+        _name(name),
+        _pac(pac)
+{
         _time = std::chrono::high_resolution_clock::now();
 }
 
-Arcade::Ghost::~Ghost() {
+Arcade::Ghost::~Ghost()
+{
 
 }
 
-bool Arcade::Ghost::placeGhost() {
+bool Arcade::Ghost::placeGhost()
+{
         for (size_t i = 0; i < _map.size(); ++i) {
                 if (_map[i] == '+') {
                         std::cerr << "Placing ghost" << std::endl;
@@ -55,7 +59,8 @@ void print_map(std::string map)
         std::cerr << std::endl;
 }
 
-bool Arcade::Ghost::move() {
+bool Arcade::Ghost::move()
+{
         Vect<size_t> pos = getCoords(_currentPos);
 
         if (!isTimeToMove())
@@ -91,18 +96,21 @@ bool Arcade::Ghost::move() {
         return true;
 }
 
-bool Arcade::Ghost::isTimeToMove() {
+bool Arcade::Ghost::isTimeToMove()
+{
         auto time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration<double, std::milli>(time - _time).count();
 
         return duration >= BEGIN_MOVE;
 }
 
-Arcade::Vect<size_t> Arcade::Ghost::getCoords(size_t pos) const {
+Arcade::Vect<size_t> Arcade::Ghost::getCoords(size_t pos) const
+{
         return {pos % (MAP_WIDTH), pos / (MAP_HEIGHT)};
 }
 
-size_t Arcade::Ghost::getIndex(size_t y, size_t x, int yOff, int xOff) const {
+size_t Arcade::Ghost::getIndex(size_t y, size_t x, int yOff, int xOff) const
+{
         if (yOff == 0 && xOff == 0)
                 return y * MAP_WIDTH + x;
         if (yOff != 0 && xOff == 0)
@@ -123,8 +131,10 @@ bool Arcade::Ghost::closeToTarget(size_t y, size_t x, size_t target)
 }
 
 int Arcade::Ghost::findPacman(size_t y, size_t x, size_t i,
-                              size_t target) {
+                              size_t target)
+{
         //print_map(_tmp);
+        std::cerr << "i = " << i << std::endl;
         _path[i] = getIndex(y, x, 0, 0);
         _tmp[getIndex(y, x, 0, 0)] = 'o';
         if (closeToTarget(y, x, target))
@@ -142,7 +152,8 @@ int Arcade::Ghost::findPacman(size_t y, size_t x, size_t i,
 }
 
 int Arcade::Ghost::backtrack(size_t y, size_t x, size_t i,
-                             size_t target) {
+                             size_t target)
+{
         size_t new_k;
 
         new_k = i - 1;
@@ -162,5 +173,10 @@ int Arcade::Ghost::backtrack(size_t y, size_t x, size_t i,
                 return (findPacman(y, x, i, target));
         return (backtrack(getCoords(_path[i]).getY(), getCoords(_path[i]).getX(),
                           new_k, target));
+}
+
+const std::string &Arcade::Ghost::getName() const
+{
+        return _name;
 }
 

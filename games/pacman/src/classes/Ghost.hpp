@@ -27,7 +27,7 @@ namespace Arcade {
 namespace Arcade {
         class Ghost {
         public:
-                Ghost(std::string &, Arcade::Pacman &);
+                Ghost(std::string &, const std::string &, Arcade::Pacman &);
                 ~Ghost();
                 bool placeGhost();
                 bool move();
@@ -37,6 +37,7 @@ namespace Arcade {
                 int findPacman(size_t, size_t, size_t, size_t);
                 int backtrack(size_t, size_t, size_t, size_t);
                 bool closeToTarget(size_t y, size_t x, size_t target);
+                const std::string &getName() const;
                 enum MOVE {
                         RIGHT = 1,
                         LEFT = -1,
@@ -46,6 +47,7 @@ namespace Arcade {
                 };
         private:
                 std::string &_map;
+                const std::string &_name;
                 std::string _tmp;
                 Arcade::Pacman &_pac;
                 std::vector<size_t> _path;

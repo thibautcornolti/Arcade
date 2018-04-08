@@ -14,6 +14,10 @@ Arcade::Pacman::Pacman()
 {
         _score = new Scoreboard();
         _scale = new Scale();
+        _ghosts.push_back(new Ghost(_map, "ghost1", *this));
+        _ghosts.push_back(new Ghost(_map, "ghost2", *this));
+        _ghosts.push_back(new Ghost(_map, "ghost3", *this));
+        _ghosts.push_back(new Ghost(_map, "ghost4", *this));
         srand((unsigned int)(time(NULL) * getpid()));
 }
 
@@ -29,7 +33,6 @@ const std::string Arcade::Pacman::getName() const
 
 bool Arcade::Pacman::init()
 {
-        _ghosts.assign(4, new Ghost(_map, *this));
         if (!readMap())
                 return false;
         _currentPos = findPlayer();
@@ -39,8 +42,9 @@ bool Arcade::Pacman::init()
         }
         _time = std::chrono::high_resolution_clock::now();
         _initialPos = _currentPos;
-        for (size_t i = 0; i < _ghosts.size(); ++i)
+        for (size_t i = 0; i < _ghosts.size(); ++i) {
                 _ghosts[i]->placeGhost();
+        }
         return true;
 }
 
@@ -102,10 +106,10 @@ void Arcade::Pacman::refresh(IGraphicLib &lib)
         if (_status == Arcade::Pacman::STATUS::RUNNING &&
             _move != STILL && isTimeToMove()) {
                 move();
-                _ghosts[0]->move();
-                //for (size_t i = 0; i < _ghosts.size(); ++i) {
-                //        _ghosts[i]->move();
-                //}
+                for (size_t i = 0; i < _ghosts.size(); ++i) {
+                        std::cerr << &_ghosts[i] << std::endl;
+                        _ghosts[i]->move();
+                }
         }
         lib.clearWindow();
         display(lib);

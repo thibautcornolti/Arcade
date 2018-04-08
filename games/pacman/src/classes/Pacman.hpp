@@ -40,12 +40,11 @@ namespace Arcade {
                 void refresh(IGraphicLib &) final;
                 size_t getCurrentPos() const;
                 size_t getScore() final;
-
-                void display(IGraphicLib &);
         private:
                 bool restart();
                 bool readMap();
                 std::string getStatus() const;
+                void display(IGraphicLib &);
                 void displayGameInfo(IGraphicLib &);
                 void updatePixel();
                 void move();

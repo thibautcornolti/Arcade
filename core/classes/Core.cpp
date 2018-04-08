@@ -15,6 +15,12 @@ void Arcade::Core::swapLib(Arcade::Keys key)
 		_libGraphIncrementer = (_graphs.size() + _libGraphIncrementer +
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
 		getGraph().openRenderer("Arcade");
+	} else if (!_inMenu && 
+		(key == Arcade::Keys::UP || key == Arcade::Keys::DOWN)) {
+		getGame().stop();
+		_libGameIncrementer = (_games.size() + _libGameIncrementer +
+			(key == Arcade::Keys::DOWN ? 1 : -1)) % _games.size();
+		getGame().init();
 	} else if (key == Arcade::Keys::ESC && !_inMenu) {
 		getGame().stop();
 		_inMenu = true;

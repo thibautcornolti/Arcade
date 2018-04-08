@@ -87,7 +87,8 @@ Arcade::Vect<size_t> Arcade::PixelBox::getPos() const
 
 void Arcade::PixelBox::putPixel(Vect<size_t> pos, Arcade::Color col)
 {
-	_colorFrame[pos.getY() * _size.getX() + pos.getX()] = col;
+	if (pos.getX() < _size.getX() && pos.getY() < _size.getY())
+		_colorFrame[pos.getY() * _size.getX() + pos.getX()] = col;
 }
 
 void Arcade::PixelBox::putRect(Vect<size_t> pos, Vect<size_t> size, Color col)

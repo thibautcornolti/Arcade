@@ -14,6 +14,7 @@ Arcade::Pacman::Pacman()
 {
         _score = new Scoreboard();
         _scale = new Scale();
+        srand((unsigned int)(time(NULL) * getpid()));
 }
 
 Arcade::Pacman::~Pacman()
@@ -28,16 +29,18 @@ const std::string Arcade::Pacman::getName() const
 
 bool Arcade::Pacman::init()
 {
-        std::cerr << "INIT PACMAN" << std::endl;
-        _ghosts.assign(4, Ghost());
+        _ghosts.assign(4, new Ghost(_map, *this));
         if (!readMap())
                 return false;
-        _current_pos = findPlayer();
-        if (_current_pos == UINT32_MAX) {
+        _currentPos = findPlayer();
+        if (_currentPos == UINT32_MAX) {
                 std::cerr << "Can not find initial player position in map" << std::endl;
                 return false;
         }
-        _initial_pos = _current_pos;
+        _time = std::chrono::high_resolution_clock::now();
+        _initialPos = _currentPos;
+        for (size_t i = 0; i < _ghosts.size(); ++i)
+                _ghosts[i]->placeGhost();
         return true;
 }
 
@@ -97,12 +100,28 @@ void Arcade::Pacman::refresh(IGraphicLib &lib)
                 _status = Arcade::Pacman::STATUS::RUNNING;
         }
         if (_status == Arcade::Pacman::STATUS::RUNNING &&
-            _move != Arcade::Pacman::MOVE::STILL) {
+            _move != STILL && isTimeToMove()) {
                 move();
+                _ghosts[0]->move();
+                //for (size_t i = 0; i < _ghosts.size(); ++i) {
+                //        _ghosts[i]->move();
+                //}
         }
         lib.clearWindow();
         display(lib);
         lib.refreshWindow();
+}
+
+bool Arcade::Pacman::isTimeToMove()
+{
+        auto time = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration<double, std::milli>(time-_time).count();
+
+        if (duration >= SPEED) {
+                _time = time;
+                return true;
+        }
+        return false;
 }
 
 bool Arcade::Pacman::readMap()
@@ -189,6 +208,14 @@ void Arcade::Pacman::updatePixel()
                                         _pixelMap.putPixel(getCoords(i),
                                                            {255, 255, 0, 255});
                                 break;
+                        case 'G':
+                                if (_godmode)
+                                        _pixelMap.putPixel(getCoords(i),
+                                                           {128, 128, 128, 255});
+                                else
+                                        _pixelMap.putPixel(getCoords(i),
+                                                           {255, 255, 255, 255});
+                                break;
                         case '.':
                                 _pixelMap.putPixel(getCoords(i),
                                                    {0, 0, 255, 255});
@@ -204,30 +231,30 @@ void Arcade::Pacman::updatePixel()
 void Arcade::Pacman::useLink()
 {
         for (size_t i = 0; i < _link.size(); ++i) {
-                if (getCoords(_current_pos + _move) == _link[i].first) {
-                        _current_pos = _link[i].second.getY() * MAP_WIDTH + _link[i].second.getX();
+                if (getCoords(_currentPos + _move) == _link[i].first) {
+                        _currentPos = _link[i].second.getY() * MAP_WIDTH + _link[i].second.getX();
                         break;
-                } else if (getCoords(_current_pos + _move) == _link[i].second) {
-                        _current_pos = _link[i].first.getY() * MAP_WIDTH + _link[i].first.getX();
+                } else if (getCoords(_currentPos + _move) == _link[i].second) {
+                        _currentPos = _link[i].first.getY() * MAP_WIDTH + _link[i].first.getX();
                         break;
                 }
         }
-        if (_map[_current_pos + TOP] != '#' &&
-            _map[_current_pos + TOP] != '|' &&
-            _map[_current_pos + TOP] != '\'')
-                _current_pos += TOP;
-        else if (_map[_current_pos + BOT] != '#' &&
-                 _map[_current_pos + BOT] != '|' &&
-                 _map[_current_pos + BOT] != '\'')
-                _current_pos += BOT;
-        else if (_map[_current_pos + LEFT] != '#' &&
-                 _map[_current_pos + LEFT] != '|' &&
-                 _map[_current_pos + LEFT] != '\'')
-                _current_pos += LEFT;
-        else if (_map[_current_pos + RIGHT] != '#' &&
-                 _map[_current_pos + RIGHT] != '|' &&
-                 _map[_current_pos + RIGHT] != '\'')
-                _current_pos += RIGHT;
+        if (_map[_currentPos + TOP] != '#' &&
+            _map[_currentPos + TOP] != '|' &&
+            _map[_currentPos + TOP] != '\'')
+                _currentPos += TOP;
+        else if (_map[_currentPos + BOT] != '#' &&
+                 _map[_currentPos + BOT] != '|' &&
+                 _map[_currentPos + BOT] != '\'')
+                _currentPos += BOT;
+        else if (_map[_currentPos + LEFT] != '#' &&
+                 _map[_currentPos + LEFT] != '|' &&
+                 _map[_currentPos + LEFT] != '\'')
+                _currentPos += LEFT;
+        else if (_map[_currentPos + RIGHT] != '#' &&
+                 _map[_currentPos + RIGHT] != '|' &&
+                 _map[_currentPos + RIGHT] != '\'')
+                _currentPos += RIGHT;
 }
 
 void *Arcade::Pacman::godTime(void *ptr)
@@ -240,22 +267,23 @@ void *Arcade::Pacman::godTime(void *ptr)
 
 void Arcade::Pacman::move()
 {
-        if (_map[_current_pos + _move] == '#') {
-                _move = Arcade::Pacman::MOVE::STILL;
+        if (_map[_currentPos + _move] == '#') {
+                _move = STILL;
                 return;
         }
-        if (_map[_current_pos + _move] == '.')
+        if (_map[_currentPos + _move] == '.')
                 _score->addScores(10);
-        if (_map[_current_pos + _move] == '*') {
+        if (_map[_currentPos + _move] == '*') {
                 _godmode = true;
                 pthread_create(&_id, NULL, &(Arcade::Pacman::godTime), &_godmode);
         }
-        _map[_current_pos] = ' ';
-        if (_map[_current_pos + _move] == '|')
+        _map[_currentPos] = ' ';
+        if (_map[_currentPos + _move] == '|')
                 useLink();
         else
-                _current_pos += _move;
-        _map[_current_pos] = 'P';
+                _currentPos += _move;
+        _map[_currentPos] = 'P';
+        _move = STILL;
 }
 
 size_t Arcade::Pacman::findPlayer()
@@ -285,6 +313,10 @@ bool Arcade::Pacman::linkDoors()
 size_t Arcade::Pacman::getScore()
 {
         return _score->getScores();
+}
+
+size_t Arcade::Pacman::getCurrentPos() const {
+        return _currentPos;
 }
 
 //TODO make the ghost class

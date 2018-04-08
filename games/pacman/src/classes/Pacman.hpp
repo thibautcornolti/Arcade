@@ -10,16 +10,22 @@
 
 #include <iostream>
 #include <fstream>
-#include "Ghost.hpp"
 #include <pthread.h>
+#include <chrono>
+#include "Ghost.hpp"
 #include "../shared_header/IGameLib.hpp"
 #include "../shared_header/Scoreboard.hpp"
 #include "../shared_header/Scale.hpp"
 
 #define GODTIME 10
+#define SPEED 150
 #define MAP_WIDTH 28
 #define MAP_HEIGHT 28
 #define ASSETS_PATH "games/pacman/assets/map.txt"
+
+namespace Arcade {
+        class Ghost;
+}
 
 namespace Arcade {
         class Pacman : public Arcade::IGameLib {
@@ -32,12 +38,14 @@ namespace Arcade {
                 bool applyEvent(Keys) final;
                 bool update() final;
                 void refresh(IGraphicLib &) final;
+                size_t getCurrentPos() const;
                 size_t getScore() final;
 
+                void display(IGraphicLib &);
+        private:
                 bool restart();
                 bool readMap();
                 std::string getStatus() const;
-                void display(IGraphicLib &);
                 void displayGameInfo(IGraphicLib &);
                 void updatePixel();
                 void move();
@@ -46,6 +54,7 @@ namespace Arcade {
                 bool linkDoors();
                 void useLink();
                 static void *godTime(void *);
+                bool isTimeToMove();
 
                 enum STATUS {
                         INIT,
@@ -60,23 +69,23 @@ namespace Arcade {
                         BOT = (MAP_HEIGHT),
                         STILL = 0
                 };
-
         private:
                 std::string _name = "Pacman";
                 std::string _playerName = "Unknown";
-                std::string _map;
                 Scoreboard *_score;
                 Scale *_scale;
                 MOVE _move = STILL;
-                size_t _current_pos;
-                size_t _initial_pos;
+                size_t _initialPos;
+                size_t _currentPos;
                 bool _init = false;
                 bool _godmode = false;
                 STATUS _status = INIT;
-                std::vector<Arcade::Ghost> _ghosts;
+                std::vector<Arcade::Ghost *> _ghosts;
                 Arcade::PixelBox _pixelMap;
                 pthread_t _id;
+                std::chrono::time_point<std::chrono::high_resolution_clock> _time;
                 std::vector<std::pair<Vect<size_t>, Vect<size_t>>> _link;
+                std::string _map;
         };
 }
 

@@ -15,7 +15,7 @@ SRCS	= ./src/entry.cpp \
 OBJS	= $(SRCS:.cpp=.o)
 
 CPPFLAGS = -I ./src/pp
-CPPFLAGS += -W -Wall -Wextra -lpthread --std=c++11 -g
+CPPFLAGS += -W -Wall -Wextra -lpthread --std=c++11 -g -O2
 CPPFLAGS += -fPIC
 
 LDFLAGS += -lncurses -shared --std=c++11

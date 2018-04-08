@@ -9,6 +9,7 @@
 #include <fstream>
 #include <ios>
 #include <sstream>
+#include <regex>
 #include "Scoreboard.hpp"
 
 Arcade::Scoreboard::Scoreboard() {}
@@ -18,32 +19,30 @@ Arcade::Scoreboard::~Scoreboard() {}
 bool Arcade::Scoreboard::readScoreboard()
 {
 	std::fstream file(SCOREBOARD);
-	std::vector<std::string> tokens;
+	std::cmatch cm;
 	std::string line;
 
 	if (!file)
 		return false;
 	while (getline(file, line)) {
-		std::istringstream split(line);
-		for (
-			std::string each;
-			std::getline(split, each, ':');
-			tokens.push_back(each)
-		);
-		_allScores[tokens.front()] = tokens;
-		tokens.clear();
+		if (std::regex_match(line.c_str(), cm, std::regex("^([A-Za-z]+):(([A-Za-z]+)\\s+([0-9]+)):(([A-Za-z]+)\\s+([0-9]+)):(([A-Za-z]+)\\s+([0-9]+))$"))) {
+			_allScores[cm[1]] = {cm[2], cm[5], cm[8]};
+			_allScoresComputed[cm[1]] = {{cm[3], std::stol(cm[4])}, {cm[6], std::stol(cm[7])}, {cm[9], std::stol(cm[10])}};
+		} else
+			return false;
 	}
 	return true;
 }
 
-std::map<const std::string, std::vector<std::string>> Arcade::Scoreboard::getScoreboard() const
+size_t Arcade::Scoreboard::getLastPlayerScore()
 {
-	return _allScores;
+	return _allScoresComputed[_gameName].back().second;
 }
 
-size_t Arcade::Scoreboard::getLastPlayerScore() const
+
+std::map<std::string, std::vector<std::string>> Arcade::Scoreboard::getScoreboard() const
 {
-	return _allScoresComputed.back().second;
+	return _allScores;
 }
 
 void Arcade::Scoreboard::setGameName(const std::string &gameName)

@@ -22,7 +22,7 @@
 
 namespace Arcade {
         class Pacman;
-};
+}
 
 namespace Arcade {
         class Ghost {
@@ -38,6 +38,7 @@ namespace Arcade {
                 int backtrack(size_t, size_t, size_t, size_t);
                 bool closeToTarget(size_t y, size_t x, size_t target);
                 const std::string &getName() const;
+                void updateGhost();
                 enum MOVE {
                         RIGHT = 1,
                         LEFT = -1,

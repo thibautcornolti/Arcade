@@ -232,17 +232,9 @@ void Arcade::Pacman::updatePixel()
         }
 }
 
-void Arcade::Pacman::useLink()
+
+void Arcade::Pacman::linkDir()
 {
-        for (size_t i = 0; i < _link.size(); ++i) {
-                if (getCoords(_currentPos + _move) == _link[i].first) {
-                        _currentPos = _link[i].second.getY() * MAP_WIDTH + _link[i].second.getX();
-                        break;
-                } else if (getCoords(_currentPos + _move) == _link[i].second) {
-                        _currentPos = _link[i].first.getY() * MAP_WIDTH + _link[i].first.getX();
-                        break;
-                }
-        }
         if (_map[_currentPos + TOP] != '#' &&
             _map[_currentPos + TOP] != '|' &&
             _map[_currentPos + TOP] != '\'')
@@ -259,6 +251,21 @@ void Arcade::Pacman::useLink()
                  _map[_currentPos + RIGHT] != '|' &&
                  _map[_currentPos + RIGHT] != '\'')
                 _currentPos += RIGHT;
+}
+
+
+void Arcade::Pacman::useLink()
+{
+        for (size_t i = 0; i < _link.size(); ++i) {
+                if (getCoords(_currentPos + _move) == _link[i].first) {
+                        _currentPos = _link[i].second.getY() * MAP_WIDTH + _link[i].second.getX();
+                        break;
+                } else if (getCoords(_currentPos + _move) == _link[i].second) {
+                        _currentPos = _link[i].first.getY() * MAP_WIDTH + _link[i].first.getX();
+                        break;
+                }
+        }
+        linkDir();
 }
 
 void *Arcade::Pacman::godTime(void *ptr)
@@ -319,7 +326,8 @@ size_t Arcade::Pacman::getScore()
         return _score->getScores();
 }
 
-size_t Arcade::Pacman::getCurrentPos() const {
+size_t Arcade::Pacman::getCurrentPos() const
+{
         return _currentPos;
 }
 

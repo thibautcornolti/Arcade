@@ -52,6 +52,7 @@ namespace Arcade {
                 Arcade::Vect<size_t> getCoords(size_t) const;
                 bool linkDoors();
                 void useLink();
+                void linkDir();
                 static void *godTime(void *);
                 bool isTimeToMove();
 

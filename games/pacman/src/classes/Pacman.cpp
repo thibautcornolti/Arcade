@@ -106,10 +106,8 @@ void Arcade::Pacman::refresh(IGraphicLib &lib)
         if (_status == Arcade::Pacman::STATUS::RUNNING &&
             _move != STILL && isTimeToMove()) {
                 move();
-                for (size_t i = 0; i < _ghosts.size(); ++i) {
-                        std::cerr << &_ghosts[i] << std::endl;
+                for (size_t i = 0; i < _ghosts.size(); ++i)
                         _ghosts[i]->move();
-                }
         }
         lib.clearWindow();
         display(lib);

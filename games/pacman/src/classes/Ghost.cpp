@@ -146,6 +146,8 @@ int Arcade::Ghost::backtrack(size_t y, size_t x, size_t i,
             (x < MAP_WIDTH && _tmp[getIndex(y, x, 0, 1)] == ' ') ||
             (x > 0 && _tmp[getIndex(y, x, 0, -1)] == ' '))
                 return (findPacman(y, x, ++i, target));
+	if (i + 1 == 0)
+		return (84);
         return (backtrack(getCoords(_path[i]).getY(), getCoords(_path[i]).getX(),
                           new_k, target));
 }

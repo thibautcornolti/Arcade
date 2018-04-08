@@ -5,72 +5,129 @@
 ** arcade
 */
 
-#include "SfmlGraphicLib.hpp"
+#include "SdlGraphicLib.hpp"
 
-Arcade::SfmlGraphicLib::SfmlGraphicLib()
+Arcade::SdlGraphicLib::SdlGraphicLib()
 	: _lastEvents()
-{}
-
-std::string Arcade::SfmlGraphicLib::getName() const
+	, _title()
 {
-	return "Sfml";
+	auto ret = SDL_Init(SDL_INIT_VIDEO);
+	if(ret < 0) {
+    		std::cerr <<"Unable to Init SDL: "
+			<< SDL_GetError()
+			<< std::endl;
+    		exit(84);
+	}
+	ret = TTF_Init();
+	if(ret < 0) {
+    		std::cerr <<"Unable to Init TTF: "
+			<< TTF_GetError()
+			<< std::endl;
+    		exit(84);
+	}
 }
 
-bool Arcade::SfmlGraphicLib::isOpen() const
+Arcade::SdlGraphicLib::~SdlGraphicLib()
 {
-	return _window.isOpen();
+	TTF_Quit();
+	SDL_Quit();
 }
 
-void Arcade::SfmlGraphicLib::clearWindow()
+std::string Arcade::SdlGraphicLib::getName() const
 {
-	_window.clear();
+	return "Sdl";
 }
 
-void Arcade::SfmlGraphicLib::openRenderer(std::string const &title)
+bool Arcade::SdlGraphicLib::isOpen() const
 {
-	_window.create(sf::VideoMode(_width, _height, 32), title);
-	_window.setVerticalSyncEnabled(true);
+	return _isRendering;
 }
 
-void Arcade::SfmlGraphicLib::closeRenderer()
+void Arcade::SdlGraphicLib::clearWindow()
 {
-	_window.close();
+	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+	SDL_RenderClear(_renderer);
 }
 
-void Arcade::SfmlGraphicLib::refreshWindow()
+void Arcade::SdlGraphicLib::openRenderer(std::string const &title)
 {
-	_window.display();
+	_title = title;
+	_window = SDL_CreateWindow(
+		_title.c_str(),
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		_width, _height, SDL_WINDOW_SHOWN
+	);
+	if (_window == NULL) {
+		std::cerr << "Unable to create SDL Window: "
+			<< SDL_GetError()
+			<< std::endl;
+	} else {
+		_primarySurface = SDL_GetWindowSurface(_window);
+		_renderer = SDL_CreateRenderer(_window, -1,
+			SDL_RENDERER_ACCELERATED);
+		if (_renderer == NULL)
+			std::cerr << "Unable to create renderer" << std::endl;
+		else
+			_isRendering = true;
+	}
 }
 
-void Arcade::SfmlGraphicLib::drawPixelBox(PixelBox &pixelBox)
+void Arcade::SdlGraphicLib::closeRenderer()
 {
-        sf::Texture texture;
-	size_t height = pixelBox.getHeight();
-	size_t width = pixelBox.getWidth();
-        texture.create(width, height);
-        sf::Sprite sprite(texture);
-        texture.update(&*(pixelBox.getPixelArray()[0]));
-        sprite.setPosition(sf::Vector2f(pixelBox.getX(), pixelBox.getY()));
-        _window.draw(sprite);
+	if(_renderer) {
+		SDL_DestroyRenderer(_renderer);
+		_renderer = NULL;
+	}
+	if(_window) {
+		SDL_DestroyWindow(_window);
+		_window = NULL;
+	}
 }
 
-void Arcade::SfmlGraphicLib::drawText(TextBox &textBox)
+void Arcade::SdlGraphicLib::refreshWindow()
 {
-	sf::Text text;
-	sf::Font font;
-	font.loadFromFile("graphical/lib_sfml/expressway rg.ttf");
-	text.setCharacterSize(textBox.getFontSize());
-	text.setPosition(textBox.getX(), textBox.getY());
-	auto col = textBox.getColor();
-	auto sfCol = sf::Color(col.getRed(), col.getGreen(),
-			col.getBlue(), col.getAlpha());
-	text.setFillColor(sfCol);
-	text.setString(textBox.getValue());
-	text.setFont(font);
-	_window.draw(text);
+	SDL_RenderPresent(_renderer);
 }
 
-Arcade::Keys Arcade::SfmlGraphicLib::getLastEvent()
+void Arcade::SdlGraphicLib::drawPixelBox(PixelBox const &pixelBox)
+{
+	auto pixels = pixelBox.getPixelArray();
+
+	size_t x = pixelBox.getX();
+	size_t y = pixelBox.getY();
+	for (size_t yi = 0 ; yi < pixelBox.getHeight() ; ++yi)
+		for (size_t xi = 0 ; xi < pixelBox.getWidth() ; ++xi) {
+			auto c = pixelBox.getPixel(Vect<size_t>(xi, yi));
+			SDL_SetRenderDrawColor(_renderer, c.getRed(),
+				c.getGreen(), c.getBlue(), c.getAlpha());
+			SDL_RenderDrawPoint(_renderer, xi + x, yi + y);
+		}
+}
+
+void Arcade::SdlGraphicLib::drawText(TextBox const &textBox)
+{
+	if (textBox.getValue().size() == 0)
+		return ;
+	TTF_Font *font = TTF_OpenFont("assets/font/expressway rg.ttf",
+		textBox.getFontSize());
+	if (font == NULL)
+		return ;
+	Arcade::Color c = textBox.getColor();
+	SDL_Color col = {c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha()};
+	auto t = TTF_RenderText_Blended(font, textBox.getValue().c_str(), col);
+	if (t == NULL)
+		return ;
+	SDL_Texture *text = SDL_CreateTextureFromSurface(_renderer, t);
+	SDL_Rect text_rect;
+	text_rect.x = static_cast<int>(textBox.getPos().getX());
+	text_rect.y = static_cast<int>(textBox.getPos().getY());
+	text_rect.w = t->w;
+	text_rect.h = t->h;
+	SDL_RenderCopy(_renderer, text, nullptr, &text_rect);
+	TTF_CloseFont(font);
+}
+
+Arcade::Keys Arcade::SdlGraphicLib::getLastEvent()
 {
 	Arcade::Keys temp = Arcade::Keys::NONE;
 	if (_lastEvents.size()) {
@@ -80,13 +137,14 @@ Arcade::Keys Arcade::SfmlGraphicLib::getLastEvent()
 	return temp;
 }
 
-bool Arcade::SfmlGraphicLib::pollEvents()
+bool Arcade::SdlGraphicLib::pollEvents()
 {
-	sf::Event event;
-	_window.pollEvent(event);
-	if (event.type != sf::Event::KeyPressed)
+	SDL_Event event;
+	
+	SDL_PollEvent(&event);
+	if (event.type != SDL_KEYDOWN)
 		return true;
-	sf::Keyboard::Key k = event.key.code;
+	SDL_Keycode k = event.key.keysym.sym;
 
 	for (size_t i = 0 ; i < _keymap.size() ; ++i) {
 		if (k == _keymap[i].first) {
@@ -97,22 +155,22 @@ bool Arcade::SfmlGraphicLib::pollEvents()
 	return true;
 }
 
-void Arcade::SfmlGraphicLib::clearEvents()
+void Arcade::SdlGraphicLib::clearEvents()
 {
 	_lastEvents.clear();
 }
 
-Arcade::Vect<size_t> Arcade::SfmlGraphicLib::getScreenSize() const 
+Arcade::Vect<size_t> Arcade::SdlGraphicLib::getScreenSize() const 
 {
 	return Arcade::Vect<size_t>(getMaxX(), getMaxY());
 }
 
-size_t Arcade::SfmlGraphicLib::getMaxY() const
+size_t Arcade::SdlGraphicLib::getMaxY() const
 {
 	return _height;
 }
 
-size_t Arcade::SfmlGraphicLib::getMaxX() const
+size_t Arcade::SdlGraphicLib::getMaxX() const
 {
 	return _width;
 }

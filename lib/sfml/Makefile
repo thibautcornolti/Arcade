@@ -1,16 +1,13 @@
-NAME	= lib_sfml.so
+NAME	= lib_arcade_sfml.so
 
 CC	= g++
 
-CP = cp
+CP = mv
 
 RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
 			./src/classes/SfmlGraphicLib.cpp \
-			../../shared_header/PixelBox.cpp \
-			../../shared_header/TextBox.cpp \
-			../../shared_header/Color.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 

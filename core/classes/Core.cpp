@@ -12,7 +12,7 @@ void Arcade::Core::swapLib(Arcade::Keys key)
 {
 	if (key == Arcade::Keys::RIGHT || key == Arcade::Keys::LEFT) {
 		getGraph().closeRenderer();
-		_libGraphIncrementer = (_libGraphIncrementer +
+		_libGraphIncrementer = (_graphs.size() + _libGraphIncrementer +
 			(key == Arcade::Keys::RIGHT ? 1 : -1)) % _graphs.size();
 		getGraph().openRenderer("Arcade");
 	} else if (key == Arcade::Keys::ESC && !_inMenu) {
@@ -53,20 +53,19 @@ void Arcade::Core::close()
 
 bool Arcade::Core::_update(Arcade::Menu *menu, Arcade::Keys key)
 {
-	bool mustExit = false;
+	bool mustContinue = true;
 	if (_inMenu) {
 		menu->applyEvent(key, *this);
 		menu->refresh(getGraph());
 	} else {
 		getGame().applyEvent(key);
-		if (!getGame().update())
-			mustExit = true;
+		mustContinue = getGame().update();
 		getGame().refresh(getGraph());
 	}
-	return !mustExit;
+	return mustContinue;
 }
 
-void Arcade::Core::run(const std::string &graphLibName)
+void Arcade::Core::run()
 {
 	Arcade::Keys key;
 	Arcade::Menu menu(_gamesName, _graphsName);
@@ -74,7 +73,6 @@ void Arcade::Core::run(const std::string &graphLibName)
 	if (_graphs.size() == 0)
 		return ;
 	getGraph().openRenderer("Arcade");
-	openGraph(graphLibName);
 	while (getGraph().isOpen()) {
 		getGraph().clearEvents();
 		getGraph().pollEvents();
@@ -88,26 +86,32 @@ void Arcade::Core::run(const std::string &graphLibName)
 	}
 }
 
-bool Arcade::Core::_initGraphs()
+bool Arcade::Core::_initGraph(const std::string &graphLibName)
+{
+	std::shared_ptr<DLLoader> dl(new DLLoader(graphLibName));
+	_loaders.push_back(dl);
+	if (dl->isError()) {
+		std::cout << dl->getError() << std::endl;
+		return false;
+	}
+	auto o = dl->getInstance<Arcade::IGraphicLib>();
+	if (dl->isError()) {
+		std::cout << dl->getError() << std::endl;
+		return false;
+	}
+	_graphsName.push_back(graphLibName);
+	_graphs.push_back(o);
+	return true;
+}
+
+bool Arcade::Core::_initGraphs(const std::string &graphLibName)
 {
 	LibAnalyzer l;
-	
-	for (auto &lib : l.getGraphs()) {
-		std::shared_ptr<DLLoader> dl(new DLLoader(GRAPH_FOLDER"/" + lib));
-		_loaders.push_back(dl);
-
-		if (dl->isError()) {
-			std::cout << dl->getError() << std::endl;
+	if (graphLibName.size() > 0 && !_initGraph(graphLibName))
 			return false;
-		}
-		auto o = dl->getInstance<Arcade::IGraphicLib>();
-		if (dl->isError()) {
-			std::cout << dl->getError() << std::endl;
+	for (auto &lib : l.getGraphs())
+		if (!_initGraph(GRAPH_FOLDER"/" + lib))
 			return false;
-		}
-		_graphsName.push_back(lib);
-		_graphs.push_back(o);
-	}
 	return true;
 }
 
@@ -134,9 +138,9 @@ bool Arcade::Core::_initGames()
 	return true;
 }
 
-bool Arcade::Core::init()
+bool Arcade::Core::init(const std::string &graphLibName)
 {	
-	if (!_initGraphs() || !_initGames())
+	if (!_initGraphs(graphLibName) || !_initGames())
 		return false;
 	return true;
 }

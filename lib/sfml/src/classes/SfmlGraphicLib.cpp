@@ -9,7 +9,12 @@
 
 Arcade::SfmlGraphicLib::SfmlGraphicLib()
 	: _lastEvents()
-{}
+	, _title()
+{
+	_window.create(sf::VideoMode(_width, _height, 32), "init");
+	_window.setVerticalSyncEnabled(true);
+	_window.close();
+}
 
 std::string Arcade::SfmlGraphicLib::getName() const
 {
@@ -28,7 +33,8 @@ void Arcade::SfmlGraphicLib::clearWindow()
 
 void Arcade::SfmlGraphicLib::openRenderer(std::string const &title)
 {
-	_window.create(sf::VideoMode(_width, _height, 32), title);
+	_title = title;
+	_window.create(sf::VideoMode(_width, _height, 32), _title);
 	_window.setVerticalSyncEnabled(true);
 }
 
@@ -42,23 +48,24 @@ void Arcade::SfmlGraphicLib::refreshWindow()
 	_window.display();
 }
 
-void Arcade::SfmlGraphicLib::drawPixelBox(PixelBox &pixelBox)
+void Arcade::SfmlGraphicLib::drawPixelBox(PixelBox const &pixelBox)
 {
         sf::Texture texture;
 	size_t height = pixelBox.getHeight();
 	size_t width = pixelBox.getWidth();
         texture.create(width, height);
         sf::Sprite sprite(texture);
-        texture.update(&*(pixelBox.getPixelArray()[0]));
+	auto *col = (unsigned char *)(&pixelBox.getPixelArray()[0]);
+        texture.update(col);
         sprite.setPosition(sf::Vector2f(pixelBox.getX(), pixelBox.getY()));
         _window.draw(sprite);
 }
 
-void Arcade::SfmlGraphicLib::drawText(TextBox &textBox)
+void Arcade::SfmlGraphicLib::drawText(TextBox const &textBox)
 {
 	sf::Text text;
 	sf::Font font;
-	font.loadFromFile("lib/sfml/expressway rg.ttf");
+	font.loadFromFile("assets/font/expressway rg.ttf");
 	text.setCharacterSize(textBox.getFontSize());
 	text.setPosition(textBox.getX(), textBox.getY());
 	auto col = textBox.getColor();

@@ -23,8 +23,8 @@ namespace Arcade {
 			~Core() = default;
 
 			void close();
-			void run(const std::string &);
-			bool init();
+			void run();
+			bool init(const std::string &);
 			void openGame(size_t);
 			void openGraph(size_t n);
 			void openGraph(const std::string &);
@@ -34,7 +34,8 @@ namespace Arcade {
 			Arcade::IGameLib &getGame();
 	protected:
 		private:
-			bool _initGraphs();
+			bool _initGraph(const std::string &);
+			bool _initGraphs(const std::string &);
 			bool _initGames();
 			bool _update(Arcade::Menu *, Arcade::Keys);
 

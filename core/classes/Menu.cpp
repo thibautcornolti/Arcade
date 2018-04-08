@@ -86,7 +86,7 @@ void Arcade::Menu::displayScoreboard(Arcade::IGraphicLib &lib)
 		_scale->scaleTextBox({70, position}, scoreboard);
 		position += 0.7;
 		lib.drawText(scoreboard);
-		for (size_t i = 1; i < elem.second.size(); ++i) {
+		for (size_t i = 0; i < elem.second.size(); ++i) {
 			scoreboard.setValue(elem.second[i]);
 			_scale->scaleTextBox({65, position}, scoreboard);
 			position += 0.7;
@@ -99,7 +99,7 @@ void Arcade::Menu::displayScoreboard(Arcade::IGraphicLib &lib)
 void Arcade::Menu::selector(Arcade::IGraphicLib &lib)
 {
 	Arcade::TextBox games("", {0, 0}, 25);
-	double line = 5;
+	double line = 3;
 
 	for (size_t i = 0; i < _games.size(); i++) {
 		if (i == _selection) {
@@ -110,7 +110,7 @@ void Arcade::Menu::selector(Arcade::IGraphicLib &lib)
 			_scale->scaleTextBox({20, line}, games);
 		}
 		lib.drawText(games);
-		line += 5;
+		line += 3;
 	}
 }
 

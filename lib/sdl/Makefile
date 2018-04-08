@@ -1,8 +1,8 @@
-NAME	= lib_arcade_sfml.so
+NAME	= lib_arcade_sdl.so
 
 CC	= g++
 
-CP = cp
+CP = mv
 
 RM	= rm -f
 
@@ -15,7 +15,7 @@ CPPFLAGS = -I ./src/pp
 CPPFLAGS += -W -Wall -Wextra --std=c++11 -g 
 CPPFLAGS += -fPIC
 
-LDFLAGS += -lsfml-graphics -lsfml-window -shared --std=c++11
+LDFLAGS += -lSDL2 -lSDL2_ttf -shared --std=c++11
 
 all: $(NAME)
 

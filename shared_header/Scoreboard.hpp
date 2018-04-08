@@ -21,9 +21,11 @@ namespace Arcade {
 			~Scoreboard();
 
 			void setGameName(const std::string &gameName);
-			bool readScoreboard();
-			std::map<const std::string, std::vector<std::string>> getScoreboard() const;
+			void setPlayerName(const std::string &playerName);
 
+			bool readScoreboard();
+			size_t getLastPlayerScore();
+			std::map<std::string, std::vector<std::string>> getScoreboard() const;
 
 			size_t getScores() const;
 			void addScores(const size_t&);
@@ -32,7 +34,9 @@ namespace Arcade {
 
 		private:
 			std::string _gameName;
-			std::map<const std::string, std::vector<std::string>> _allScores;
+			std::string _playerName = "Unknown";
+			std::map<std::string, std::vector<std::string>> _allScores;
+			std::map<std::string, std::vector<std::pair<std::string, size_t>>> _allScoresComputed;
 			size_t _score = 0;
 	};
 

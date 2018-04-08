@@ -1,14 +1,16 @@
-NAME	= game_pacman.so
+NAME	= lib_arcade_pacman.so
 
 CC	= g++
 
-CP = cp
+CP = mv
 
 RM	= rm -f
 
 SRCS	= ./src/entry.cpp \
 		./src/classes/Pacman.cpp \
 		./src/classes/Ghost.cpp \
+		./src/shared_header/Scoreboard.cpp \
+		./src/shared_header/Scale.cpp \
 
 OBJS	= $(SRCS:.cpp=.o)
 

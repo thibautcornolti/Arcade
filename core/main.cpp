@@ -38,8 +38,8 @@ int main(int, char **av)
 
 	coreGetter(&core);
 	signal(SIGINT, sighandler);
-	if (core.init())
-		core.run((av[1] ? std::string(av[1]) : ""));
+	if (core.init((av[1] ? std::string(av[1]) : "")))
+		core.run();
 	return (0);
 }
 

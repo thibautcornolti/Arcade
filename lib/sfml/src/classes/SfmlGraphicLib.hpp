@@ -42,10 +42,10 @@ namespace Arcade {
 
 		/* Rendering functions */
 		// Draws a PixelBox or the sprite if supported
-		void drawPixelBox(PixelBox &) final;
+		void drawPixelBox(PixelBox const &) final;
 		
 		// Draws a TextBox
-		void drawText(TextBox &) final;
+		void drawText(TextBox const &) final;
 
 
 		/* Events handling */
@@ -74,6 +74,7 @@ namespace Arcade {
 		size_t _height = 600;
 		sf::RenderWindow _window;
 		std::vector<Keys> _lastEvents;
+		std::string _title;
 		std::vector<std::pair<sf::Keyboard::Key, Arcade::Keys>> _keymap = {
 			{sf::Keyboard::A, Arcade::Keys::A},
 			{sf::Keyboard::B, Arcade::Keys::B},

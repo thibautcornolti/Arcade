@@ -79,6 +79,7 @@ namespace Arcade {
 		SDL_Renderer *_renderer;
 		SDL_Surface *_primarySurface;
 		std::vector<Keys> _lastEvents;
+		std::string _title;
 		std::vector<std::pair<SDL_Keycode, Arcade::Keys>> _keymap = {
 			{SDLK_a, Arcade::Keys::A},
 			{SDLK_b, Arcade::Keys::B},

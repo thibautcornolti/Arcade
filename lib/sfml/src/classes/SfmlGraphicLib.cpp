@@ -9,6 +9,7 @@
 
 Arcade::SfmlGraphicLib::SfmlGraphicLib()
 	: _lastEvents()
+	, _title()
 {
 	_window.create(sf::VideoMode(_width, _height, 32), "init");
 	_window.setVerticalSyncEnabled(true);
@@ -32,7 +33,8 @@ void Arcade::SfmlGraphicLib::clearWindow()
 
 void Arcade::SfmlGraphicLib::openRenderer(std::string const &title)
 {
-	_window.create(sf::VideoMode(_width, _height, 32), title);
+	_title = title;
+	_window.create(sf::VideoMode(_width, _height, 32), _title);
 	_window.setVerticalSyncEnabled(true);
 }
 

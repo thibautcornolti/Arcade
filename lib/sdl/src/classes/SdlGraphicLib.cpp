@@ -9,6 +9,7 @@
 
 Arcade::SdlGraphicLib::SdlGraphicLib()
 	: _lastEvents()
+	, _title()
 {
 	auto ret = SDL_Init(SDL_INIT_VIDEO);
 	if(ret < 0) {
@@ -34,7 +35,7 @@ Arcade::SdlGraphicLib::~SdlGraphicLib()
 
 std::string Arcade::SdlGraphicLib::getName() const
 {
-	return "Sfml";
+	return "Sdl";
 }
 
 bool Arcade::SdlGraphicLib::isOpen() const
@@ -50,8 +51,9 @@ void Arcade::SdlGraphicLib::clearWindow()
 
 void Arcade::SdlGraphicLib::openRenderer(std::string const &title)
 {
+	_title = title;
 	_window = SDL_CreateWindow(
-		title.c_str(),
+		_title.c_str(),
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		_width, _height, SDL_WINDOW_SHOWN
 	);

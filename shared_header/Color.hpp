@@ -45,7 +45,7 @@ namespace Arcade {
 		 * (red, green, blue and alpha).
 		 *
 		 */
-		explicit Color(unsigned char red = 0, unsigned char green = 0,
+		Color(unsigned char red = 0, unsigned char green = 0,
 			unsigned char blue = 0, unsigned char alpha = 0);
 
 		/*!
@@ -123,7 +123,7 @@ namespace Arcade {
 		 * Overloading the cast operator to unsigned char *
 		 * @return an array of unsigned char * composed of 4 elements, each representing one of the subpixels
 		 */
-		explicit operator unsigned char *();
+		operator unsigned char *();
 
 		/*!
 		 * Overloading the comparison operator

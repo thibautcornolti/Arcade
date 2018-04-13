@@ -52,7 +52,7 @@ namespace Arcade {
 		 * The third argument defines the color in which the pixels will be created.
 		 *
 		 */
-		explicit PixelBox(Vect<size_t> size = Vect<size_t>(),
+		PixelBox(Vect<size_t> size = Vect<size_t>(),
 			Vect<size_t> pos = Vect<size_t>(),
 			Color col = Color(255, 255, 255, 255));
 

@@ -37,7 +37,7 @@ namespace Arcade {
 		 * @param x : coordinate X
 		 * @param y : coordinate Y
 		 */
-		explicit Vect(T x = 0, T y = 0)
+		Vect(T x = 0, T y = 0)
 		{
 			setXY(x, y);
 		};

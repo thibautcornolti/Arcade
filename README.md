@@ -13,9 +13,9 @@ $> ./arcade
 * Arrow left & right to change the graphical library
 
 ### Authors
-* victor.heim@epitech.eu
-* davy.hantz@epitech.eu
-* thibaut.cornolti@epitech.eu
+* Victor Heim
+* Davy Hantz
+* Thibaut Cornolti
 
 ### Library Specification
 

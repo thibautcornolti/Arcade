@@ -2,7 +2,7 @@
 
 **Subject [here](https://github.com/thibautcornolti/Arcade/blob/master/Subject.pdf)**
 
-### Usage
+## Usage
 
 ```
 $> make
@@ -12,11 +12,27 @@ $> ./arcade
 * Arrow up & down to change the game
 * Arrow left & right to change the graphical library
 
-### Authors
+## Screenshots
+
+![Nibbler ncurses](https://imgur.com/Tr2WtCD.png)
+
+_Nibbler with NCurses_
+
+
+![Nibbler sfml](https://imgur.com/mZQeyok.png)
+
+_Nibbler with SFML_
+
+
+![Nibbler sdl2](https://imgur.com/eQkb1yS.png)
+
+_Nibbler with SDL2_
+
+## Authors
 * Victor Heim
 * Davy Hantz
 * Thibaut Cornolti
 
-### Library Specification
+## Library Specification
 
 Everyone can contribute and create games or graphic libraries by just following the specification available [here](https://github.com/EPITECH-Strasbourg-2021/CPP-Arcade-Spec).

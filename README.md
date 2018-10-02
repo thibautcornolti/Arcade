@@ -1,4 +1,4 @@
-# CPP_Arcade
+# Arcade
 
 **Subject [here](https://github.com/thibautcornolti/Arcade/blob/master/Subject.pdf)**
 

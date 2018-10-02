@@ -19,7 +19,7 @@ $> ./arcade
 _Menu with NCurses_
 
 
-![Menu sfml](https://imgur.com/jA6slqf)
+![Menu sfml](https://imgur.com/jA6slqf.png)
 
 _Menu with SFML_
 
